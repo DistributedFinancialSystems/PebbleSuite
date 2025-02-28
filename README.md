@@ -9,9 +9,11 @@ SETUP INSTRUCTIONS:
     git clone https://github.com/DistributedFinancialSystems/PebbleSuite/
 
 
+
 2.  Create SQLite3 database using the following command:
 
     python3 setup_pebblesuite.py
+
 
 
 3.  Run PebbleSuite using the following command:
