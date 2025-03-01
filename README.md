@@ -1,7 +1,10 @@
 # PebbleSuite
-PebbleSuite is an open-source accounting system.  The software was created, and is actively maintained, by Distributed Financial Systems.
+PebbleSuite is an open-source accounting system.  The software is actively maintained by Distributed Financial Systems.
 
-PebbleSuite is free to use, and is available to anyone who needs a simplfied, user-friendly accounting system.  The installation instructions are as follows:
+PebbleSuite is free to use, and is available to anyone who needs a simplfied, user-friendly accounting system.
+
+
+The installation instructions are as follows:
 
 
 PEBBLESUITE SETUP INSTRUCTIONS:
