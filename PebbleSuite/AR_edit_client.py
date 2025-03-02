@@ -8,7 +8,7 @@ from tkinter.messagebox import showinfo
 
 
 
-class EDIT_CLIENT(tk.Toplevel):
+class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 	#Define SQL database scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''

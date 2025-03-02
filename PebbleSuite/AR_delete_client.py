@@ -43,7 +43,7 @@ class DELETE_CLIENT_ENTRY:
 
 
 
-class DELETE_CLIENT(tk.Toplevel):
+class DELETE_CLIENT_WINDOW(tk.Toplevel):
 
 	#Define SQL database scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''

@@ -11,7 +11,7 @@ from tkinter.messagebox import showinfo
 
 
 
-class DELETE_INVOICE(tk.Toplevel):
+class DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 	#Define class variables
 	alive = False

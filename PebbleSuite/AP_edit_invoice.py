@@ -11,7 +11,7 @@ from tkinter.messagebox import showinfo
 
 
 
-class AP_EDIT_INVOICE(tk.Toplevel):
+class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	#Define class variables
 	alive = False

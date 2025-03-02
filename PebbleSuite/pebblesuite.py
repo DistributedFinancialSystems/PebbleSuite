@@ -1,44 +1,44 @@
 """
-
-
-PROGRAM_NAME:	PEBBLESUITE SOLO
-CREATED_BY:	DISTRIBUTED FINANCIAL SYSTEMS, LLC
-VERSION:	00.00
-
-
+[ ]
+[ ]
+[ ]
+[ ]	PROGRAM_NAME:	PEBBLESUITE SOLO
+[ ]	CREATED_BY:	DISTRIBUTED FINANCIAL SYSTEMS, LLC
+[ ]	VERSION:	00.00
+[ ]
+[ ]
+[ ]
+"""
+"""
+[ ]
+[ ]
+[ ]
+[ ]	IMPORT PYTHON MODULES:
+[ ]
+[ ]
+[ ]
 """
 
-
-
-
-"""
-	IMPORT PYTHON MODULES:
-"""
 
 #Python Standard Library modules.
-
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 
-
 #PebbleSuite custom modules.
-
 from MenuBar import *
 
-
-#AP modules:
+#Accounts Payable modules:
 from AP_new_vendor import *
 from AP_edit_vendor import *
 from AP_delete_vendor import *
 from AP_new_invoice import *
 from AP_edit_invoice import *
 from AP_delete_invoice import *
-from AP_vendor_summary import *
 
-#AR modules:
+#Accounts Receivable modules:
 from AR_new_client import *
 from AR_edit_client import *
 from AR_delete_client import *
@@ -46,26 +46,36 @@ from AR_new_invoice import *
 from AR_edit_invoice import *
 from AR_delete_invoice import *
 
+#Company Menu modules:
+from Company_commands import *
+from Export_database import *
 
+#General Ledger Menu modules:
 from GL_commands import *
-from Help_commands import *
 
+#Help Memu modules:
+from Help_commands import *
 
 #Journal Entries modules:
 from JE_new_journal_entry import *
 
-
-
+#Reports Menu modules:
 from Reports_commands import *
-
-
+from Reports_AP_aging_report import *
+from Reports_AR_aging_report import *
+from Reports_vendor_summary import *
+from Reports_client_summary import *
 
 
 """
-	PEBBLESUITE MAIN WINDOW:
+[ ]
+[ ]
+[ ]
+[ ]	PEBBLESUITE MAIN WINDOW:
+[ ]
+[ ]
+[ ]
 """
-
-
 
 
 class APP(tk.Tk):
@@ -85,10 +95,16 @@ class APP(tk.Tk):
 		self.config(menu=root_menu)
 
 
+		"""
+		[ ]
+		[ ]
+		[ ]
+		[ ]	NOTES MENU TKINTER WIDGETS:
+		[ ]
+		[ ]
+		[ ]
+		"""
 
-		"""
-			NOTES MENU TKINTER WIDGETS:
-		"""
 
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=290,y=150,width=20,height=430)
@@ -110,10 +126,16 @@ class APP(tk.Tk):
 			cursor.close()
 
 
+		"""
+		[ ]
+		[ ]
+		[ ]
+		[ ]	TEXTBOX TKINTER WIDGETS:
+		[ ]
+		[ ]
+		[ ]
+		"""
 
-		"""
-			TEXTBOX TKINTER WIDGETS:
-		"""
 
 		self.text_scrollbar = ttk.Scrollbar(self)
 		self.text_scrollbar.place(x=920,y=150,width=20,height=400)
@@ -121,10 +143,16 @@ class APP(tk.Tk):
 		self.textbox.place(x=330,y=150,width=590,height=400)
 
 
+		"""
+		[ ]
+		[ ]
+		[ ]
+		[ ]	"NEW NOTE" SECTION TKINTER WIDGETS:
+		[ ]
+		[ ]
+		[ ]
+		"""
 
-		"""
-			"NEW NOTE" SECTION TKINTER WIDGETS:
-		"""
 
 		self.new_task_button = ttk.Button(self,text="New Note",command=self.new_task)
 		self.new_task_button.place(x=20,y=35)
@@ -150,13 +178,16 @@ class APP(tk.Tk):
 		self.new_note_due_date_entry.place(x=775,y=35,width=100)
 
 
-
 		"""
-			BOTTOM ROW BUTTONS:
+		[ ]
+		[ ]
+		[ ]
+		[ ]	BOTTOM ROW BUTTONS:
+		[ ]
+		[ ]
+		[ ]
 		"""
 
-		self.clear_task_list_button = ttk.Button(self,text="Clear Task List",command=self.clear_task_list)
-		self.clear_task_list_button.place(x=110,y=95)
 
 		self.open_task_note_button = ttk.Button(self,text="Open Note",command=self.display_note)
 		self.open_task_note_button.place(x=20,y=95)
@@ -164,17 +195,23 @@ class APP(tk.Tk):
 		self.update_task_note_button = ttk.Button(self,text="Save Changes",command=self.save_note_changes)
 		self.update_task_note_button.place(x=330,y=560)
 
-		self.clear_task_note_button = ttk.Button(self,text="Cancel Changes",command=self.cancel_note_changes)
+		self.clear_task_note_button = ttk.Button(self,text="Close Note",command=self.close_note)
 		self.clear_task_note_button.place(x=435,y=560)
 
 		self.delete_task_note_button = ttk.Button(self,text="Delete Note",command=self.delete_task_note)
-		self.delete_task_note_button.place(x=215,y=95)
-
+		self.delete_task_note_button.place(x=110,y=95)
 
 
 		"""
-			NOTE EDITING" ENTRY WIDGETS:
+		[ ]
+		[ ]
+		[ ]
+		[ ]	NOTE EDITING ENTRY WIDGETS:
+		[ ]
+		[ ]
+		[ ]
 		"""
+
 
 		self.editing_task_name_label = ttk.Label(self,text="Current Task:")
 		self.editing_task_name_label.place(x=330,y=75)
@@ -195,10 +232,16 @@ class APP(tk.Tk):
 		self.editing_note_due_date_entry.place(x=775,y=95,width=100)
 
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	"NEW NOTE" BUTTON FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
-	"""
-		"NEW NOTE" BUTTON FUNCTIONALITY:
-	"""
 
 	def new_task(self):
 
@@ -211,9 +254,7 @@ class APP(tk.Tk):
 
 		retrieve_note_names = '''SELECT TASK_NAME FROM tasks;'''
 
-
 		#Define function variables:
-
 		new_task_data = []
 		new_task_name = self.new_task_name_entry.get()
 		new_task_data.append(new_task_name)
@@ -253,13 +294,11 @@ class APP(tk.Tk):
 
 					new_task_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
-
 			#Delete data in tkinter widgets:
 			self.listbox.delete(0,tk.END)
 			self.new_task_name_entry.delete(0,tk.END)
 			self.new_task_date_entry.delete(0,tk.END)
 			self.new_note_due_date_entry.delete(0,tk.END)
-
 
 			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
@@ -281,10 +320,16 @@ class APP(tk.Tk):
 					new_task_error_message2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	"CLEAR NOTE ENTRIES" BUTTON FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
-	"""
-		"CLEAR NOTE ENTRIES" BUTTON FUNCTIONALITY
-	"""
 
 	def clear_note_entries(self):
 
@@ -292,20 +337,16 @@ class APP(tk.Tk):
 		self.new_task_date_entry.delete(0,tk.END)
 
 
-
 	"""
-		"CLEAR TASK LIST" BUTTON FUNCTIONALITY
+	[ ]
+	[ ]
+	[ ]
+	[ ]	"OPEN NOTE" BUTTON FUNCTION:
+	[ ]
+	[ ]
+	[ ]
 	"""
 
-	def clear_task_list(self):
-
-		print("CLEAR TASK LIST")
-
-
-
-	"""
-		"OPEN NOTE" BUTTON FUNCTIONALITY
-	"""
 
 	def display_note(self):
 
@@ -341,6 +382,17 @@ class APP(tk.Tk):
 		self.editing_task_name_entry_text.set(select_task)
 
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	"SAVE NOTE CHANGES" BUTTON FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+
 	def save_note_changes(self):
 
 		#Define SQL.db scripts:
@@ -366,11 +418,33 @@ class APP(tk.Tk):
 		save_note_changes_confirmation_message = tk.messagebox.showinfo(title="Save Changes",message="Note updates saved successfully.")
 
 
-	def cancel_note_changes(self):
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	"CLOSE NOTE" BUTTON FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+
+	def close_note(self):
 
 		self.editing_task_name_entry_text.set("")
 		self.editing_task_date_entry_text.set("")
 		self.textbox.delete(1.0,tk.END)
+
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	"DELETE NOTE BUTTON FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 
 	def delete_task_note(self):
@@ -380,12 +454,10 @@ class APP(tk.Tk):
 		delete_note_sql_script = '''DELETE FROM tasks WHERE TASK_NAME=?;'''
 		query_all_notes_sql_script = '''SELECT TASK_NAME FROM tasks;'''
 
-
 		#Select item from listbox tkinter widget:
 		for item in self.listbox.curselection():
 
 			select_task = self.listbox.get(item)
-
 
 			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
@@ -403,14 +475,12 @@ class APP(tk.Tk):
 
 					delete_note_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
-
 			#Clear note entry tkinter widgets:
 			self.listbox.delete(0,tk.END)
 			self.editing_task_name_entry.delete(0,tk.END)
 			self.editing_task_date_entry.delete(0,tk.END)
 			self.editing_note_due_date_entry.delete(0,tk.END)
 			self.textbox.delete(1.0,tk.END)
-
 
 			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
@@ -433,13 +503,15 @@ class APP(tk.Tk):
 					delete_note_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
-
-
 """
-	PebbleSuite  --  __main__ program entry point.
+[ ]
+[ ]
+[ ]
+[ ]	__main__ PROGRAM ENTRY POINT
+[ ]
+[ ]
+[ ]
 """
-
-
 
 
 if __name__ == "__main__":
@@ -450,3 +522,14 @@ if __name__ == "__main__":
 
 	except sqlite3.Error as error:
 		print(error)
+
+
+"""
+[ ]
+[ ]
+[ ]
+[ ]	END OF FILE
+[ ]
+[ ]
+[ ]
+"""

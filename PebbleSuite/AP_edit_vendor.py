@@ -8,7 +8,7 @@ from tkinter.messagebox import showinfo
 
 
 
-class EDIT_VENDOR(tk.Toplevel):
+class EDIT_VENDOR_WINDOW(tk.Toplevel):
 
 
 	#Define class SQL.db scripts:

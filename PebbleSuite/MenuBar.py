@@ -1,5 +1,24 @@
-#Python Standard Library modules.
+"""
+[ ]
+[ ]
+[ ]
+[ ]	MENUBAR.PY
+[ ]
+[ ]
+[ ]
+"""
+"""
+[ ]
+[ ]
+[ ]
+[ ]	IMPORT PYTHON MODULES
+[ ]
+[ ]
+[ ]
+"""
 
+
+#Python Standard Library modules.
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -13,7 +32,6 @@ from AP_delete_vendor import *
 from AP_new_invoice import *
 from AP_edit_invoice import *
 from AP_delete_invoice import *
-from AP_vendor_summary import *
 
 #Accounts Receivable Menu modules:
 from AR_new_client import *
@@ -23,23 +41,51 @@ from AR_new_invoice import *
 from AR_edit_invoice import *
 from AR_delete_invoice import *
 
+#Company Menu modules:
+from Company_commands import *
+from Export_database import *
 
+#General Ledgers Menu modules:
 from GL_commands import *
+
+#Help Menu modules:
 from Help_commands import *
-
-
 
 #Journal Entries Menu modules:
 from JE_new_journal_entry import *
 
-
-
+#Reports Menu modules:
 from Reports_commands import *
+from Reports_AP_aging_report import *
+from Reports_AR_aging_report import *
+from Reports_vendor_summary import *
+from Reports_client_summary import *
 
 
+"""
+[ ]
+[ ]
+[ ]
+[ ]	MENU_BAR CLASS:
+[ ]
+[ ]
+[ ]
+"""
 
 
 class MENU_BAR(tk.Menu):
+
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	INITIALIZE CLASS WIDGETS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def __init__(self,root):
 
@@ -56,9 +102,9 @@ class MENU_BAR(tk.Menu):
 		self.AP_menu.add_command(label="Edit Invoice",command=self.edit_vendor_invoice)
 		self.AP_menu.add_command(label="Delete Invoice",command=self.delete_vendor_invoice)
 		self.AP_menu.add_separator()
-		self.AP_menu.add_command(label="AP Aging Report",command=self.new_AP)
-		self.AP_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
-		self.AP_menu.add_command(label="Export Vendor",command=self.new_AP)
+		self.AP_menu.add_command(label="New Credit Memo",command=self.new_AP)
+		self.AP_menu.add_command(label="Edit Credit Memo",command=self.new_AP)
+		self.AP_menu.add_command(label="Delete Credit Memo",command=self.new_AP)
 		self.add_cascade(label="Accounts Payable",menu=self.AP_menu)
 
 		#AR Menu Tkinter widgets
@@ -71,15 +117,16 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="Edit Invoice",command=self.new_AR)
 		self.AR_menu.add_command(label="Delete Invoice",command=self.delete_client_invoice)
 		self.AR_menu.add_separator()
-		self.AR_menu.add_command(label="AR Aging Report",command=self.new_AR)
-		self.AR_menu.add_command(label="Client Summary",command=self.new_AR)
-		self.AR_menu.add_command(label="Export Clients",command=self.new_AR)
+		self.AR_menu.add_command(label="New Credit Memo",command=self.new_AR)
+		self.AR_menu.add_command(label="Edit Credit Memo",command=self.new_AR)
+		self.AR_menu.add_command(label="Delete Credit Memo",command=self.new_AR)
 		self.add_cascade(label="Accounts Receivable",menu=self.AR_menu)
 
-		#Company Menu Tkinter widgets
-		self.setup_menu = tk.Menu(self)
-		self.setup_menu.add_command(label="My Company",command=self.new_setup)
-		self.add_cascade(label="Company",menu=self.setup_menu)
+		#Export Menu Tkinter widgets:
+		self.company_menu = tk.Menu(self)
+		self.company_menu.add_command(label="Company Information",command=self.new_company)
+		self.company_menu.add_command(label="Export Database",command=self.new_company)
+		self.add_cascade(label="Company",menu=self.company_menu)
 
 		#GL Menu Tkinter widgets
 		self.GL_menu = tk.Menu(self)
@@ -91,19 +138,6 @@ class MENU_BAR(tk.Menu):
 		self.GL_menu.add_command(label="General Ledger Summary",command=self.new_GL)
 		self.GL_menu.add_command(label="Reconcile General Ledger",command=self.new_GL)
 		self.add_cascade(label="General Ledgers",menu=self.GL_menu)
-
-		#Financial Statements Menu Tkinter widgets
-		self.reports_menu = tk.Menu(self)
-		self.reports_menu.add_command(label="Balance Sheet",command=self.new_reports)
-		self.reports_menu.add_command(label="Cash Flows",command=self.new_reports)
-		self.reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
-		self.reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
-		self.add_cascade(label="Financial Statements",menu=self.reports_menu)
-
-		#Financial Tools Menu Tkinter widgets:
-		self.tools_menu = tk.Menu(self)
-		self.tools_menu.add_command(label="Calculator",command=self.calculator)
-		self.add_cascade(label="Financial Tools",menu=self.tools_menu)
 
 		#Help Menu Tkinter widgets
 		self.help_menu = tk.Menu(self)
@@ -127,119 +161,280 @@ class MENU_BAR(tk.Menu):
 		self.JE_menu.add_command(label="Multi-Journal Entry",command=self.new_JE)
 		self.add_cascade(label="Journal Entries",menu=self.JE_menu)
 
+		#Reports Menu Tkinter widgets
+		self.reports_menu = tk.Menu(self)
+		self.reports_menu.add_command(label="AP Aging Report",command=self.new_reports)
+		self.reports_menu.add_command(label="AR Aging Report",command=self.new_reports)
+		self.reports_menu.add_command(label="Balance Sheet",command=self.new_reports)
+		self.reports_menu.add_command(label="Cash Flows",command=self.new_reports)
+		self.reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
+		self.reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
+		self.reports_menu.add_separator()
+		self.reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
+		self.reports_menu.add_command(label="Client Summary",command=self.client_summary)
+		self.add_cascade(label="Reports",menu=self.reports_menu)
+
 		#Taxes Menu Tkinter widgets
 		self.taxes_menu = tk.Menu(self)
+		self.taxes_menu.add_command(label="Company Taxes",command=self.new_taxes)
+		self.taxes_menu.add_separator()
 		self.taxes_menu.add_command(label="Create 1099-MISC Forms",command=self.new_taxes)
 		self.taxes_menu.add_command(label="Create 1099-NEC Forms",command=self.new_taxes)
 		self.taxes_menu.add_command(label="Create Schedule C",command=self.new_taxes)
-		self.add_cascade(label="Tax Forms",menu=self.taxes_menu)
+		self.add_cascade(label="Taxes",menu=self.taxes_menu)
+
+		#Tools Menu Tkinter widgets:
+		self.tools_menu = tk.Menu(self)
+		self.tools_menu.add_command(label="Calculator",command=self.calculator)
+		self.add_cascade(label="Tools",menu=self.tools_menu)
 
 
-	#AP Menu functions
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	ACCOUNTS PAYABLE MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def new_AP(self):
+
 		showinfo(title="AP Menu",message="This is the Accounts Payable menu!")
 
+
 	def new_vendor(self):
+
 		if not NEW_VENDOR_WINDOW.alive:
 			self.secondary_window = NEW_VENDOR_WINDOW()
 
+
 	def edit_vendor(self):
-		if not EDIT_VENDOR.alive:
-			self.secondary_window = EDIT_VENDOR()
+
+		if not EDIT_VENDOR_WINDOW.alive:
+			self.secondary_window = EDIT_VENDOR_WINDOW()
+
 
 	def delete_vendor(self):
+
 		if not DELETE_VENDOR_WINDOW.alive:
 			self.secondary_window = DELETE_VENDOR_WINDOW()
 
+
 	def new_vendor_invoice(self):
+
 		if not NEW_INVOICE_WINDOW.alive:
 			self.secondary_window = NEW_INVOICE_WINDOW()
 
+
 	def edit_vendor_invoice(self):
-		if not AP_EDIT_INVOICE.alive:
-			self.secondary_window = AP_EDIT_INVOICE()
+
+		if not AP_EDIT_INVOICE_WINDOW.alive:
+			self.secondary_window = AP_EDIT_INVOICE_WINDOW()
+
 
 	def delete_vendor_invoice(self):
-		if not DELETE_INVOICE.alive:
-			self.secondary_window = DELETE_INVOICE()
 
-	def vendor_summary(self):
-		if not VENDOR_SUMMARY.alive:
-			self.secondary_window = VENDOR_SUMMARY()
+		if not DELETE_INVOICE_WINDOW.alive:
+			self.secondary_window = DELETE_INVOICE_WINDOW()
 
-	#AR Menu functions
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	ACCOUNTS RECEIVABLE MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def new_AR(self):
+
 		showinfo(title="AP Menu",message="This is the AR menu!")
 
+
 	def new_client(self):
+
 		if not NEW_CLIENT_WINDOW.alive:
 			self.secondary_window = NEW_CLIENT_WINDOW()
 
+
 	def edit_client(self):
 
-		if not EDIT_CLIENT.alive:
-			self.secondary_window = EDIT_CLIENT()
+		if not EDIT_CLIENT_WINDOW.alive:
+			self.secondary_window = EDIT_CLIENT_WINDOW()
+
 
 	def delete_client(self):
-		if not DELETE_CLIENT.alive:
-			self.secondary_window = DELETE_CLIENT()
+
+		if not DELETE_CLIENT_WINDOW.alive:
+			self.secondary_window = DELETE_CLIENT_WINDOW()
+
 
 	def new_client_invoice(self):
+
 		if not AR_NEW_INVOICE_WINDOW.alive:
 			self.secondary_window = AR_NEW_INVOICE_WINDOW()
 
+
 	def delete_client_invoice(self):
-		if not AR_DELETE_INVOICE.alive:
-			self.secondary_window = AR_DELETE_INVOICE()
 
-	#Billing Menu functions
+		if not AR_DELETE_INVOICE_WINDOW.alive:
+			self.secondary_window = AR_DELETE_INVOICE_WINDOW()
 
-	def new_billing(self):
-		showinfo(title="Billing Menu",message="This is the Billing menu!")
 
-	#GL Menu functions
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	COMPANY MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+
+	def new_company(self):
+
+		new_company_message = tk.messagebox.showinfo(title="New Company",message="This is the Company Menu.")
+
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	GENERAL LEDGER FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def new_GL(self):
+
 		showinfo(title="GL Menu",message="This is the GL menu!")
 
+
 	def new_GL_entry(self):
+
 		if not NEW_GL_WINDOW.alive:
 			self.secondary_window = NEW_GL_WINDOW()
 
+
 	def edit_GL(self):
+
 		if not EDIT_GL_WINDOW.alive:
 			self.secondary_window = EDIT_GL_WINDOW()
 
-	#Help Menu functions
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	HELP MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+
 	def new_help(self):
+
 		showinfo(title="Help Menu",message="This is the Help menu!")
 
-	#JE Menu functions
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	JOURNAL ENTRIES MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+
 	def new_JE(self):
+
 		showinfo(title="Journal Entries Menu",message="This is the Journal Entries menu!")
 
+
 	def new_JE_entry(self):
+
 		if not NEW_JE_WINDOW.alive:
 			self.secondary_window = NEW_JE_WINDOW()
 
-	#Reports Menu functions
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	REPORTS MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def new_reports(self):
+
 		showinfo(title="Reports Menu",message="This is the Reports menu!")
 
-	#Setup Menu functions
 
-	def new_setup(self):
-		showinfo(title="Setup Menu",message="This is the Setup menu!")
+	def vendor_summary(self):
 
-	#Taxes Menu functions
+		if not VENDOR_SUMMARY_WINDOW.alive:
+			self.secondary_window = VENDOR_SUMMARY_WINDOW()
+
+
+	def client_summary(self):
+
+		if not CLIENT_SUMMARY_WINDOW.alive:
+			self.secondary_window = CLIENT_SUMMARY_WINDOW()
+
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	TAXES MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def new_taxes(self):
+
 		showinfo(title="Taxes Menu",message="This is the Taxes menu!")
 
-	#Tools Menu functions:
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	TOOLS MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 
 	def calculator(self):
+
 		calculator = tk.messagebox.showinfo(title="Tools",message="Calculator")
+
+
+"""
+[ ]
+[ ]
+[ ]
+[ ]	END OF FILE
+[ ]
+[ ]
+[ ]
+"""
