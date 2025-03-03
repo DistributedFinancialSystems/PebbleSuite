@@ -114,7 +114,7 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="Delete Client",command=self.delete_client)
 		self.AR_menu.add_separator()
 		self.AR_menu.add_command(label="New Invoice",command=self.new_client_invoice)
-		self.AR_menu.add_command(label="Edit Invoice",command=self.new_AR)
+		self.AR_menu.add_command(label="Edit Invoice",command=self.edit_client_invoice)
 		self.AR_menu.add_command(label="Delete Invoice",command=self.delete_client_invoice)
 		self.AR_menu.add_separator()
 		self.AR_menu.add_command(label="New Credit Memo",command=self.new_AR)
@@ -279,6 +279,12 @@ class MENU_BAR(tk.Menu):
 
 		if not AR_NEW_INVOICE_WINDOW.alive:
 			self.secondary_window = AR_NEW_INVOICE_WINDOW()
+
+
+	def edit_client_invoice(self):
+
+		if not AR_EDIT_INVOICE_WINDOW.alive:
+			self.secondary_window = AR_EDIT_INVOICE_WINDOW()
 
 
 	def delete_client_invoice(self):

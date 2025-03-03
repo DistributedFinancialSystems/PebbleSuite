@@ -138,10 +138,10 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_notes_entry = ttk.Entry(self,textvariable=self.invoice_notes_entry_text)
 		self.invoice_notes_entry.place(x=400,y=465)
 
-		self.cancel_invoice_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
+		self.cancel_invoice_changes_button = ttk.Button(self,text="Close",command=self.cancel_changes)
 		self.cancel_invoice_changes_button.place(x=490,y=510)
 
-		self.submit_invoice_changes_button = ttk.Button(self,text="Submit",command=self.submit_changes)
+		self.submit_invoice_changes_button = ttk.Button(self,text="Save",command=self.submit_changes)
 		self.submit_invoice_changes_button.place(x=400,y=510)
 
 
