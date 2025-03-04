@@ -51,7 +51,8 @@ from Company_commands import *
 from Export_database import *
 
 #General Ledger Menu modules:
-from GL_commands import *
+from GL_new_GL import *
+from GL_edit_GL import *
 
 #Help Memu modules:
 from Help_commands import *

@@ -46,7 +46,8 @@ from Company_commands import *
 from Export_database import *
 
 #General Ledgers Menu modules:
-from GL_commands import *
+from GL_new_GL import *
+from GL_edit_GL import *
 
 #Help Menu modules:
 from Help_commands import *
