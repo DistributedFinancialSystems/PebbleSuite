@@ -44,7 +44,7 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
-		self.config(width=600,height=550)
+		self.config(width=600,height=265)
 		self.title("Edit General Ledger")
 		self.focus()
 		self.resizable(0,0)
@@ -53,16 +53,16 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 		self.clicked = tk.StringVar()
 		self.clicked.set(f"{options[0]}")
 
-		self.general_ledger_name_label = ttk.Label(self,text="General Ledger Name")
+		self.general_ledger_name_label = ttk.Label(self,text="General Ledger Name:")
 		self.general_ledger_name_label.place(x=20,y=15)
 
 
 		#Search for general ledger names in SQL.db.
 		#Insert general ledger names into general ledger search listbox widget.
 		self.select_general_ledger_scrollbar = ttk.Scrollbar(self)
-		self.select_general_ledger_scrollbar.place(x=353,y=45,width=20,height=200)
+		self.select_general_ledger_scrollbar.place(x=353,y=45,width=20,height=170)
 		self.select_general_ledger_listbox = tk.Listbox(self,yscrollcommand=self.select_general_ledger_scrollbar.set)
-		self.select_general_ledger_listbox.place(x=20,y=45,width=333,height=200)
+		self.select_general_ledger_listbox.place(x=20,y=45,width=333,height=170)
 		self.select_general_ledger_scrollbar.config(command=self.select_general_ledger_listbox.yview)
 
 
@@ -83,31 +83,31 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 
 		self.edit_general_ledger_button = ttk.Button(self,text="Edit General Ledger",command=self.edit_general_ledger)
-		self.edit_general_ledger_button.place(x=20,y=510)
+		self.edit_general_ledger_button.place(x=20,y=230)
 
 		self.general_ledger_name_label = ttk.Label(self,text="General Ledger Name:")
 		self.general_ledger_name_label.place(x=400,y=15)
 		self.general_ledger_name_entry_text = tk.StringVar()
-		self.general_ledger_name_entry = ttk.Entry(self,textvariable=self.general_ledger_name_entry_text)
+		self.general_ledger_name_entry = ttk.Entry(self,textvariable=self.general_ledger_name_entry_text,width=21)
 		self.general_ledger_name_entry.place(x=400,y=45)
 
 		self.general_ledger_number_label = ttk.Label(self,text="General Ledger Number:")
-		self.general_ledger_number_label.place(x=400,y=185)
+		self.general_ledger_number_label.place(x=400,y=85)
 		self.general_ledger_number_entry_text = tk.StringVar()
-		self.general_ledger_number_entry = ttk.Entry(self,textvariable=self.general_ledger_number_entry_text,state=tk.DISABLED)
-		self.general_ledger_number_entry.place(x=400,y=215)
+		self.general_ledger_number_entry = ttk.Entry(self,textvariable=self.general_ledger_number_entry_text,state=tk.DISABLED,width=21)
+		self.general_ledger_number_entry.place(x=400,y=115)
 
 		self.general_ledger_type_label = ttk.Label(self,text="General Ledger Type:")
-		self.general_ledger_type_label.place(x=400,y=1255)
+		self.general_ledger_type_label.place(x=400,y=155)
 		self.general_ledger_type_entry_text = tk.StringVar()
-		self.general_ledger_type_entry = ttk.Entry(self,textvariable=self.general_ledger_type_entry_text,state=tk.DISABLED)
-		self.general_ledger_type_entry.place(x=400,y=155)
+		self.general_ledger_type_entry = ttk.Entry(self,textvariable=self.general_ledger_type_entry_text,state=tk.DISABLED,width=21)
+		self.general_ledger_type_entry.place(x=400,y=185)
 
-		self.cancel_general_ledger_changes_button = ttk.Button(self,text="Close",command=self.cancel_changes)
-		self.cancel_general_ledger_changes_button.place(x=490,y=510)
+		self.cancel_general_ledger_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
+		self.cancel_general_ledger_changes_button.place(x=490,y=230)
 
 		self.submit_general_ledger_changes_button = ttk.Button(self,text="Save",command=self.submit_changes)
-		self.submit_general_ledger_changes_button.place(x=400,y=510)
+		self.submit_general_ledger_changes_button.place(x=400,y=230)
 
 
 	def edit_general_ledger(self):
