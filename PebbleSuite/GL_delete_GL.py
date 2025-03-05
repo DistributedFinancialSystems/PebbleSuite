@@ -86,7 +86,7 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 			#Tkinter widgets here:
 
 		super().__init__(*args,**kwargs)
-		self.config(width=600,height=265)
+		self.config(width=600,height=270)
 		self.title("Delete General Ledger")
 		self.focus()
 		self.resizable(0,0)

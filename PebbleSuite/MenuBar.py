@@ -130,6 +130,24 @@ class MENU_BAR(tk.Menu):
 		self.company_menu.add_command(label="Export Database",command=self.new_company)
 		self.add_cascade(label="Company",menu=self.company_menu)
 
+		#Financial Reports Menu Tkinter widgets
+		self.financial_reports_menu = tk.Menu(self)
+		self.financial_reports_menu.add_command(label="AP Aging Report",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="AR Aging Report",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Balance Sheet",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Cash Flows",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
+		self.financial_reports_menu.add_separator()
+		self.financial_reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
+		self.financial_reports_menu.add_command(label="Client Summary",command=self.client_summary)
+		self.add_cascade(label="Financial Reports",menu=self.financial_reports_menu)
+
+		#Financial Tools Menu Tkinter widgets:
+		self.financial_tools_menu = tk.Menu(self)
+		self.financial_tools_menu.add_command(label="Calculator",command=self.calculator)
+		self.add_cascade(label="Financial Tools",menu=self.financial_tools_menu)
+
 		#GL Menu Tkinter widgets
 		self.GL_menu = tk.Menu(self)
 		self.GL_menu.add_command(label="New General Ledger",command=self.new_GL_entry)
@@ -163,18 +181,10 @@ class MENU_BAR(tk.Menu):
 		self.JE_menu.add_command(label="Multi-Journal Entry",command=self.new_JE)
 		self.add_cascade(label="Journal Entries",menu=self.JE_menu)
 
-		#Reports Menu Tkinter widgets
-		self.reports_menu = tk.Menu(self)
-		self.reports_menu.add_command(label="AP Aging Report",command=self.new_reports)
-		self.reports_menu.add_command(label="AR Aging Report",command=self.new_reports)
-		self.reports_menu.add_command(label="Balance Sheet",command=self.new_reports)
-		self.reports_menu.add_command(label="Cash Flows",command=self.new_reports)
-		self.reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
-		self.reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
-		self.reports_menu.add_separator()
-		self.reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
-		self.reports_menu.add_command(label="Client Summary",command=self.client_summary)
-		self.add_cascade(label="Reports",menu=self.reports_menu)
+		#Settings Menu Tkinter widgets:
+		self.settings_menu = tk.Menu(self)
+		self.settings_menu.add_command(label="Settings",command=self.new_settings)
+		self.add_cascade(label="Settings",menu=self.settings_menu)
 
 		#Taxes Menu Tkinter widgets
 		self.taxes_menu = tk.Menu(self)
@@ -183,12 +193,7 @@ class MENU_BAR(tk.Menu):
 		self.taxes_menu.add_command(label="Create 1099-MISC Forms",command=self.new_taxes)
 		self.taxes_menu.add_command(label="Create 1099-NEC Forms",command=self.new_taxes)
 		self.taxes_menu.add_command(label="Create Schedule C",command=self.new_taxes)
-		self.add_cascade(label="Taxes",menu=self.taxes_menu)
-
-		#Tools Menu Tkinter widgets:
-		self.tools_menu = tk.Menu(self)
-		self.tools_menu.add_command(label="Calculator",command=self.calculator)
-		self.add_cascade(label="Tools",menu=self.tools_menu)
+		self.add_cascade(label="Taxation",menu=self.taxes_menu)
 
 
 	"""
@@ -409,12 +414,26 @@ class MENU_BAR(tk.Menu):
 		if not CLIENT_SUMMARY_WINDOW.alive:
 			self.secondary_window = CLIENT_SUMMARY_WINDOW()
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	SETTINGS MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+	def new_settings(self):
+
+		showinfo(title="Settings Menu",message="This is the Settings menu!")
+
 
 	"""
 	[ ]
 	[ ]
 	[ ]
-	[ ]	TAXES MENU FUNCTIONS:
+	[ ]	TAXATION MENU FUNCTIONS:
 	[ ]
 	[ ]
 	[ ]

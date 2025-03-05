@@ -109,9 +109,9 @@ class APP(tk.Tk):
 
 
 		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=290,y=150,width=20,height=430)
+		self.scrollbar.place(x=290,y=150,width=20,height=440)
 		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=150,width=270,height=430)
+		self.listbox.place(x=20,y=150,width=270,height=440)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		#Initialize SQL.db connection
@@ -157,27 +157,27 @@ class APP(tk.Tk):
 
 
 		self.new_task_button = ttk.Button(self,text="New Note",command=self.new_task)
-		self.new_task_button.place(x=20,y=35)
+		self.new_task_button.place(x=20,y=40)
 
 		self.clear_note_data_button = ttk.Button(self,text="Clear Note Entries",command=self.clear_note_entries)
-		self.clear_note_data_button.place(x=110,y=35)
+		self.clear_note_data_button.place(x=110,y=40)
 
 		self.new_task_name_label = ttk.Label(self,text="New Note Name:")
-		self.new_task_name_label.place(x=330,y=10)
+		self.new_task_name_label.place(x=330,y=15)
 		self.new_task_name_entry = ttk.Entry(self)
-		self.new_task_name_entry.place(x=330,y=35,width=300)
+		self.new_task_name_entry.place(x=330,y=40,width=300)
 
 		self.new_note_date_label = ttk.Label(self,text="New Note Date:")
-		self.new_note_date_label.place(x=650,y=10)
+		self.new_note_date_label.place(x=650,y=15)
 		self.new_task_date_entry_text = tk.StringVar()
 		self.new_task_date_entry_text.set("MM/DD/YYYY")
 		self.new_task_date_entry = ttk.Entry(self,textvariable=self.new_task_date_entry_text)
-		self.new_task_date_entry.place(x=650,y=35,width=100)
+		self.new_task_date_entry.place(x=650,y=40,width=100)
 
 		self.new_note_due_date_label = ttk.Label(self,text="Note Due Date:")
-		self.new_note_due_date_label.place(x=775,y=10)
+		self.new_note_due_date_label.place(x=775,y=15)
 		self.new_note_due_date_entry = ttk.Entry(self)
-		self.new_note_due_date_entry.place(x=775,y=35,width=100)
+		self.new_note_due_date_entry.place(x=775,y=40,width=100)
 
 
 		"""
@@ -192,7 +192,7 @@ class APP(tk.Tk):
 
 
 		self.open_task_note_button = ttk.Button(self,text="Open Note",command=self.display_note)
-		self.open_task_note_button.place(x=20,y=95)
+		self.open_task_note_button.place(x=20,y=105)
 
 		self.update_task_note_button = ttk.Button(self,text="Save Changes",command=self.save_note_changes)
 		self.update_task_note_button.place(x=330,y=560)
@@ -201,7 +201,7 @@ class APP(tk.Tk):
 		self.clear_task_note_button.place(x=435,y=560)
 
 		self.delete_task_note_button = ttk.Button(self,text="Delete Note",command=self.delete_task_note)
-		self.delete_task_note_button.place(x=110,y=95)
+		self.delete_task_note_button.place(x=110,y=105)
 
 
 		"""
@@ -216,22 +216,22 @@ class APP(tk.Tk):
 
 
 		self.editing_task_name_label = ttk.Label(self,text="Current Task:")
-		self.editing_task_name_label.place(x=330,y=75)
+		self.editing_task_name_label.place(x=330,y=85)
 		self.editing_task_name_entry_text = tk.StringVar()
 		self.editing_task_name_entry = ttk.Entry(self,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
-		self.editing_task_name_entry.place(x=330,y=95,width=300)
+		self.editing_task_name_entry.place(x=330,y=105,width=300)
 
 		self.editing_task_date_label = ttk.Label(self,text="Date Created:")
-		self.editing_task_date_label.place(x=650,y=75)
+		self.editing_task_date_label.place(x=650,y=85)
 		self.editing_task_date_entry_text = tk.StringVar()
 		self.editing_task_date_entry = ttk.Entry(self,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
-		self.editing_task_date_entry.place(x=650,y=95,width=100)
+		self.editing_task_date_entry.place(x=650,y=105,width=100)
 
 		self.editing_note_due_date_label = ttk.Label(self,text="Due Date:")
-		self.editing_note_due_date_label.place(x=775,y=75)
+		self.editing_note_due_date_label.place(x=775,y=85)
 		self.editing_note_due_date_entry_text = tk.StringVar()
 		self.editing_note_due_date_entry = ttk.Entry(self,textvariable=self.editing_note_due_date_entry_text,state=tk.DISABLED)
-		self.editing_note_due_date_entry.place(x=775,y=95,width=100)
+		self.editing_note_due_date_entry.place(x=775,y=105,width=100)
 
 
 	"""
