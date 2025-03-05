@@ -48,6 +48,7 @@ from Export_database import *
 #General Ledgers Menu modules:
 from GL_new_GL import *
 from GL_edit_GL import *
+from GL_delete_GL import *
 
 #Help Menu modules:
 from Help_commands import *
@@ -133,7 +134,7 @@ class MENU_BAR(tk.Menu):
 		self.GL_menu = tk.Menu(self)
 		self.GL_menu.add_command(label="New General Ledger",command=self.new_GL_entry)
 		self.GL_menu.add_command(label="Edit General Ledger",command=self.edit_GL)
-		self.GL_menu.add_command(label="Delete General Ledger",command=self.new_GL)
+		self.GL_menu.add_command(label="Delete General Ledger",command=self.delete_GL)
 		self.GL_menu.add_separator()
 		self.GL_menu.add_command(label="Export General Ledgers",command=self.new_GL)
 		self.GL_menu.add_command(label="General Ledger Summary",command=self.new_GL)
@@ -336,6 +337,11 @@ class MENU_BAR(tk.Menu):
 
 		if not EDIT_GL_WINDOW.alive:
 			self.secondary_window = EDIT_GL_WINDOW()
+
+	def delete_GL(self):
+
+		if not DELETE_GL_WINDOW.alive:
+			self.secondary_window = DELETE_GL_WINDOW()
 
 
 	"""

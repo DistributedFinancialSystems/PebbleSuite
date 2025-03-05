@@ -55,10 +55,12 @@ class NEW_JOURNAL_ENTRY:
 						GENERAL_LEDGER_NAME,
 						GENERAL_LEDGER_NUMBER,
 						GENERAL_LEDGER_TYPE,
+						OFFSET_GENERAL_LEDGER_NAME,
+						OFFSET_GENERAL_LEDGER_TYPE,
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?);'''
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -84,10 +86,12 @@ class NEW_JOURNAL_ENTRY:
 						GENERAL_LEDGER_NAME,
 						GENERAL_LEDGER_NUMBER,
 						GENERAL_LEDGER_TYPE,
+						OFFSET_GENERAL_LEDGER_NAME,
+						OFFSET_GENERAL_LEDGER_TYPE,
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?);'''
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -311,6 +315,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_general_ledger_name = self.expense_GL_text.get()
 			new_general_ledger_number = self.vendor_invoice_number_entry.get()
 			new_general_ledger_type = "Expense"
+			new_offset_general_ledger_name = self.liability_GL_text.get()
+			new_offset_general_ledger_type = "Liability"
 			new_journal_entry_debit_amount = self.vendor_invoice_amount_entry.get()
 			new_journal_entry_credit_amount = 0
 			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
@@ -322,6 +328,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_debit_data.append(new_general_ledger_name)
 			new_debit_data.append(new_general_ledger_number)
 			new_debit_data.append(new_general_ledger_type)
+			new_debit_data.append(new_offset_general_ledger_name)
+			new_debit_data.append(new_offset_general_ledger_type)
 			new_debit_data.append(new_journal_entry_debit_amount)
 			new_debit_data.append(new_journal_entry_credit_amount)
 			new_debit_data.append(new_journal_entry_notes)
@@ -340,6 +348,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_general_ledger_name = self.liability_GL_text.get()
 			new_general_ledger_number = self.vendor_invoice_number_entry.get()
 			new_general_ledger_type = "Liability"
+			new_offset_general_ledger_name = self.expense_GL_text.get()
+			new_offset_general_ledger_type = "Expense"
 			new_journal_entry_debit_amount = 0
 			new_journal_entry_credit_amount = self.vendor_invoice_amount_entry.get()
 			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
@@ -351,6 +361,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_credit_data.append(new_general_ledger_name)
 			new_credit_data.append(new_general_ledger_number)
 			new_credit_data.append(new_general_ledger_type)
+			new_credit_data.append(new_offset_general_ledger_name)
+			new_credit_data.append(new_offset_general_ledger_type)
 			new_credit_data.append(new_journal_entry_debit_amount)
 			new_credit_data.append(new_journal_entry_credit_amount)
 			new_credit_data.append(new_journal_entry_notes)
