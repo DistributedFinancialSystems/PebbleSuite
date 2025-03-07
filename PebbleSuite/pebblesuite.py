@@ -37,6 +37,7 @@ from AP_delete_vendor import *
 from AP_new_invoice import *
 from AP_edit_invoice import *
 from AP_delete_invoice import *
+from AP_new_credit_memo import *
 
 #Accounts Receivable modules:
 from AR_new_client import *
@@ -89,7 +90,7 @@ class APP(tk.Tk):
 		#Initialize PebbleSuite parent class Tkinter widget.
 		super().__init__()
 		self.title("Distributed Financial Systems  -  PebbleSuite Solo")
-		self.geometry("960x600")
+		self.geometry("960x605")
 		self.resizable(0,0)
 
 		#Connect Menu Bar Tkinter widget to __main()__ PebbleSuite window.

@@ -1,4 +1,21 @@
-#Python Standard Library dependencies
+"""
+[ ]
+[ ]
+[ ]
+[ ]	AP_new_invoice.py
+[ ]
+[ ]
+[ ]
+"""
+"""
+[ ]
+[ ]
+[ ]
+[ ]	IMPORT PYTHON MODULES:
+[ ]
+[ ]
+[ ]
+"""
 
 import datetime
 from datetime import date
@@ -42,8 +59,28 @@ class NEW_INVOICE_ENTRY:
 
 class NEW_JOURNAL_ENTRY:
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	INITIALIZE CLASS VARIABLES:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 	def __init__(self,new_journal_entry):
 		self.new_journal_entry = new_journal_entry
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	DEBIT_ENTRY FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def debit_entry(self):
 
@@ -59,8 +96,9 @@ class NEW_JOURNAL_ENTRY:
 						OFFSET_GENERAL_LEDGER_TYPE,
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
+						JOURNAL_ENTRY_NAME,
 						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?);'''
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -75,6 +113,15 @@ class NEW_JOURNAL_ENTRY:
 
 				debit_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	CREDIT_ENTRY FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def credit_entry(self):
 
@@ -90,8 +137,9 @@ class NEW_JOURNAL_ENTRY:
 						OFFSET_GENERAL_LEDGER_TYPE,
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
+						JOURNAL_ENTRY_NAME,
 						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?);'''
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -332,6 +380,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_debit_data.append(new_offset_general_ledger_type)
 			new_debit_data.append(new_journal_entry_debit_amount)
 			new_debit_data.append(new_journal_entry_credit_amount)
+			new_debit_data.append(new_invoice_name)
 			new_debit_data.append(new_journal_entry_notes)
 
 			debit_entry = NEW_JOURNAL_ENTRY(new_debit_data)
@@ -352,6 +401,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_offset_general_ledger_type = "Expense"
 			new_journal_entry_debit_amount = 0
 			new_journal_entry_credit_amount = self.vendor_invoice_amount_entry.get()
+			new_journal_entry_name = self.clicked.get()
 			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
 
 			new_credit_data.append(new_journal_entry_timestamp)
@@ -365,6 +415,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_credit_data.append(new_offset_general_ledger_type)
 			new_credit_data.append(new_journal_entry_debit_amount)
 			new_credit_data.append(new_journal_entry_credit_amount)
+			new_credit_data.append(new_invoice_name)
 			new_credit_data.append(new_journal_entry_notes)
 
 			credit_entry = NEW_JOURNAL_ENTRY(new_credit_data)

@@ -67,11 +67,23 @@ class database:
 					INVOICE_AMOUNT REAL,
 					INVOICE_NOTES TEXT);''')
 
-		credit_memos_sql_script = ('''CREATE TABLE IF NOT EXISTS credit_memos(
+		vendor_credit_memos_sql_script = ('''CREATE TABLE IF NOT EXISTS vendor_credit_memos(
 						CREDIT_MEMO_NAME TEXT,
 						CREDIT_MEMO_ISSUE_DATE TEXT,
-						CREDIT_MEMO_EXPIRATION_DATE TEXT,
+						CREDIT_MEMO_DUE_DATE TEXT,
 						CREDIT_MEMO_NUMBER INTEGER,
+						CREDIT_MEMO_ASSET_ACCOUNT TEXT,
+						CREDIT_MEMO_INCOME_ACCOUNT TEXT,
+						CREDIT_MEMO_AMOUNT REAL,
+						CREDIT_MEMO_NOTES TEXT);''')
+
+		client_credit_memos_sql_script = ('''CREATE TABLE IF NOT EXISTS client_credit_memos(
+						CREDIT_MEMO_NAME TEXT,
+						CREDIT_MEMO_ISSUE_DATE TEXT,
+						CREDIT_MEMO_DUE_DATE TEXT,
+						CREDIT_MEMO_NUMBER INTEGER,
+						CREDIT_MEMO_LIABIITY_ACCOUNT,
+						CREDIT_MEMO_EXPENSE_ACCOUNT,
 						CREDIT_MEMO_AMOUNT REAL,
 						CREDIT_MEMO_NOTES TEXT);''')
 
@@ -92,6 +104,7 @@ class database:
 						OFFSET_GENERAL_LEDGER_TYPE TEXT,
 						JOURNAL_ENTRY_DEBIT_AMOUNT REAL,
 						JOURNAL_ENTRY_CREDIT_AMOUNT REAL,
+						JOURNAL_ENTRY_NAME TEXT,
 						JOURNAL_ENTRY_NOTES TEXT);''')
 
 
@@ -102,7 +115,8 @@ class database:
 			cursor.execute(clients_sql_script)
 			cursor.execute(vendor_invoices_sql_script)
 			cursor.execute(client_invoices_sql_script)
-			cursor.execute(credit_memos_sql_script)
+			cursor.execute(vendor_credit_memos_sql_script)
+			cursor.execute(client_credit_memos_sql_script)
 			cursor.execute(general_ledger_sql_script)
 			cursor.execute(journal_entry_sql_script)
 			connection.commit()
