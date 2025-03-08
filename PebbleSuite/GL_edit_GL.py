@@ -156,6 +156,9 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 		edit_JE_GL_name_sql_script = '''UPDATE journal_entries SET GENERAL_LEDGER_NAME=? WHERE GENERAL_LEDGER_NAME=?'''
 		edit_JE_GL_number_sql_script = '''UPDATE journal_entries SET GENERAL_LEDGER_NUMBER=? WHERE GENERAL_LEDGER_NUMBER=?'''
 
+		retrieve_offset_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE OFFSET_GENERAL_LEDGER_NAME=?;'''
+		edit_JE_offset_GL_name_sql_script = '''UPDATE journal_entries SET OFFSET_GENERAL_LEDGER_NAME=? WHERE OFFSET_GENERAL_LEDGER_NAME=?;'''
+
 
 		#Define function variables:
 		prev_general_ledger_name = self.edit_selection_temporary_memory[0][0]
@@ -163,7 +166,7 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 		new_general_ledger_name = self.general_ledger_name_entry_text.get()
 		new_general_ledger_number = self.general_ledger_number_entry_text.get()
 
-
+		#Edit general ledger name:
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
@@ -173,11 +176,13 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 				cursor.execute(edit_general_ledger_number_sql_script,(new_general_ledger_number,prev_general_ledger_number))
 				connection.commit()
 				cursor.close()
+				edit_general_ledger_name_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger Name successfully changed")
 
 		except sqlite3.Error as error:
 
 			edit_general_ledger_error_message_2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
+		#Edit general ledger name in journal entries:
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
@@ -187,11 +192,27 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 				cursor.execute(edit_JE_GL_number_sql_script,(new_general_ledger_number,prev_general_ledger_number))
 				connection.commit()
 				cursor.close()
-				edit_general_ledger_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger successfully edited.")
+				edit_journal_entry_names_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger journal entry names successfully changed")
 
 		except sqlite3.Error as error:
 
 			edit_general_ledger_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+
+		#Edit general ledger name in offset journal entries:
+		try:
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+				cursor.execute(retrieve_offset_journal_entries_sql_script,[prev_general_ledger_name])
+				cursor.execute(edit_JE_offset_GL_name_sql_script,(new_general_ledger_name,prev_general_ledger_name))
+				connection.commit()
+				cursor.close()
+				edit_offset_journal_entry_names_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger offset journal entry names successfully changed")
+
+		except sqlite3.Error as error:
+
+			edit_offset_journal_entry_names_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 		#Clear temporary memory variable:
 		self.edit_selection_temporary_memory.clear()

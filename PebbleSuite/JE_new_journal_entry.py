@@ -1,4 +1,22 @@
-#JE_commands.py
+"""
+[ ]
+[ ]
+[ ]
+[ ]	JE_new_journal_entry.py
+[ ]
+[ ]
+[ ]
+"""
+
+"""
+[ ]
+[ ]
+[ ]
+[ ]	IMPORT PYTHON MODULES:
+[ ]
+[ ]
+[ ]
+"""
 
 import datetime
 from datetime import date
@@ -8,13 +26,15 @@ from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 
-
-
-
 """
-		NEW JE SECTION
+[ ]
+[ ]
+[ ]
+[ ]	NEW JOURNAL ENTRY CLASS
+[ ]
+[ ]
+[ ]
 """
-
 
 journal_entry_queue = 0
 
@@ -24,6 +44,16 @@ class NEW_JOURNAL_ENTRY:
 	def __init__(self,new_journal_entry):
 
 		self.new_journal_entry = new_journal_entry
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	DEBIT_ENTRY FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def debit_entry(self):
 
@@ -35,10 +65,13 @@ class NEW_JOURNAL_ENTRY:
 					GENERAL_LEDGER_NAME,
 					GENERAL_LEDGER_NUMBER,
 					GENERAL_LEDGER_TYPE,
+					OFFSET_GENERAL_LEDGER_NAME,
+					OFFSET_GENERAL_LEDGER_TYPE,
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
+					JOURNAL_ENTRY_NAME,
 					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?);'''
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -51,6 +84,15 @@ class NEW_JOURNAL_ENTRY:
 			except sqlite3.Error as error:
 				print(f"debit_entry errror: {error}")
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	CREDIT_ENTRY FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def credit_entry(self):
 
@@ -62,10 +104,13 @@ class NEW_JOURNAL_ENTRY:
 					GENERAL_LEDGER_NAME,
 					GENERAL_LEDGER_NUMBER,
 					GENERAL_LEDGER_TYPE,
+					OFFSET_GENERAL_LEDGER_NAME,
+					OFFSET_GENERAL_LEDGER_TYPE,
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
+					JOURNAL_ENTRY_NAME,
 					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?);'''
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -78,8 +123,15 @@ class NEW_JOURNAL_ENTRY:
 			except sqlite3.Error as error:
 				print(f"credit_entry error: {error}")
 
-
-
+"""
+[ ]
+[ ]
+[ ]
+[ ]	NEW_JE_WINDOW CLASS
+[ ]
+[ ]
+[ ]
+"""
 
 class NEW_JE_WINDOW(tk.Toplevel):
 
@@ -89,7 +141,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 	GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
 
-	GL_options = ["Select General Ledger","Select General Ledger"]
+	GL_options = ["Select General Ledger"]
 
 	#Search for GL data in SQL.db.
 
@@ -101,7 +153,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			cursor.execute(GL_sql_script)
 
 			for item in cursor:
-				GL_options.append(item)
+				GL_options.append(" ".join(item))
 
 			connection.commit()
 			cursor.close()
@@ -141,7 +193,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 		self.debit_GL_option_menu_label = ttk.Label(self,text="Debit General Ledger")
 		self.debit_GL_option_menu_label.place(x=20,y=100)
-		self.debit_GL_option_menu = ttk.OptionMenu(self,self.debit,*self.GL_options)
+		self.debit_GL_option_menu = ttk.OptionMenu(self,self.debit,self.GL_options[0],*self.GL_options)
 		self.debit_GL_option_menu.place(x=20,y=125)
 		self.debit_GL_amount_label = ttk.Label(self,text="Debit Amount")
 		self.debit_GL_amount_label.place(x=220,y=100)
@@ -150,7 +202,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 		self.credit_GL_option_menu_label = ttk.Label(self,text="Credit General Ledger")
 		self.credit_GL_option_menu_label.place(x=420,y=100)
-		self.credit_GL_option_menu = ttk.OptionMenu(self,self.credit,*self.GL_options)
+		self.credit_GL_option_menu = ttk.OptionMenu(self,self.credit,self.GL_options[0],*self.GL_options)
 		self.credit_GL_option_menu.place(x=420,y=125)
 		self.credit_GL_amount_label = ttk.Label(self,text="Credit Amount")
 		self.credit_GL_amount_label.place(x=620,y=100)
@@ -168,22 +220,45 @@ class NEW_JE_WINDOW(tk.Toplevel):
 		self.print_JE_button = ttk.Button(self,text="Print Journal Entries",command=self.print_journal_entries)
 		self.print_JE_button.place(x=200,y=600)
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	CREATE_NEW_JE FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def create_new_JE(self):
 
+		#Define debit data list and credit data list:
 		debit_JE_data = []
 		credit_JE_data = []
 
+		#Retrieve journal entry data:
 		new_JE_timestamp = datetime.datetime.now()
 		new_JE_number = self.JE_number_entry.get()
 		new_JE_date = self.JE_date_entry.get()
-		new_invoice_number = 0
+
+		new_invoice_number = None
+
 		new_debit_GL_name = self.debit.get()
 		new_credit_GL_name = self.credit.get()
-		new_GL_number = "null"
-		new_GL_type = "null"
+
+		new_GL_number = None
+		new_GL_type = None
+
+		new_offset_GL_name_2 = self.credit.get()
+		new_offset_GL_name_1 = self.debit.get()
+
+		new_offset_GL_number = None
+		new_offset_GL_type = None
+
 		new_GL_debit = self.debit_GL_entry.get()
 		new_GL_credit = self.credit_GL_entry.get()
+
+		new_JE_name = None
 		new_JE_notes = self.JE_notes_entry.get()
 
 
@@ -202,24 +277,33 @@ class NEW_JE_WINDOW(tk.Toplevel):
 		else:
 
 			debit_JE_data.append(new_JE_timestamp)
-			credit_JE_data.append(new_JE_timestamp)
 			debit_JE_data.append(new_JE_number)
-			credit_JE_data.append(new_JE_number)
 			debit_JE_data.append(new_JE_date)
-			credit_JE_data.append(new_JE_date)
 			debit_JE_data.append(new_invoice_number)
-			credit_JE_data.append(new_invoice_number)
 			debit_JE_data.append(new_debit_GL_name)
-			credit_JE_data.append(new_credit_GL_name)
 			debit_JE_data.append(new_GL_number)
-			credit_JE_data.append(new_GL_number)
 			debit_JE_data.append(new_GL_type)
-			credit_JE_data.append(new_GL_type)
+			debit_JE_data.append(new_offset_GL_name_2)
+			#debit_JE_data.append(new_offset_GL_number)
+			debit_JE_data.append(new_offset_GL_type)
 			debit_JE_data.append(new_GL_debit)
-			credit_JE_data.append(0)
 			debit_JE_data.append(0)
-			credit_JE_data.append(new_GL_credit)
+			debit_JE_data.append(new_JE_name)
 			debit_JE_data.append(new_JE_notes)
+
+			credit_JE_data.append(new_JE_timestamp)
+			credit_JE_data.append(new_JE_number)
+			credit_JE_data.append(new_JE_date)
+			credit_JE_data.append(new_invoice_number)
+			credit_JE_data.append(new_credit_GL_name)
+			credit_JE_data.append(new_GL_number)
+			credit_JE_data.append(new_GL_type)
+			credit_JE_data.append(new_offset_GL_name_1)
+			#credit_JE_data.append(new_offset_GL_number)
+			credit_JE_data.append(new_offset_GL_type)
+			credit_JE_data.append(0)
+			credit_JE_data.append(new_GL_credit)
+			credit_JE_data.append(new_JE_name)
 			credit_JE_data.append(new_JE_notes)
 
 			try:
@@ -236,6 +320,15 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 				print(error)
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	PRINT_JOURNAL_ENTRIES FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def print_journal_entries(self):
 
@@ -252,6 +345,15 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			connection.commit()
 			cursor.close()
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	DESTROY FUNCTION:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 	def destroy(self):
 
