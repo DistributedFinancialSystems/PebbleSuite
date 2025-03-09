@@ -367,6 +367,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_offset_general_ledger_type = "Liability"
 			new_journal_entry_debit_amount = self.vendor_invoice_amount_entry.get()
 			new_journal_entry_credit_amount = 0
+			new_journal_entry_name = self.clicked.get()
 			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
 
 			new_debit_data.append(new_journal_entry_timestamp)
@@ -380,7 +381,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_debit_data.append(new_offset_general_ledger_type)
 			new_debit_data.append(new_journal_entry_debit_amount)
 			new_debit_data.append(new_journal_entry_credit_amount)
-			new_debit_data.append(new_invoice_name)
+			new_debit_data.append(new_journal_entry_name)
 			new_debit_data.append(new_journal_entry_notes)
 
 			debit_entry = NEW_JOURNAL_ENTRY(new_debit_data)
@@ -415,7 +416,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_credit_data.append(new_offset_general_ledger_type)
 			new_credit_data.append(new_journal_entry_debit_amount)
 			new_credit_data.append(new_journal_entry_credit_amount)
-			new_credit_data.append(new_invoice_name)
+			new_credit_data.append(new_journal_entry_name)
 			new_credit_data.append(new_journal_entry_notes)
 
 			credit_entry = NEW_JOURNAL_ENTRY(new_credit_data)
