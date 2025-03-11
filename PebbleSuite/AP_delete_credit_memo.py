@@ -2,7 +2,7 @@
 [ ]
 [ ]
 [ ]
-[ ]	AP_delete_invoice.py
+[ ]	AP_delete_credit_memo.py
 [ ]
 [ ]
 [ ]
@@ -28,7 +28,7 @@ from tkinter.messagebox import showinfo
 
 
 
-class DELETE_INVOICE_WINDOW(tk.Toplevel):
+class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	#Define class variables
 	alive = False
@@ -60,7 +60,7 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=550)
-		self.title("Delete Invoice")
+		self.title("Delete Vendor Credit Memo")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -97,31 +97,30 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 			cursor.close()
 
 
-		#Invoice selection listbox widget:
+		#Credit memo selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=200)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
 		self.listbox.place(x=20,y=300,width=333,height=200)
 		self.scrollbar.config(command=self.listbox.yview)
 
-		self.search_invoices_button = ttk.Button(self,text="Search Invoices",command=self.search_invoices)
-		self.search_invoices_button.place(x=20,y=255)
+		self.search_credit_memos_button = ttk.Button(self,text="Search Credit Memos",command=self.search_credit_memos)
+		self.search_credit_memos_button.place(x=20,y=255)
 
-		self.clear_invoices_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_invoices)
-		self.clear_invoices_button.place(x=20,y=510)
+		self.clear_credit_memos_button = ttk.Button(self,text="Clear All Credit Memos",command=self.clear_credit_memos)
+		self.clear_credit_memos_button.place(x=20,y=510)
 
-		self.delete_invoice_button = ttk.Button(self,text="Delete Invoice",command=self.delete_invoice)
-		self.delete_invoice_button.place(x=200,y=510)
+		self.delete_credit_memo_button = ttk.Button(self,text="Delete Credit Memo",command=self.delete_credit_memo)
+		self.delete_credit_memo_button.place(x=200,y=510)
 
 
-	def search_invoices(self):
+	def search_credit_memos(self):
 
-		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=?'''
+		search_vendor_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM vendor_credit_memos WHERE CREDIT_MEMO_NAME=?'''
 
 		for item in self.select_vendor_listbox.curselection():
 
 			select_vendor = self.select_vendor_listbox.get(item)
-			print(select_vendor)
 
 		try:
 
@@ -139,43 +138,43 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 		except sqlite3.Error as error:
 
-			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_credit_memos_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
-	def clear_invoices(self):
+	def clear_credit_memos(self):
 
 		self.listbox.delete(0,tk.END)
 
 
-	def delete_invoice(self):
+	def delete_credit_memo(self):
 
 		#Define SQL.db scripts:
-		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?'''
-		delete_invoice_sql_script = '''DELETE FROM vendor_invoices WHERE INVOICE_NUMBER=?'''
+		query_credit_memo_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
+		delete_credit_memo_sql_script = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE INVOICE_NUMBER=?'''
 		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE INVOICE_NUMBER=?'''
 
 
 		for item in self.listbox.curselection():
 
-			select_invoice = self.listbox.get(item)
+			select_credit_memo = self.listbox.get(item)
 
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
-				cursor.execute(query_invoice_sql_script,select_invoice)
-				cursor.execute(delete_invoice_sql_script,select_invoice)
-				cursor.execute(query_journal_entries_sql_script,select_invoice)
-				cursor.execute(delete_journal_entries_sql_script,select_invoice)
+				cursor.execute(query_credit_memo_sql_script,select_credit_memo)
+				cursor.execute(delete_credit_memo_sql_script,select_credit_memo)
+				cursor.execute(query_journal_entries_sql_script,select_credit_memo)
+				cursor.execute(delete_journal_entries_sql_script,select_credit_memo)
 				connection.commit()
 				cursor.close()
-				delete_invoice_confirmation_message = tk.messagebox.showinfo(title="Delete Invoice",message="Invoice successfully deleted.")
+				delete_credit_memo_confirmation_message = tk.messagebox.showinfo(title="Delete Credit Memo",message="Credit memo successfully deleted.")
 
 		except sqlite3.Error as error:
 
-			delete_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			delete_credit_memo_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
 
