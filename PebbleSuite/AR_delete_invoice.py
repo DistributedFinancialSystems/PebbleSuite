@@ -134,8 +134,8 @@ class AR_DELETE_INVOICE_WINDOW(tk.Toplevel):
 		#Define SQL.db scripts:
 		query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?'''
 		delete_invoice_sql_script = '''DELETE FROM client_invoices WHERE INVOICE_NUMBER=?'''
-		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE INVOICE_NUMBER=?'''
-		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE INVOICE_NUMBER=?'''
+		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?'''
+		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?'''
 
 
 		for item in self.listbox.curselection():
