@@ -19,7 +19,6 @@ class DELETE_VENDOR_ENTRY:
 
 	def delete_data(self):
 
-
 		#Define SQL database scripts:
 		query_vendor_sql_script = '''SELECT * FROM vendors WHERE VENDOR_NAME=?;'''
 		delete_vendor_sql_script = '''DELETE FROM vendors WHERE VENDOR_NAME=?;'''
@@ -27,8 +26,8 @@ class DELETE_VENDOR_ENTRY:
 		delete_vendor_invoices_sql_script = '''DELETE FROM vendor_invoices WHERE INVOICE_NAME=?;'''
 		query_vendor_credit_memos_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NAME=?;'''
 		delete_vendor_credit_memos_sql_script = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_NAME=?;'''
-		query_vendor_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_NAME=?;'''
-		delete_vendor_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE JOURNAL_ENTRY_NAME=?;'''
+		query_vendor_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_VENDOR_NAME=?;'''
+		delete_vendor_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE JOURNAL_ENTRY_VENDOR_NAME=?;'''
 
 
 		#Initialize SQL database connection:

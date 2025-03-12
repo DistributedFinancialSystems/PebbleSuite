@@ -106,10 +106,12 @@ class MENU_BAR(tk.Menu):
 		self.AP_menu.add_command(label="New Invoice",command=self.new_vendor_invoice)
 		self.AP_menu.add_command(label="Edit Invoice",command=self.edit_vendor_invoice)
 		self.AP_menu.add_command(label="Delete Invoice",command=self.delete_vendor_invoice)
+		self.AP_menu.add_command(label="Pay Invoice",command=self.new_AP)
 		self.AP_menu.add_separator()
 		self.AP_menu.add_command(label="New Credit Memo",command=self.new_vendor_credit_memo)
 		self.AP_menu.add_command(label="Edit Credit Memo",command=self.new_AP)
 		self.AP_menu.add_command(label="Delete Credit Memo",command=self.delete_vendor_credit_memo)
+		self.AP_menu.add_command(label="Apply Credit Memo",command=self.new_AP)
 		self.add_cascade(label="Accounts Payable",menu=self.AP_menu)
 
 		#AR Menu Tkinter widgets
@@ -121,10 +123,12 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="New Invoice",command=self.new_client_invoice)
 		self.AR_menu.add_command(label="Edit Invoice",command=self.edit_client_invoice)
 		self.AR_menu.add_command(label="Delete Invoice",command=self.delete_client_invoice)
+		self.AR_menu.add_command(label="Pay Invoice",command=self.new_AR)
 		self.AR_menu.add_separator()
 		self.AR_menu.add_command(label="New Credit Memo",command=self.new_client_credit_memo)
 		self.AR_menu.add_command(label="Edit Credit Memo",command=self.new_AR)
 		self.AR_menu.add_command(label="Delete Credit Memo",command=self.new_AR)
+		self.AR_menu.add_command(label="Apply Credit Memo",command=self.new_AR)
 		self.add_cascade(label="Accounts Receivable",menu=self.AR_menu)
 
 		#Export Menu Tkinter widgets:

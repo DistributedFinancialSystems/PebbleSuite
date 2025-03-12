@@ -224,11 +224,11 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		edit_invoice_amount_sql_script = '''UPDATE client_invoices SET INVOICE_AMOUNT=? WHERE INVOICE_NUMBER=?;'''
 		edit_invoice_notes_sql_script = '''UPDATE client_invoices SET INVOICE_NOTES=? WHERE INVOICE_NUMBER=?;'''
 
-		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE INVOICE_NUMBER=?;'''
-		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE INVOICE_NUMBER=?;'''
-		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE INVOICE_NUMBER=?'''
-		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE INVOICE_NUMBER=?'''
-		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE INVOICE_NUMBER=?'''
+		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?;'''
+		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE CLIENT_INVOICE_NUMBER=?;'''
+		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
+		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
+		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_INVOICE_NUMBER=?'''
 
 
 		#Define function variables:

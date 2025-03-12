@@ -151,8 +151,8 @@ class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		#Define SQL.db scripts:
 		query_credit_memo_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 		delete_credit_memo_sql_script = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
-		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE INVOICE_NUMBER=?'''
-		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE INVOICE_NUMBER=?'''
+		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE VENDOR_CREDIT_MEMO_NUMBER=?'''
+		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE VENDOR_CREDIT_MEMO_NUMBER=?'''
 
 
 		for item in self.listbox.curselection():

@@ -25,8 +25,8 @@ class DELETE_CLIENT_ENTRY:
 		delete_client_invoices_sql_script = '''DELETE FROM client_invoices WHERE INVOICE_NAME=?;'''
 		query_client_credit_memos_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NAME=?;'''
 		delete_client_credit_memos_sql_script = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_NAME=?;'''
-		query_vendor_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_CLIENT_NAME=?;'''
-		delete_vendor_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE JOURNAL_ENTRY_CLIENT_NAME=?;'''
+		query_client_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_CLIENT_NAME=?;'''
+		delete_client_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE JOURNAL_ENTRY_CLIENT_NAME=?;'''
 
 		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
@@ -64,25 +64,20 @@ class DELETE_CLIENT_ENTRY:
 				cursor.execute(delete_client_credit_memos_sql_script,[self.delete_client_entry])
 				connection.commit()
 				cursor.close()
-				delete_client_credit_memos_confirmation_messages = tk.messagebox.showinfo(title="Delete Client",message="Client credit memo data successfully deleted")
+				delete_client_credit_memos_confirmation_message = tk.messagebox.showinfo(title="Delete Client",message="Client credit memo data successfully deleted")
 
 			except sqlite3.Error as error:
 
 				delete_client_credit_memos_error_message = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
 
-
 			try:
 
-				cursor = connection.cursor()
-				cursor.execute(query_vendor_journal_entries_sql_script,[self.delete_client_entry])
-				cursor.execute(delete_vendor_journal_entries_sql_script,[self.delete_client_entry])
-				connection.commit()
-				cursor.close()
-				delete_client_journal_entries_confirmation_message = tk.messagebox.showinfo(title="Delete Client",message="Client journal entries successfully deleted")
+				rf
 
 			except sqlite3.Error as error:
 
-				delete_client_journal_entries_error_message = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
+				x
+
 
 
 
