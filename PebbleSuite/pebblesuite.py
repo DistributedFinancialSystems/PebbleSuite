@@ -48,6 +48,7 @@ from AR_new_invoice import *
 from AR_edit_invoice import *
 from AR_delete_invoice import *
 from AR_new_credit_memo import *
+from AR_delete_credit_memo import *
 
 #Company Menu modules:
 from Company_commands import *

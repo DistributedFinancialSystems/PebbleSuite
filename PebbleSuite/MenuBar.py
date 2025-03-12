@@ -43,6 +43,7 @@ from AR_new_invoice import *
 from AR_edit_invoice import *
 from AR_delete_invoice import *
 from AR_new_credit_memo import *
+from AR_delete_credit_memo import *
 
 #Company Menu modules:
 from Company_commands import *
@@ -127,7 +128,7 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_separator()
 		self.AR_menu.add_command(label="New Credit Memo",command=self.new_client_credit_memo)
 		self.AR_menu.add_command(label="Edit Credit Memo",command=self.new_AR)
-		self.AR_menu.add_command(label="Delete Credit Memo",command=self.new_AR)
+		self.AR_menu.add_command(label="Delete Credit Memo",command=self.delete_client_credit_memo)
 		self.AR_menu.add_command(label="Apply Credit Memo",command=self.new_AR)
 		self.add_cascade(label="Accounts Receivable",menu=self.AR_menu)
 
@@ -322,6 +323,11 @@ class MENU_BAR(tk.Menu):
 
 		if not NEW_CLIENT_CREDIT_MEMO_WINDOW.alive:
 			self.secondary_window = NEW_CLIENT_CREDIT_MEMO_WINDOW()
+
+	def delete_client_credit_memo(self):
+
+		if not DELETE_CLIENT_CREDIT_MEMO_WINDOW.alive:
+			self.secondary_window = DELETE_CLIENT_CREDIT_MEMO_WINDOW()
 
 
 	"""
