@@ -164,18 +164,20 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=?'''
+		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
 
 		for item in self.select_vendor_listbox.curselection():
 
 			select_vendor = self.select_vendor_listbox.get(item)
+
+		invoice_status = "Open"
 
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
-				cursor.execute(search_vendor_sql_script,[select_vendor])
+				cursor.execute(search_vendor_sql_script,(select_vendor,invoice_status))
 
 				for item in cursor:
 
@@ -197,12 +199,13 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 	def edit_invoice(self):
 
 		#Define SQL.db scripts:
-		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?'''
-
+		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
 
 		for item in self.listbox.curselection():
 
 			select_invoice = self.listbox.get(item)
+
+		#select_vendor = self.select_vendor_listbox.get(item)
 
 		try:
 
@@ -235,20 +238,21 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 	def submit_changes(self):
 
 		#Define SQL.db scripts:
-		retrieve_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_issue_date_sql_script = '''UPDATE vendor_invoices SET INVOICE_ISSUE_DATE=? WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_due_date_sql_script = '''UPDATE vendor_invoices SET INVOICE_DUE_DATE=? WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_amount_sql_script = '''UPDATE vendor_invoices SET INVOICE_AMOUNT=? WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_notes_sql_script = '''UPDATE vendor_invoices SET INVOICE_NOTES=? WHERE INVOICE_NUMBER=?;'''
+		retrieve_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
+		edit_invoice_issue_date_sql_script = '''UPDATE vendor_invoices SET INVOICE_ISSUE_DATE=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
+		edit_invoice_due_date_sql_script = '''UPDATE vendor_invoices SET INVOICE_DUE_DATE=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
+		edit_invoice_amount_sql_script = '''UPDATE vendor_invoices SET INVOICE_AMOUNT=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
+		edit_invoice_notes_sql_script = '''UPDATE vendor_invoices SET INVOICE_NOTES=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
 
-		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE VENDOR_INVOICE_NUMBER=?;'''
-		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE VENDOR_INVOICE_NUMBER=?;'''
-		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE VENDOR_INVOICE_NUMBER=?'''
-		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE VENDOR_INVOICE_NUMBER=?'''
-		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE VENDOR_INVOICE_NUMBER=?'''
+		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?;'''
+		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?;'''
+		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
+		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
+		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
 
 
 		#Define function variables:
+		reference_vendor_name = self.select_vendor_listbox.get(item)
 		reference_invoice_number = self.invoice_number_entry_text.get()
 		new_invoice_issue_date = self.invoice_issue_date_entry_text.get()
 		new_invoice_due_date = self.invoice_due_date_entry_text.get()
@@ -260,10 +264,10 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
-				cursor.execute(edit_invoice_issue_date_sql_script,(new_invoice_issue_date,reference_invoice_number))
-				cursor.execute(edit_invoice_due_date_sql_script,(new_invoice_due_date,reference_invoice_number))
-				cursor.execute(edit_invoice_amount_sql_script,(new_invoice_amount,reference_invoice_number))
-				cursor.execute(edit_invoice_notes_sql_script,(new_invoice_notes,reference_invoice_number))
+				cursor.execute(edit_invoice_issue_date_sql_script,[new_invoice_issue_date,reference_vendor_name,reference_invoice_number])
+				cursor.execute(edit_invoice_due_date_sql_script,[new_invoice_due_date,reference_vendor_name,reference_invoice_number])
+				cursor.execute(edit_invoice_amount_sql_script,[new_invoice_amount,reference_vendor_name,reference_invoice_number])
+				cursor.execute(edit_invoice_notes_sql_script,[new_invoice_notes,reference_vendor_name,reference_invoice_number])
 				connection.commit()
 				cursor.close()
 
@@ -276,10 +280,10 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 				cursor = connection.cursor()
-				cursor.execute(edit_JE_date_sql_script,(new_invoice_issue_date,reference_invoice_number))
-				cursor.execute(edit_JE_debit_amount_sql_script,(new_invoice_amount,reference_invoice_number))
-				cursor.execute(edit_JE_credit_amount_sql_script,(new_invoice_amount,reference_invoice_number))
-				cursor.execute(edit_JE_notes_sql_script,(new_invoice_notes,reference_invoice_number))
+				cursor.execute(edit_JE_date_sql_script,[new_invoice_issue_date,reference_vendor_name,reference_invoice_number])
+				cursor.execute(edit_JE_debit_amount_sql_script,[new_invoice_amount,reference_vendor_name,reference_invoice_number])
+				cursor.execute(edit_JE_credit_amount_sql_script,[new_invoice_amount,reference_vendor_name,reference_invoice_number])
+				cursor.execute(edit_JE_notes_sql_script,[new_invoice_notes,reference_vendor_name,reference_invoice_number])
 				connection.commit()
 				cursor.close()
 				edit_invoice_confirmation_message = tk.messagebox.showinfo("Edit Vendor Invoice",message="Invoice successfully edited.")

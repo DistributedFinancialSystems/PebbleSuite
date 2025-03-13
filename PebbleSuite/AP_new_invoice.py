@@ -44,8 +44,9 @@ class NEW_INVOICE_ENTRY:
 					INVOICE_LIABILITY_ACCOUNT,
 					INVOICE_EXPENSE_ACCOUNT,
 					INVOICE_AMOUNT,
-					INVOICE_NOTES)
-					VALUES(?,?,?,?,?,?,?,?);'''
+					INVOICE_NOTES,
+					INVOICE_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -336,6 +337,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_expense_GL = self.expense_GL_text.get()
 			new_invoice_amount = self.vendor_invoice_amount_entry.get()
 			new_invoice_notes = self.vendor_invoice_notes_entry.get()
+			new_invoice_status = "Open"
 
 			new_invoice_data.append(new_invoice_name)
 			new_invoice_data.append(new_invoice_issue_date)
@@ -345,6 +347,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_invoice_data.append(new_expense_GL)
 			new_invoice_data.append(new_invoice_amount)
 			new_invoice_data.append(new_invoice_notes)
+			new_invoice_data.append(new_invoice_status)
 
 			new_invoice = NEW_INVOICE_ENTRY(new_invoice_data)
 			new_invoice.enter_invoice()

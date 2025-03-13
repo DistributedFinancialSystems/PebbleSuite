@@ -44,8 +44,9 @@ class NEW_CLIENT_CREDIT_MEMO_ENTRY:
 					CREDIT_MEMO_LIABILITY_ACCOUNT,
 					CREDIT_MEMO_EXPENSE_ACCOUNT,
 					CREDIT_MEMO_AMOUNT,
-					CREDIT_MEMO_NOTES)
-					VALUES(?,?,?,?,?,?,?,?);'''
+					CREDIT_MEMO_NOTES,
+					CREDIT_MEMO_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -351,6 +352,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			new_expense_GL = self.expense_GL_text.get()
 			new_credit_memo_amount = self.client_credit_memo_amount_entry.get()
 			new_credit_memo_notes = self.client_credit_memo_notes_entry.get()
+			new_credit_memo_status = "Open"
 
 			new_credit_memo_data.append(new_credit_memo_name)
 			new_credit_memo_data.append(new_credit_memo_issue_date)
@@ -360,6 +362,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			new_credit_memo_data.append(new_expense_GL)
 			new_credit_memo_data.append(new_credit_memo_amount)
 			new_credit_memo_data.append(new_credit_memo_notes)
+			new_credit_memo_data.append(new_credit_memo_status)
 
 			new_credit_memo = NEW_CLIENT_CREDIT_MEMO_ENTRY(new_credit_memo_data)
 			new_credit_memo.enter_credit_memo()
