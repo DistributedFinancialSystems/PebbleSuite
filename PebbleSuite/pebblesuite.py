@@ -37,9 +37,11 @@ from AP_delete_vendor import *
 from AP_new_invoice import *
 from AP_edit_invoice import *
 from AP_delete_invoice import *
+from AP_print_invoice import *
 from AP_new_credit_memo import *
 from AP_edit_credit_memo import *
 from AP_delete_credit_memo import *
+from AP_print_credit_memo import *
 
 #Accounts Receivable modules:
 from AR_new_client import *
@@ -48,9 +50,11 @@ from AR_delete_client import *
 from AR_new_invoice import *
 from AR_edit_invoice import *
 from AR_delete_invoice import *
+from AR_print_invoice import *
 from AR_new_credit_memo import *
 from AR_edit_credit_memo import *
 from AR_delete_credit_memo import *
+from AR_print_credit_memo import *
 
 #Company Menu modules:
 from Company_commands import *
