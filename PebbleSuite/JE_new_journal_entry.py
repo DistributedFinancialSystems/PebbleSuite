@@ -167,7 +167,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 	def __init__(self,*args,**kwargs):
 
 		super().__init__(*args,**kwargs)
-		self.config(width=800,height=710)
+		self.config(width=800,height=250)
 		self.title("New Journal Entry")
 		self.focus()
 		self.resizable(0,0)
@@ -215,10 +215,10 @@ class NEW_JE_WINDOW(tk.Toplevel):
 		self.JE_notes_entry.place(x=420,y=45)
 
 		self.new_JE_button = ttk.Button(self,text="Enter Journal Entry",command=self.create_new_JE)
-		self.new_JE_button.place(x=20,y=600)
+		self.new_JE_button.place(x=20,y=200)
 
 		self.print_JE_button = ttk.Button(self,text="Print Journal Entries",command=self.print_journal_entries)
-		self.print_JE_button.place(x=200,y=600)
+		self.print_JE_button.place(x=200,y=200)
 
 	"""
 	[ ]
