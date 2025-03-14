@@ -381,10 +381,10 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			new_journal_entry_date = self.client_credit_memo_issue_date_entry.get()
 			new_credit_memo_number = self.client_credit_memo_number_entry.get()
 			new_general_ledger_name = self.expense_GL_text.get()
-			new_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_general_ledger_number = "INSERT GL NUMBER"
 			new_general_ledger_type = "Expense"
 			new_offset_general_ledger_name = self.liability_GL_text.get()
-			new_offset_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_offset_general_ledger_number = "INSERT GL NUMBER"
 			new_offset_general_ledger_type = "Liability"
 			new_journal_entry_debit_amount = self.client_credit_memo_amount_entry.get()
 			new_journal_entry_credit_amount = 0
@@ -418,10 +418,10 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			new_journal_entry_date = self.client_credit_memo_issue_date_entry.get()
 			new_credit_memo_number = self.client_credit_memo_number_entry.get()
 			new_general_ledger_name = self.liability_GL_text.get()
-			new_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_general_ledger_number = "INSERT GL NUMBER"
 			new_general_ledger_type = "Liability"
 			new_offset_general_ledger_name = self.expense_GL_text.get()
-			new_offset_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_offset_general_ledger_number = "INSERT GL NUMBER"
 			new_offset_general_ledger_type = "Expense"
 			new_journal_entry_debit_amount = 0
 			new_journal_entry_credit_amount = self.client_credit_memo_amount_entry.get()

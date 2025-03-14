@@ -369,10 +369,10 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_journal_entry_date = self.client_invoice_issue_date_entry.get()
 			new_invoice_number = self.client_invoice_number_entry.get()
 			new_general_ledger_name = self.asset_GL_text.get()
-			new_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_general_ledger_number = "INSERT GL NUMBER"
 			new_general_ledger_type = "Asset"
 			new_offset_general_ledger_name = self.income_GL_text.get()
-			new_offset_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_offset_general_ledger_number = "INSERT GL NUMBER"
 			new_offset_general_ledger_type = "Income"
 			new_journal_entry_debit_amount = self.client_invoice_amount_entry.get()
 			new_journal_entry_credit_amount = 0
@@ -406,10 +406,10 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_journal_entry_date = self.client_invoice_issue_date_entry.get()
 			new_invoice_number = self.client_invoice_number_entry.get()
 			new_general_ledger_name = self.income_GL_text.get()
-			new_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_general_ledger_number = "INSERT GL NUMBER"
 			new_general_ledger_type = "Income"
 			new_offset_general_ledger_name = self.asset_GL_text.get()
-			new_offset_general_ledger_number = "INSERT GENERAL LEDGER NUMBER"
+			new_offset_general_ledger_number = "INSERT GL NUMBER"
 			new_offset_general_ledger_type = "Asset"
 			new_journal_entry_debit_amount = 0
 			new_journal_entry_credit_amount = self.client_invoice_amount_entry.get()
