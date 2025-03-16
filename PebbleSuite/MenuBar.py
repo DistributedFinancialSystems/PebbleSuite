@@ -32,6 +32,7 @@ from AP_delete_vendor import *
 from AP_new_invoice import *
 from AP_edit_invoice import *
 from AP_delete_invoice import *
+from AP_pay_invoice import *
 from AP_print_invoice import *
 from AP_new_credit_memo import *
 from AP_edit_credit_memo import *
@@ -113,7 +114,7 @@ class MENU_BAR(tk.Menu):
 		self.AP_menu.add_command(label="New Invoice",command=self.new_vendor_invoice)
 		self.AP_menu.add_command(label="Edit Invoice",command=self.edit_vendor_invoice)
 		self.AP_menu.add_command(label="Delete Invoice",command=self.delete_vendor_invoice)
-		self.AP_menu.add_command(label="Pay Invoice",command=self.new_AP)
+		self.AP_menu.add_command(label="Pay Invoice",command=self.pay_vendor_invoice)
 		self.AP_menu.add_command(label="Print Invoice",command=self.print_vendor_invoice)
 		self.AP_menu.add_separator()
 		self.AP_menu.add_command(label="New Credit Memo",command=self.new_vendor_credit_memo)
@@ -265,8 +266,14 @@ class MENU_BAR(tk.Menu):
 		if not DELETE_INVOICE_WINDOW.alive:
 			self.secondary_window = DELETE_INVOICE_WINDOW()
 
+	def pay_vendor_invoice(self):
+
+		if not AP_PAY_INVOICE_WINDOW.alive:
+			self.secondary_window = AP_PAY_INVOICE_WINDOW()
+
 
 	def print_vendor_invoice(self):
+
 		if not AP_PRINT_INVOICE_WINDOW.alive:
 			self.secondary_window = AP_PRINT_INVOICE_WINDOW()
 

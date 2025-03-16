@@ -37,6 +37,7 @@ from AP_delete_vendor import *
 from AP_new_invoice import *
 from AP_edit_invoice import *
 from AP_delete_invoice import *
+from AP_pay_invoice import *
 from AP_print_invoice import *
 from AP_new_credit_memo import *
 from AP_edit_credit_memo import *

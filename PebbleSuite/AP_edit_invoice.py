@@ -59,7 +59,7 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
-		self.config(width=600,height=550)
+		self.config(width=600,height=615)
 		self.title("Edit Vendor Invoice")
 		self.focus()
 		self.resizable(0,0)
@@ -99,67 +99,73 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		#Invoice selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=353,y=300,width=20,height=200)
+		self.scrollbar.place(x=353,y=300,width=20,height=260)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=300,width=333,height=200)
+		self.listbox.place(x=20,y=300,width=333,height=260)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		self.search_invoices_button = ttk.Button(self,text="Search Invoices",command=self.search_invoices)
 		self.search_invoices_button.place(x=20,y=255)
 
 		self.clear_invoices_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_invoices)
-		self.clear_invoices_button.place(x=120,y=510)
+		self.clear_invoices_button.place(x=120,y=575)
 
 		self.edit_invoice_button = ttk.Button(self,text="Edit Invoice",command=self.edit_invoice)
-		self.edit_invoice_button.place(x=20,y=510)
+		self.edit_invoice_button.place(x=20,y=575)
+
+		self.invoice_name_label = ttk.Label(self,text="Invoice Name:")
+		self.invoice_name_label.place(x=400,y=15)
+		self.invoice_name_entry_text = tk.StringVar()
+		self.invoice_name_entry = ttk.Entry(self,textvariable=self.invoice_name_entry_text,state=tk.DISABLED)
+		self.invoice_name_entry.place(x=400,y=45)
 
 		self.invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
-		self.invoice_issue_date_label.place(x=400,y=15)
+		self.invoice_issue_date_label.place(x=400,y=85)
 		self.invoice_issue_date_entry_text = tk.StringVar()
 		self.invoice_issue_date_entry = ttk.Entry(self,textvariable=self.invoice_issue_date_entry_text)
-		self.invoice_issue_date_entry.place(x=400,y=45)
+		self.invoice_issue_date_entry.place(x=400,y=115)
 
 		self.invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
-		self.invoice_due_date_label.place(x=400,y=85)
+		self.invoice_due_date_label.place(x=400,y=155)
 		self.invoice_due_date_entry_text = tk.StringVar()
 		self.invoice_due_date_entry = ttk.Entry(self,textvariable=self.invoice_due_date_entry_text)
-		self.invoice_due_date_entry.place(x=400,y=115)
+		self.invoice_due_date_entry.place(x=400,y=185)
 
 		self.invoice_number_label = ttk.Label(self,text="Invoice Number:")
-		self.invoice_number_label.place(x=400,y=155)
+		self.invoice_number_label.place(x=400,y=225)
 		self.invoice_number_entry_text = tk.StringVar()
 		self.invoice_number_entry = ttk.Entry(self,textvariable=self.invoice_number_entry_text,state=tk.DISABLED)
-		self.invoice_number_entry.place(x=400,y=185)
+		self.invoice_number_entry.place(x=400,y=255)
 
 		self.invoice_liability_GL_label = ttk.Label(self,text="Invoice Liability GL:")
-		self.invoice_liability_GL_label.place(x=400,y=225)
+		self.invoice_liability_GL_label.place(x=400,y=295)
 		self.invoice_liability_GL_entry_text = tk.StringVar()
 		self.invoice_liability_GL_entry = ttk.Entry(self,textvariable=self.invoice_liability_GL_entry_text,state=tk.DISABLED)
-		self.invoice_liability_GL_entry.place(x=400,y=255)
+		self.invoice_liability_GL_entry.place(x=400,y=325)
 
 		self.invoice_expense_GL_label = ttk.Label(self,text="Invoice Expense GL:")
-		self.invoice_expense_GL_label.place(x=400,y=295)
+		self.invoice_expense_GL_label.place(x=400,y=365)
 		self.invoice_expense_GL_entry_text = tk.StringVar()
 		self.invoice_expense_GL_entry = ttk.Entry(self,textvariable=self.invoice_expense_GL_entry_text,state=tk.DISABLED)
-		self.invoice_expense_GL_entry.place(x=400,y=325)
+		self.invoice_expense_GL_entry.place(x=400,y=395)
 
 		self.invoice_amount_label = ttk.Label(self,text="Invoice Amount:")
-		self.invoice_amount_label.place(x=400,y=365)
+		self.invoice_amount_label.place(x=400,y=435)
 		self.invoice_amount_entry_text = tk.StringVar()
 		self.invoice_amount_entry = ttk.Entry(self,textvariable=self.invoice_amount_entry_text)
-		self.invoice_amount_entry.place(x=400,y=395)
+		self.invoice_amount_entry.place(x=400,y=465)
 
 		self.invoice_notes_label = ttk.Label(self,text="Invoice Notes:")
-		self.invoice_notes_label.place(x=400,y=435)
+		self.invoice_notes_label.place(x=400,y=505)
 		self.invoice_notes_entry_text = tk.StringVar()
 		self.invoice_notes_entry = ttk.Entry(self,textvariable=self.invoice_notes_entry_text)
-		self.invoice_notes_entry.place(x=400,y=465)
+		self.invoice_notes_entry.place(x=400,y=535)
 
 		self.cancel_invoice_changes_button = ttk.Button(self,text="Close",command=self.cancel_changes)
-		self.cancel_invoice_changes_button.place(x=490,y=510)
+		self.cancel_invoice_changes_button.place(x=490,y=575)
 
 		self.submit_invoice_changes_button = ttk.Button(self,text="Save",command=self.submit_changes)
-		self.submit_invoice_changes_button.place(x=400,y=510)
+		self.submit_invoice_changes_button.place(x=400,y=575)
 
 
 	def search_invoices(self):
@@ -219,6 +225,7 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 				for item in cursor:
 					collect.append(item)
 
+				self.invoice_name_entry_text.set(f"{collect[0][0]}")
 				self.invoice_issue_date_entry_text.set(f"{collect[0][1]}")
 				self.invoice_due_date_entry_text.set(f"{collect[0][2]}")
 				self.invoice_number_entry_text.set(f"{collect[0][3]}")
@@ -244,15 +251,15 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		edit_invoice_amount_sql_script = '''UPDATE vendor_invoices SET INVOICE_AMOUNT=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
 		edit_invoice_notes_sql_script = '''UPDATE vendor_invoices SET INVOICE_NOTES=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
 
-		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?;'''
-		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?;'''
-		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
-		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
-		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE VENDOR_INVOICE_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
+		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_VENDOR_NAME=? AND VENDOR_INVOICE_NUMBER=?;'''
+		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE JOURNAL_ENTRY_VENDOR_NAME=? AND VENDOR_INVOICE_NUMBER=?;'''
+		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE JOURNAL_ENTRY_VENDOR_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
+		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE JOURNAL_ENTRY_VENDOR_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
+		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE JOURNAL_ENTRY_VENDOR_NAME=? AND VENDOR_INVOICE_NUMBER=?'''
 
 
 		#Define function variables:
-		reference_vendor_name = self.select_vendor_listbox.get(item)
+		reference_vendor_name = self.invoice_name_entry_text.get()
 		reference_invoice_number = self.invoice_number_entry_text.get()
 		new_invoice_issue_date = self.invoice_issue_date_entry_text.get()
 		new_invoice_due_date = self.invoice_due_date_entry_text.get()
@@ -273,7 +280,7 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		except sqlite3.Error as error:
 
-			edit_invoice_error_message_2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_invoice_error_message_2 = tk.messagebox.showinfo(title="Error",message=f" Invoice error:  {error}")
 
 		try:
 
@@ -290,7 +297,7 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		except sqlite3.Error as error:
 
-			edit_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"JE error:  {error}")
 
 
 	def cancel_changes(self):

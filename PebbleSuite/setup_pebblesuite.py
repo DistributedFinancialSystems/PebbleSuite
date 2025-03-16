@@ -56,7 +56,8 @@ class database:
 					INVOICE_EXPENSE_ACCOUNT TEXT,
 					INVOICE_AMOUNT REAL,
 					INVOICE_NOTES TEXT,
-					INVOICE_STATUS TEXT);''')
+					INVOICE_STATUS TEXT,
+					INVOICE_PAID_DATE TIMESTAMP);''')
 
 		client_invoices_sql_script = ('''CREATE TABLE IF NOT EXISTS client_invoices(
 					INVOICE_NAME TEXT,
@@ -67,7 +68,8 @@ class database:
 					INVOICE_INCOME_ACCOUNT TEXT,
 					INVOICE_AMOUNT REAL,
 					INVOICE_NOTES TEXT,
-					INVOICE_STATUS TEXT);''')
+					INVOICE_STATUS TEXT,
+					INVOICE_PAID_DATE TIMESTAMP);''')
 
 		vendor_credit_memos_sql_script = ('''CREATE TABLE IF NOT EXISTS vendor_credit_memos(
 						CREDIT_MEMO_NAME TEXT,
@@ -78,7 +80,8 @@ class database:
 						CREDIT_MEMO_INCOME_ACCOUNT TEXT,
 						CREDIT_MEMO_AMOUNT REAL,
 						CREDIT_MEMO_NOTES TEXT,
-						CREDIT_MEMO_STATUS TEXT);''')
+						CREDIT_MEMO_STATUS TEXT,
+						CREDIT_MEMO_PAID_DATE TIMESTAMP);''')
 
 		client_credit_memos_sql_script = ('''CREATE TABLE IF NOT EXISTS client_credit_memos(
 						CREDIT_MEMO_NAME TEXT,
@@ -89,7 +92,8 @@ class database:
 						CREDIT_MEMO_EXPENSE_ACCOUNT TEXT,
 						CREDIT_MEMO_AMOUNT REAL,
 						CREDIT_MEMO_NOTES TEXT,
-						CREDIT_MEMO_STATUS TEXT);''')
+						CREDIT_MEMO_STATUS TEXT,
+						CREDIT_MEMO_PAID_DATE TIMESTAMP);''')
 
 		general_ledger_sql_script = ('''CREATE TABLE IF NOT EXISTS general_ledgers(
 						GENERAL_LEDGER_NAME TEXT,

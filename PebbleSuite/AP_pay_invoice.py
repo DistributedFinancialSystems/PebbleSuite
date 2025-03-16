@@ -1,0 +1,428 @@
+"""
+[ ]
+[ ]
+[ ]
+[ ]	AP_pay_invoice.py
+[ ]
+[ ]
+[ ]
+"""
+"""
+[ ]
+[ ]
+[ ]
+[ ]	IMPORT PYTHON MODULES:
+[ ]
+[ ]
+[ ]
+"""
+
+import datetime
+from datetime import date
+import sqlite3
+import tkinter as tk
+from tkinter import ttk
+from tkinter.ttk import *
+from tkinter.messagebox import showinfo
+
+
+
+
+class PAY_INVOICE_UPDATE_STATUS:
+
+	def __init__(self,pay_invoice_status):
+
+		self.pay_invoice_status = pay_invoice_status
+
+	def pay_invoice(self):
+
+		invoice_payment_status_sql_script = '''UPDATE vendor_invoices SET INVOICE_STATUS="Paid" WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
+
+		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+
+			cursor = connection.cursor()
+			cursor.execute(invoice_payment_status_sql_script,self.pay_invoice_status)
+			connection.commit()
+			cursor.close()
+
+
+
+
+class PAY_INVOICE_UPDATE_PAYMENT_DATE:
+
+	def __init__(self,pay_invoice_date):
+
+		self.pay_invoice_date = pay_invoice_date
+
+	def pay_invoice(self):
+
+		invoice_payment_date_sql_script = '''UPDATE vendor_invoices SET INVOICE_PAID_DATE=? WHERE INVOICE_NAME=? AND INVOICE_NUMBER=?;'''
+
+		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+
+			cursor = connection.cursor()
+			cursor.execute(invoice_payment_date_sql_script,self.pay_invoice_date)
+			connection.commit()
+			cursor.close()
+
+
+
+
+class PAY_INVOICE_JOURNAL_ENTRY:
+
+	def __init__(self,pay_invoice_entry):
+
+		self.pay_invoice_entry = pay_invoice_entry
+
+	def pay_invoice(self):
+
+		new_payment_JE_sql_script = '''INSERT INTO journal_entries(
+						JOURNAL_ENTRY_TIMESTAMP TIMESTAMP,
+						JOURNAL_ENTRY_NUMBER TEXT,
+						JOURNAL_ENTRY_DATE TIMESTAMP,
+						VENDOR_INVOICE_NUMBER INTEGER,
+						GENERAL_LEDGER_NAME TEXT,
+						GENERAL_LEDGER_NUMBER INTEGER,
+						GENERAL_LEDGER_TYPE TEXT,
+						OFFSET_GENERAL_LEDGER_NAME TEXT,
+						OFFSET_GENERAL_LEDGER_NUMBER INTEGER,
+						OFFSET_GENERAL_LEDGER_TYPE TEXT,
+						JOURNAL_ENTRY_DEBIT_AMOUNT REAL,
+						JOURNAL_ENTRY_CREDIT_AMOUNT REAL,
+						JOURNAL_ENTRY_VENDOR_NAME TEXT,
+						JOURNAL_ENTRY_NOTES TEXT)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+
+		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+
+			cursor = connection.cursor()
+			cursor.execute(new_payment_sql_script,self.pay_invoice_entry)
+			connection.commit()
+			cursor.close()
+
+
+
+
+class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
+
+	#Define class variables
+	alive = False
+
+
+	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
+
+
+	#Define class functions
+	def __init__(self,*args,**kwargs):
+
+		options = ["Select Vendor"]
+
+
+		#Initialize SQL.db connection:
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+			cursor.execute(self.vendor_sql_script)
+
+			for item in cursor:
+
+				options.append(" ".join(item))
+
+			connection.commit()
+			cursor.close()
+
+
+		#Define class tkinter widgets:
+		super().__init__(*args,**kwargs)
+		self.config(width=600,height=700)
+		self.title("Pay Vendor Invoice")
+		self.focus()
+		self.resizable(0,0)
+		self.__class__.alive = True
+
+		self.clicked = tk.StringVar()
+		self.clicked.set(f"{options[0]}")
+
+		self.invoice_name_label = ttk.Label(self,text="Vendor Name")
+		self.invoice_name_label.place(x=20,y=15)
+
+
+		#Search for vendor names in SQL.db.
+		#Insert vendor names into vendor search listbox widget.
+		self.select_vendor_scrollbar = ttk.Scrollbar(self)
+		self.select_vendor_scrollbar.place(x=353,y=45,width=20,height=200)
+		self.select_vendor_listbox = tk.Listbox(self,yscrollcommand=self.select_vendor_scrollbar.set)
+		self.select_vendor_listbox.place(x=20,y=45,width=333,height=200)
+		self.select_vendor_scrollbar.config(command=self.select_vendor_listbox.yview)
+
+
+		search_vendor_name_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
+
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+			cursor.execute(search_vendor_name_sql_script)
+			connection.commit()
+
+			for item in cursor:
+
+				self.select_vendor_listbox.insert(0," ".join(item))
+
+			cursor.close()
+
+
+		#Invoice selection listbox widget:
+		self.scrollbar = ttk.Scrollbar(self)
+		self.scrollbar.place(x=353,y=300,width=20,height=200)
+		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
+		self.listbox.place(x=20,y=300,width=333,height=200)
+		self.scrollbar.config(command=self.listbox.yview)
+
+		self.search_invoices_button = ttk.Button(self,text="Search Invoices",command=self.search_invoices)
+		self.search_invoices_button.place(x=20,y=255)
+
+		self.clear_invoices_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_invoices)
+		self.clear_invoices_button.place(x=120,y=510)
+
+		self.pay_invoice_button = ttk.Button(self,text="Select Invoice",command=self.select_invoice)
+		self.pay_invoice_button.place(x=20,y=510)
+
+		self.invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
+		self.invoice_issue_date_label.place(x=400,y=15)
+		self.invoice_issue_date_entry_text = tk.StringVar()
+		self.invoice_issue_date_entry = ttk.Entry(self,textvariable=self.invoice_issue_date_entry_text,state=tk.DISABLED)
+		self.invoice_issue_date_entry.place(x=400,y=45)
+
+		self.invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
+		self.invoice_due_date_label.place(x=400,y=85)
+		self.invoice_due_date_entry_text = tk.StringVar()
+		self.invoice_due_date_entry = ttk.Entry(self,textvariable=self.invoice_due_date_entry_text,state=tk.DISABLED)
+		self.invoice_due_date_entry.place(x=400,y=115)
+
+		self.invoice_number_label = ttk.Label(self,text="Invoice Number:")
+		self.invoice_number_label.place(x=400,y=155)
+		self.invoice_number_entry_text = tk.StringVar()
+		self.invoice_number_entry = ttk.Entry(self,textvariable=self.invoice_number_entry_text,state=tk.DISABLED)
+		self.invoice_number_entry.place(x=400,y=185)
+
+		self.invoice_liability_GL_label = ttk.Label(self,text="Invoice Liability GL:")
+		self.invoice_liability_GL_label.place(x=400,y=225)
+		self.invoice_liability_GL_entry_text = tk.StringVar()
+		self.invoice_liability_GL_entry = ttk.Entry(self,textvariable=self.invoice_liability_GL_entry_text,state=tk.DISABLED)
+		self.invoice_liability_GL_entry.place(x=400,y=255)
+
+		self.invoice_expense_GL_label = ttk.Label(self,text="Invoice Expense GL:")
+		self.invoice_expense_GL_label.place(x=400,y=295)
+		self.invoice_expense_GL_entry_text = tk.StringVar()
+		self.invoice_expense_GL_entry = ttk.Entry(self,textvariable=self.invoice_expense_GL_entry_text,state=tk.DISABLED)
+		self.invoice_expense_GL_entry.place(x=400,y=325)
+
+		self.invoice_amount_label = ttk.Label(self,text="Invoice Amount:")
+		self.invoice_amount_label.place(x=400,y=365)
+		self.invoice_amount_entry_text = tk.StringVar()
+		self.invoice_amount_entry = ttk.Entry(self,textvariable=self.invoice_amount_entry_text,state=tk.DISABLED)
+		self.invoice_amount_entry.place(x=400,y=395)
+
+		self.invoice_notes_label = ttk.Label(self,text="Invoice Notes:")
+		self.invoice_notes_label.place(x=400,y=435)
+		self.invoice_notes_entry_text = tk.StringVar()
+		self.invoice_notes_entry = ttk.Entry(self,textvariable=self.invoice_notes_entry_text,state=tk.DISABLED)
+		self.invoice_notes_entry.place(x=400,y=465)
+
+		self.pay_invoice_date_label = ttk.Label(self,text="Payment Date:")
+		self.pay_invoice_date_label.place(x=400,y=505)
+		self.pay_invoice_entry_text = tk.StringVar()
+		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_entry_text)
+		self.pay_invoice_date_entry.place(x=400,y=545)
+
+		self.invoice_name_entry_text = tk.StringVar()
+		self.invoice_name_entry = ttk.Entry(self,textvariable=self.invoice_name_entry_text,state=tk.DISABLED)
+		self.invoice_name_entry.place(x=400,y=575)
+
+		self.cancel_invoice_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
+		self.cancel_invoice_changes_button.place(x=490,y=650)
+
+		self.submit_invoice_changes_button = ttk.Button(self,text="Pay Invoice",command=self.submit_payment)
+		self.submit_invoice_changes_button.place(x=400,y=650)
+
+
+	def search_invoices(self):
+
+		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
+
+		for item in self.select_vendor_listbox.curselection():
+
+			select_vendor = self.select_vendor_listbox.get(item)
+
+		invoice_status = "Open"
+
+		try:
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+				cursor.execute(search_vendor_sql_script,(select_vendor,invoice_status))
+
+				for item in cursor:
+
+					self.listbox.insert(0,item)
+
+				connection.commit()
+				cursor.close()
+
+		except sqlite3.Error as error:
+
+			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+
+
+	def clear_invoices(self):
+
+		self.listbox.delete(0,tk.END)
+
+
+	def select_invoice(self):
+
+		#Define SQL.db scripts:
+		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
+
+		for item in self.listbox.curselection():
+
+			select_invoice = self.listbox.get(item)
+
+		#select_vendor = self.select_vendor_listbox.get(item)
+
+		try:
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				collect = []
+
+				cursor = connection.cursor()
+				cursor.execute(query_invoice_sql_script,select_invoice)
+
+				for item in cursor:
+					collect.append(item)
+
+				self.invoice_name_entry_text.set(f"{collect[0][0]}")
+				self.invoice_issue_date_entry_text.set(f"{collect[0][1]}")
+				self.invoice_due_date_entry_text.set(f"{collect[0][2]}")
+				self.invoice_number_entry_text.set(f"{collect[0][3]}")
+				self.invoice_liability_GL_entry_text.set(f"{collect[0][4]}")
+				self.invoice_expense_GL_entry_text.set(f"{collect[0][5]}")
+				self.invoice_amount_entry_text.set(f"{collect[0][6]}")
+				self.invoice_notes_entry_text.set(f"{collect[0][7]}")
+
+				connection.commit()
+				cursor.close()
+
+		except sqlite3.Error as error:
+
+			pay_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+
+
+	def submit_payment(self):
+
+		#Define update invoice status variables:
+
+		pay_invoice_update_status_data = []
+		pay_invoice_update_payment_data = []
+
+		reference_vendor_name = self.invoice_name_entry_text.get()
+		reference_invoice_number = self.invoice_number_entry_text.get()
+		reference_invoice_paid_date = self.pay_invoice_entry_text.get()
+
+		try:
+
+			pay_invoice_update_status_data.append(reference_vendor_name)
+			pay_invoice_update_status_data.append(reference_invoice_number)
+
+		except:
+
+			print("Error:  could not add data into pay_invoice_update_status_data list.")
+
+
+		#Update vendor invoice data:
+
+		try:
+
+			#PAY_INVOICE_UPDATE_STATUS class (from above):
+
+			update_payment_status = PAY_INVOICE_UPDATE_STATUS(pay_invoice_update_status_data)
+			update_payment_status.pay_invoice()
+
+		except sqlite3.Error as error:
+
+			update_payment_status_error_message = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"Invoice Status Error:  {error}")
+
+
+		#Update vendor payment date data:
+
+		try:
+
+			pay_invoice_update_payment_data.append(reference_invoice_paid_date)
+			pay_invoice_update_payment_data.append(reference_vendor_name)
+			pay_invoice_update_payment_data.append(reference_invoice_number)
+
+		except:
+
+			print("Error:  could not add data into pay_invoice_update_payment_data list.")
+
+		try:
+
+			update_payment_date = PAY_INVOICE_UPDATE_PAYMENT_DATE(pay_invoice_update_payment_data)
+			update_payment_date.pay_invoice()
+
+		except sqlite3.Error as error:
+
+			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"Invoice Date Error:  {error}")
+
+
+
+
+		#Continue working here:
+
+
+
+
+		"""
+		#Create new journal entries:
+
+		try:
+
+			PAY_INVOICE_JOURNAL_ENTRY(#__data)
+			PAY_INVOICE_JOURNAL_ENTRY.pay_invoice()
+
+				cursor = connection.cursor()
+				connection.commit()
+				cursor.close()
+				pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Vendor Invoice",message="Invoice successfully payed.")
+
+		except sqlite3.Error as error:
+
+			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+
+		"""
+
+
+	def cancel_changes(self):
+
+		try:
+
+			self.invoice_name_entry_text.set("")
+			self.invoice_issue_date_entry_text.set("")
+			self.invoice_due_date_entry_text.set("")
+			self.invoice_number_entry_text.set("")
+			self.invoice_liability_GL_entry_text.set("")
+			self.invoice_expense_GL_entry_text.set("")
+			self.invoice_amount_entry_text.set("")
+			self.invoice_notes_entry_text.set("")
+
+		except:
+
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+
+
+	def destroy(self):
+		self.__class__.alive = False
+		return super().destroy()
