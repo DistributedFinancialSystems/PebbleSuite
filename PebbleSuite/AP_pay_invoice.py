@@ -174,77 +174,79 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		#Invoice selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=353,y=300,width=20,height=200)
+		self.scrollbar.place(x=353,y=300,width=20,height=330)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=300,width=333,height=200)
+		self.listbox.place(x=20,y=300,width=333,height=330)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		self.search_invoices_button = ttk.Button(self,text="Search Invoices",command=self.search_invoices)
 		self.search_invoices_button.place(x=20,y=255)
 
 		self.clear_invoices_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_invoices)
-		self.clear_invoices_button.place(x=120,y=510)
+		self.clear_invoices_button.place(x=120,y=645)
 
 		self.pay_invoice_button = ttk.Button(self,text="Select Invoice",command=self.select_invoice)
-		self.pay_invoice_button.place(x=20,y=510)
+		self.pay_invoice_button.place(x=20,y=645)
 
-		self.invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
-		self.invoice_issue_date_label.place(x=400,y=15)
-		self.invoice_issue_date_entry_text = tk.StringVar()
-		self.invoice_issue_date_entry = ttk.Entry(self,textvariable=self.invoice_issue_date_entry_text,state=tk.DISABLED)
-		self.invoice_issue_date_entry.place(x=400,y=45)
-
-		self.invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
-		self.invoice_due_date_label.place(x=400,y=85)
-		self.invoice_due_date_entry_text = tk.StringVar()
-		self.invoice_due_date_entry = ttk.Entry(self,textvariable=self.invoice_due_date_entry_text,state=tk.DISABLED)
-		self.invoice_due_date_entry.place(x=400,y=115)
-
-		self.invoice_number_label = ttk.Label(self,text="Invoice Number:")
-		self.invoice_number_label.place(x=400,y=155)
-		self.invoice_number_entry_text = tk.StringVar()
-		self.invoice_number_entry = ttk.Entry(self,textvariable=self.invoice_number_entry_text,state=tk.DISABLED)
-		self.invoice_number_entry.place(x=400,y=185)
-
-		self.invoice_liability_GL_label = ttk.Label(self,text="Invoice Liability GL:")
-		self.invoice_liability_GL_label.place(x=400,y=225)
-		self.invoice_liability_GL_entry_text = tk.StringVar()
-		self.invoice_liability_GL_entry = ttk.Entry(self,textvariable=self.invoice_liability_GL_entry_text,state=tk.DISABLED)
-		self.invoice_liability_GL_entry.place(x=400,y=255)
-
-		self.invoice_expense_GL_label = ttk.Label(self,text="Invoice Expense GL:")
-		self.invoice_expense_GL_label.place(x=400,y=295)
-		self.invoice_expense_GL_entry_text = tk.StringVar()
-		self.invoice_expense_GL_entry = ttk.Entry(self,textvariable=self.invoice_expense_GL_entry_text,state=tk.DISABLED)
-		self.invoice_expense_GL_entry.place(x=400,y=325)
-
-		self.invoice_amount_label = ttk.Label(self,text="Invoice Amount:")
-		self.invoice_amount_label.place(x=400,y=365)
-		self.invoice_amount_entry_text = tk.StringVar()
-		self.invoice_amount_entry = ttk.Entry(self,textvariable=self.invoice_amount_entry_text,state=tk.DISABLED)
-		self.invoice_amount_entry.place(x=400,y=395)
-
-		self.invoice_notes_label = ttk.Label(self,text="Invoice Notes:")
-		self.invoice_notes_label.place(x=400,y=435)
-		self.invoice_notes_entry_text = tk.StringVar()
-		self.invoice_notes_entry = ttk.Entry(self,textvariable=self.invoice_notes_entry_text,state=tk.DISABLED)
-		self.invoice_notes_entry.place(x=400,y=465)
-
-		self.pay_invoice_date_label = ttk.Label(self,text="Payment Date:")
-		self.pay_invoice_date_label.place(x=400,y=590)
-		self.pay_invoice_entry_text = tk.StringVar()
-		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_entry_text)
-		self.pay_invoice_date_entry.place(x=400,y=620)
-
+		self.invoice_name_label = ttk.Label(self,text="Vendor Invoice Name")
+		self.invoice_name_label.place(x=400,y=15)
 		self.invoice_name_entry_text = tk.StringVar()
 		self.invoice_name_entry = ttk.Entry(self,textvariable=self.invoice_name_entry_text,state=tk.DISABLED)
-		self.invoice_name_entry.place(x=200,y=575)
+		self.invoice_name_entry.place(x=400,y=45)
+
+		self.invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
+		self.invoice_issue_date_label.place(x=400,y=85)
+		self.invoice_issue_date_entry_text = tk.StringVar()
+		self.invoice_issue_date_entry = ttk.Entry(self,textvariable=self.invoice_issue_date_entry_text,state=tk.DISABLED)
+		self.invoice_issue_date_entry.place(x=400,y=115)
+
+		self.invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
+		self.invoice_due_date_label.place(x=400,y=155)
+		self.invoice_due_date_entry_text = tk.StringVar()
+		self.invoice_due_date_entry = ttk.Entry(self,textvariable=self.invoice_due_date_entry_text,state=tk.DISABLED)
+		self.invoice_due_date_entry.place(x=400,y=185)
+
+		self.invoice_number_label = ttk.Label(self,text="Invoice Number:")
+		self.invoice_number_label.place(x=400,y=225)
+		self.invoice_number_entry_text = tk.StringVar()
+		self.invoice_number_entry = ttk.Entry(self,textvariable=self.invoice_number_entry_text,state=tk.DISABLED)
+		self.invoice_number_entry.place(x=400,y=255)
+
+		self.invoice_liability_GL_label = ttk.Label(self,text="Invoice Liability GL:")
+		self.invoice_liability_GL_label.place(x=400,y=295)
+		self.invoice_liability_GL_entry_text = tk.StringVar()
+		self.invoice_liability_GL_entry = ttk.Entry(self,textvariable=self.invoice_liability_GL_entry_text,state=tk.DISABLED)
+		self.invoice_liability_GL_entry.place(x=400,y=325)
+
+		self.invoice_expense_GL_label = ttk.Label(self,text="Invoice Expense GL:")
+		self.invoice_expense_GL_label.place(x=400,y=365)
+		self.invoice_expense_GL_entry_text = tk.StringVar()
+		self.invoice_expense_GL_entry = ttk.Entry(self,textvariable=self.invoice_expense_GL_entry_text,state=tk.DISABLED)
+		self.invoice_expense_GL_entry.place(x=400,y=395)
+
+		self.invoice_amount_label = ttk.Label(self,text="Invoice Amount:")
+		self.invoice_amount_label.place(x=400,y=435)
+		self.invoice_amount_entry_text = tk.StringVar()
+		self.invoice_amount_entry = ttk.Entry(self,textvariable=self.invoice_amount_entry_text,state=tk.DISABLED)
+		self.invoice_amount_entry.place(x=400,y=465)
+
+		self.invoice_notes_label = ttk.Label(self,text="Invoice Notes:")
+		self.invoice_notes_label.place(x=400,y=505)
+		self.invoice_notes_entry_text = tk.StringVar()
+		self.invoice_notes_entry = ttk.Entry(self,textvariable=self.invoice_notes_entry_text,state=tk.DISABLED)
+		self.invoice_notes_entry.place(x=400,y=535)
+
+		self.pay_invoice_date_label = ttk.Label(self,text="Payment Date:")
+		self.pay_invoice_date_label.place(x=400,y=575)
+		self.pay_invoice_entry_text = tk.StringVar()
+		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_entry_text)
+		self.pay_invoice_date_entry.place(x=400,y=605)
 
 		self.cancel_invoice_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
-		self.cancel_invoice_changes_button.place(x=490,y=650)
+		self.cancel_invoice_changes_button.place(x=490,y=645)
 
 		self.submit_invoice_changes_button = ttk.Button(self,text="Pay Invoice",command=self.submit_payment)
-		self.submit_invoice_changes_button.place(x=400,y=650)
+		self.submit_invoice_changes_button.place(x=400,y=645)
 
 
 	def search_invoices(self):
