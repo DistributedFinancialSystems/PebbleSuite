@@ -231,14 +231,14 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_notes_entry.place(x=400,y=465)
 
 		self.pay_invoice_date_label = ttk.Label(self,text="Payment Date:")
-		self.pay_invoice_date_label.place(x=400,y=505)
+		self.pay_invoice_date_label.place(x=400,y=590)
 		self.pay_invoice_entry_text = tk.StringVar()
 		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_entry_text)
-		self.pay_invoice_date_entry.place(x=400,y=545)
+		self.pay_invoice_date_entry.place(x=400,y=620)
 
 		self.invoice_name_entry_text = tk.StringVar()
 		self.invoice_name_entry = ttk.Entry(self,textvariable=self.invoice_name_entry_text,state=tk.DISABLED)
-		self.invoice_name_entry.place(x=400,y=575)
+		self.invoice_name_entry.place(x=200,y=575)
 
 		self.cancel_invoice_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
 		self.cancel_invoice_changes_button.place(x=490,y=650)
