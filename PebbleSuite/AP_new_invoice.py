@@ -78,85 +78,43 @@ class NEW_JOURNAL_ENTRY:
 	[ ]
 	[ ]
 	[ ]
-	[ ]	DEBIT_ENTRY FUNCTION:
+	[ ]	JOURNAL_ENTRY FUNCTION:
 	[ ]
 	[ ]
 	[ ]
 	"""
 
-	def debit_entry(self):
+	def journal_entry(self):
 
-		new_debit_JE_sql_script = '''INSERT INTO journal_entries(
-						JOURNAL_ENTRY_TIMESTAMP,
-						JOURNAL_ENTRY_NUMBER,
-						JOURNAL_ENTRY_DATE,
-						VENDOR_INVOICE_NUMBER,
-						GENERAL_LEDGER_NAME,
-						GENERAL_LEDGER_NUMBER,
-						GENERAL_LEDGER_TYPE,
-						OFFSET_GENERAL_LEDGER_NAME,
-						OFFSET_GENERAL_LEDGER_NUMBER,
-						OFFSET_GENERAL_LEDGER_TYPE,
-						JOURNAL_ENTRY_DEBIT_AMOUNT,
-						JOURNAL_ENTRY_CREDIT_AMOUNT,
-						JOURNAL_ENTRY_VENDOR_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+		new_JE_sql_script = '''INSERT INTO journal_entries(
+					JOURNAL_ENTRY_TIMESTAMP,
+					JOURNAL_ENTRY_NUMBER,
+					JOURNAL_ENTRY_DATE,
+					VENDOR_INVOICE_NUMBER,
+					DEBIT_GENERAL_LEDGER_NAME,
+					DEBIT_GENERAL_LEDGER_NUMBER,
+					DEBIT_GENERAL_LEDGER_TYPE,
+					CREDIT_GENERAL_LEDGER_NAME,
+					CREDIT_GENERAL_LEDGER_NUMBER,
+					CREDIT_GENERAL_LEDGER_TYPE,
+					JOURNAL_ENTRY_DEBIT_AMOUNT,
+					JOURNAL_ENTRY_CREDIT_AMOUNT,
+					JOURNAL_ENTRY_VENDOR_NAME,
+					JOURNAL_ENTRY_NOTES)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			try:
 
 				cursor = connection.cursor()
-				cursor.execute(new_debit_JE_sql_script,self.new_journal_entry)
+				cursor.execute(new_JE_sql_script,self.new_journal_entry)
 				connection.commit()
 				cursor.close()
 
 			except sqlite3.Error as error:
 
-				debit_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	CREDIT_ENTRY FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-	def credit_entry(self):
-
-		new_credit_JE_sql_script = '''INSERT INTO journal_entries(
-						JOURNAL_ENTRY_TIMESTAMP,
-						JOURNAL_ENTRY_NUMBER,
-						JOURNAL_ENTRY_DATE,
-						VENDOR_INVOICE_NUMBER,
-						GENERAL_LEDGER_NAME,
-						GENERAL_LEDGER_NUMBER,
-						GENERAL_LEDGER_TYPE,
-						OFFSET_GENERAL_LEDGER_NAME,
-						OFFSET_GENERAL_LEDGER_NUMBER,
-						OFFSET_GENERAL_LEDGER_TYPE,
-						JOURNAL_ENTRY_DEBIT_AMOUNT,
-						JOURNAL_ENTRY_CREDIT_AMOUNT,
-						JOURNAL_ENTRY_VENDOR_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
-
-		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
-
-			try:
-
-				cursor = connection.cursor()
-				cursor.execute(new_credit_JE_sql_script,self.new_journal_entry)
-				connection.commit()
-				cursor.close()
-
-			except sqlite3.Error as error:
-
-				credit_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				journal_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
 
@@ -362,77 +320,40 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 
 			#Enter debit data using NEW_JOURNAL_ENTRY class (from above):
-			new_debit_data = []
+			new_JE_data = []
 
 			new_journal_entry_timestamp = journal_entry_timestamp
-			new_journal_entry_number = 0
+			new_journal_entry_number = None
 			new_journal_entry_date = self.vendor_invoice_issue_date_entry.get()
 			new_invoice_number = self.vendor_invoice_number_entry.get()
-			new_general_ledger_name = self.expense_GL_text.get()
-			new_general_ledger_number = "INSERT GL NUMBER"
-			new_general_ledger_type = "Expense"
-			new_offset_general_ledger_name = self.liability_GL_text.get()
-			new_offset_general_ledger_number = "INSERT GL NUMBER"
-			new_offset_general_ledger_type = "Liability"
+			new_debit_general_ledger_name = self.expense_GL_text.get()
+			new_debit_general_ledger_number = "INSERT GL NUMBER"
+			new_debit_general_ledger_type = "Expense"
+			new_credit_general_ledger_name = self.liability_GL_text.get()
+			new_credit_general_ledger_number = "INSERT GL NUMBER"
+			new_credit_general_ledger_type = "Liability"
 			new_journal_entry_debit_amount = self.vendor_invoice_amount_entry.get()
-			new_journal_entry_credit_amount = 0
-			new_journal_entry_name = self.clicked.get()
-			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
-
-			new_debit_data.append(new_journal_entry_timestamp)
-			new_debit_data.append(new_journal_entry_number)
-			new_debit_data.append(new_journal_entry_date)
-			new_debit_data.append(new_invoice_number)
-			new_debit_data.append(new_general_ledger_name)
-			new_debit_data.append(new_general_ledger_number)
-			new_debit_data.append(new_general_ledger_type)
-			new_debit_data.append(new_offset_general_ledger_name)
-			new_debit_data.append(new_offset_general_ledger_number)
-			new_debit_data.append(new_offset_general_ledger_type)
-			new_debit_data.append(new_journal_entry_debit_amount)
-			new_debit_data.append(new_journal_entry_credit_amount)
-			new_debit_data.append(new_journal_entry_name)
-			new_debit_data.append(new_journal_entry_notes)
-
-			debit_entry = NEW_JOURNAL_ENTRY(new_debit_data)
-			debit_entry.debit_entry()
-
-
-			#Enter credit data using NEW_JOURNAL_ENTRY class (from above):
-			new_credit_data = []
-
-			new_journal_entry_timestamp = journal_entry_timestamp
-			new_journal_entry_number = 0
-			new_journal_entry_date = self.vendor_invoice_issue_date_entry.get()
-			new_invoice_number = self.vendor_invoice_number_entry.get()
-			new_general_ledger_name = self.liability_GL_text.get()
-			new_general_ledger_number = "INSERT GL NUMBER"
-			new_general_ledger_type = "Liability"
-			new_offset_general_ledger_name = self.expense_GL_text.get()
-			new_offset_general_ledger_number = "INSERT GL NUMBER"
-			new_offset_general_ledger_type = "Expense"
-			new_journal_entry_debit_amount = 0
 			new_journal_entry_credit_amount = self.vendor_invoice_amount_entry.get()
 			new_journal_entry_name = self.clicked.get()
 			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
 
-			new_credit_data.append(new_journal_entry_timestamp)
-			new_credit_data.append(new_journal_entry_number)
-			new_credit_data.append(new_journal_entry_date)
-			new_credit_data.append(new_invoice_number)
-			new_credit_data.append(new_general_ledger_name)
-			new_credit_data.append(new_general_ledger_number)
-			new_credit_data.append(new_general_ledger_type)
-			new_credit_data.append(new_offset_general_ledger_name)
-			new_credit_data.append(new_offset_general_ledger_number)
-			new_credit_data.append(new_offset_general_ledger_type)
-			new_credit_data.append(new_journal_entry_debit_amount)
-			new_credit_data.append(new_journal_entry_credit_amount)
-			new_credit_data.append(new_journal_entry_name)
-			new_credit_data.append(new_journal_entry_notes)
+			new_JE_data.append(new_journal_entry_timestamp)
+			new_JE_data.append(new_journal_entry_number)
+			new_JE_data.append(new_journal_entry_date)
+			new_JE_data.append(new_invoice_number)
+			new_JE_data.append(new_debit_general_ledger_name)
+			new_JE_data.append(new_debit_general_ledger_number)
+			new_JE_data.append(new_debit_general_ledger_type)
+			new_JE_data.append(new_credit_general_ledger_name)
+			new_JE_data.append(new_credit_general_ledger_number)
+			new_JE_data.append(new_credit_general_ledger_type)
+			new_JE_data.append(new_journal_entry_debit_amount)
+			new_JE_data.append(new_journal_entry_credit_amount)
+			new_JE_data.append(new_journal_entry_name)
+			new_JE_data.append(new_journal_entry_notes)
 
-			credit_entry = NEW_JOURNAL_ENTRY(new_credit_data)
-			credit_entry.credit_entry()
+			JE_entry = NEW_JOURNAL_ENTRY(new_JE_data)
+			JE_entry.journal_entry()
 
 			confirmation_message = tk.messagebox.showinfo(title="New Invoice",message="New Invoice Created.")
 

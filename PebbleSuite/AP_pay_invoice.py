@@ -77,26 +77,26 @@ class PAY_INVOICE_JOURNAL_ENTRY:
 	def pay_invoice(self):
 
 		new_payment_JE_sql_script = '''INSERT INTO journal_entries(
-						JOURNAL_ENTRY_TIMESTAMP TIMESTAMP,
-						JOURNAL_ENTRY_NUMBER TEXT,
-						JOURNAL_ENTRY_DATE TIMESTAMP,
-						VENDOR_INVOICE_NUMBER INTEGER,
-						GENERAL_LEDGER_NAME TEXT,
-						GENERAL_LEDGER_NUMBER INTEGER,
-						GENERAL_LEDGER_TYPE TEXT,
-						OFFSET_GENERAL_LEDGER_NAME TEXT,
-						OFFSET_GENERAL_LEDGER_NUMBER INTEGER,
-						OFFSET_GENERAL_LEDGER_TYPE TEXT,
-						JOURNAL_ENTRY_DEBIT_AMOUNT REAL,
-						JOURNAL_ENTRY_CREDIT_AMOUNT REAL,
-						JOURNAL_ENTRY_VENDOR_NAME TEXT,
-						JOURNAL_ENTRY_NOTES TEXT)
+						JOURNAL_ENTRY_TIMESTAMP,
+						JOURNAL_ENTRY_NUMBER,
+						JOURNAL_ENTRY_DATE,
+						VENDOR_INVOICE_NUMBER,
+						DEBIT_GENERAL_LEDGER_NAME,
+						DEBIT_GENERAL_LEDGER_NUMBER,
+						DEBIT_GENERAL_LEDGER_TYPE,
+						CREDIT_GENERAL_LEDGER_NAME,
+						CREDIT_GENERAL_LEDGER_NUMBER,
+						CREDIT_GENERAL_LEDGER_TYPE,
+						JOURNAL_ENTRY_DEBIT_AMOUNT,
+						JOURNAL_ENTRY_CREDIT_AMOUNT,
+						JOURNAL_ENTRY_VENDOR_NAME,
+						JOURNAL_ENTRY_NOTES)
 						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
-			cursor.execute(new_payment_sql_script,self.pay_invoice_entry)
+			cursor.execute(new_payment_JE_sql_script,self.pay_invoice_entry)
 			connection.commit()
 			cursor.close()
 
@@ -108,8 +108,9 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 	#Define class variables
 	alive = False
 
-
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
+
+	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset";'''
 
 
 	#Define class functions
@@ -117,8 +118,10 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		options = ["Select Vendor"]
 
+		payment_GL_options = ["Select Asset GL"]
 
-		#Initialize SQL.db connection:
+
+		#Retrieve vendor names from SQL.db, add them into options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -131,10 +134,23 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 			connection.commit()
 			cursor.close()
 
+		#Retrieve asset general ledger names from SQL.db, add them into payment_GL_options list:
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+			cursor.execute(self.asset_GL_sql_script)
+
+			for item in cursor:
+
+				payment_GL_options.append(" ".join(item))
+
+			connection.commit()
+			cursor.close()
+
 
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
-		self.config(width=600,height=700)
+		self.config(width=600,height=775)
 		self.title("Pay Vendor Invoice")
 		self.focus()
 		self.resizable(0,0)
@@ -174,19 +190,19 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		#Invoice selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=353,y=300,width=20,height=330)
+		self.scrollbar.place(x=353,y=300,width=20,height=405)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=300,width=333,height=330)
+		self.listbox.place(x=20,y=300,width=333,height=405)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		self.search_invoices_button = ttk.Button(self,text="Search Invoices",command=self.search_invoices)
 		self.search_invoices_button.place(x=20,y=255)
 
 		self.clear_invoices_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_invoices)
-		self.clear_invoices_button.place(x=120,y=645)
+		self.clear_invoices_button.place(x=120,y=725)
 
 		self.pay_invoice_button = ttk.Button(self,text="Select Invoice",command=self.select_invoice)
-		self.pay_invoice_button.place(x=20,y=645)
+		self.pay_invoice_button.place(x=20,y=725)
 
 		self.invoice_name_label = ttk.Label(self,text="Vendor Invoice Name")
 		self.invoice_name_label.place(x=400,y=15)
@@ -242,11 +258,18 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_entry_text)
 		self.pay_invoice_date_entry.place(x=400,y=605)
 
+		self.pay_invoice_payment_account_label = ttk.Label(self,text="Payment Account")
+		self.pay_invoice_payment_account_label.place(x=400,y=645)
+		self.pay_invoice_payment_account_text = tk.StringVar()
+		self.pay_invoice_payment_account_text.set(f"{payment_GL_options[0]}")
+		self.pay_invoice_payment_account_option_menu = ttk.OptionMenu(self,self.pay_invoice_payment_account_text,payment_GL_options[0],*payment_GL_options)
+		self.pay_invoice_payment_account_option_menu.place(x=400,y=675)
+
 		self.cancel_invoice_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
-		self.cancel_invoice_changes_button.place(x=490,y=645)
+		self.cancel_invoice_changes_button.place(x=490,y=725)
 
 		self.submit_invoice_changes_button = ttk.Button(self,text="Pay Invoice",command=self.submit_payment)
-		self.submit_invoice_changes_button.place(x=400,y=645)
+		self.submit_invoice_changes_button.place(x=400,y=725)
 
 
 	def search_invoices(self):
@@ -326,13 +349,39 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 	def submit_payment(self):
 
 		#Define update invoice status variables:
-
 		pay_invoice_update_status_data = []
 		pay_invoice_update_payment_data = []
+		pay_invoice_journal_entry_data = []
 
 		reference_vendor_name = self.invoice_name_entry_text.get()
 		reference_invoice_number = self.invoice_number_entry_text.get()
 		reference_invoice_paid_date = self.pay_invoice_entry_text.get()
+
+
+
+#
+#
+#		CONTINUE WORKING HERE:
+#
+#		CHANGE GENERAL_LEDGER TO DEBIT_GENERAL_LEDGER AND OFFSET_GENERAL_LEDGER TO CREDIT_GENERAL_LEDGER.
+#
+#
+
+		#Define journal entry variables:
+		reference_JE_timestamp = None
+		reference_JE_number = None
+		reference_JE_entry_date = None
+		reference_vendor_invoice_number = None
+		reference_debit_GL_name = None
+		reference_debit_GL_number = None
+		reference_debit_GL_type = None
+		reference_credit_GL_name = self.pay_invoice_payment_account_text.get()
+		reference_credit_GL_number = None
+		reference_credit_GL_type = None
+		reference_debit_GL_amount = None
+		reference_credit_GL_amount = None
+		reference_JE_vendor_name = self.invoice_name_entry_text.get()
+		reference_JE_notes = None
 
 		try:
 
@@ -380,31 +429,36 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"Invoice Date Error:  {error}")
 
 
-
-
-		#Continue working here:
-
-
-
-
-		"""
 		#Create new journal entries:
 
 		try:
 
-			PAY_INVOICE_JOURNAL_ENTRY(#__data)
-			PAY_INVOICE_JOURNAL_ENTRY.pay_invoice()
+			#Continue working here:
 
-				cursor = connection.cursor()
-				connection.commit()
-				cursor.close()
-				pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Vendor Invoice",message="Invoice successfully payed.")
+			pay_invoice_journal_entry_data.append(reference_JE_timestamp)
+			pay_invoice_journal_entry_data.append(reference_JE_number)
+			pay_invoice_journal_entry_data.append(reference_JE_entry_date)
+			pay_invoice_journal_entry_data.append(reference_vendor_invoice_number)
+			pay_invoice_journal_entry_data.append(reference_debit_GL_name)
+			pay_invoice_journal_entry_data.append(reference_debit_GL_number)
+			pay_invoice_journal_entry_data.append(reference_debit_GL_type)
+			pay_invoice_journal_entry_data.append(reference_credit_GL_name)
+			pay_invoice_journal_entry_data.append(reference_credit_GL_number)
+			pay_invoice_journal_entry_data.append(reference_credit_GL_type)
+			pay_invoice_journal_entry_data.append(reference_JE_debit_amount)
+			pay_invoice_journal_entry_data.append(reference_JE_credit_amount)
+			pay_invoice_journal_entry_data.append(reference_JE_vendor_name)
+			pay_invoice_journal_entry_data.append(reference_JE_notes)
+
+			new_invoice_payment_journal_entry = PAY_INVOICE_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
+			new_invoice_payment_journal_entry.pay_invoice()
+			pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Vendor Invoice",message="Invoice payment successfully recorded.")
 
 		except sqlite3.Error as error:
 
 			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
-		"""
+
 
 
 	def cancel_changes(self):
