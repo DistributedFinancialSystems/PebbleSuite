@@ -164,6 +164,7 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 
 
 		#Define SQL database scripts:
+		#Edit data in vendors table:
 		retrieve_vendors_sql_script = '''SELECT * FROM vendors;'''
 		edit_vendor_address1_sql_script = '''UPDATE vendors SET VENDOR_ADDRESS1=? WHERE VENDOR_NAME=?;'''
 		edit_vendor_address2_sql_script = '''UPDATE vendors SET VENDOR_ADDRESS2=? WHERE VENDOR_NAME=?;'''
@@ -175,6 +176,9 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 		edit_contact_phone_sql_script = '''UPDATE vendors SET CONTACT_PHONE=? WHERE VENDOR_NAME=?;'''
 		edit_contact_email_sql_script = '''UPDATE vendors SET CONTACT_EMAIL=? WHERE VENDOR_NAME=?;'''
 		edit_vendor_1099_sql_script = '''UPDATE vendors SET VENDOR_1099=? WHERE VENDOR_NAME=?;'''
+
+		#Edit data in journal_entries table:
+		search_vendor_JE_name = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_VENDOR_NAME=?;'''
 
 
 		#Define function variables:
