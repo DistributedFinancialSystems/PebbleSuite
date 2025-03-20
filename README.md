@@ -1,7 +1,5 @@
-# PebbleSuite
+# PebbleSuite setup instructions:
 
-
-PEBBLESUITE SETUP INSTRUCTIONS:
 
 1 - Download the Python programming language:
 
