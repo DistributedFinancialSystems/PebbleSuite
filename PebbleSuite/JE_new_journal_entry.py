@@ -7,7 +7,6 @@
 [ ]
 [ ]
 """
-
 """
 [ ]
 [ ]
@@ -49,79 +48,39 @@ class NEW_JOURNAL_ENTRY:
 	[ ]
 	[ ]
 	[ ]
-	[ ]	DEBIT_ENTRY FUNCTION:
+	[ ]	JOURNAL_ENTRY FUNCTION:
 	[ ]
 	[ ]
 	[ ]
 	"""
 
-	def debit_entry(self):
+	def journal_entry(self):
 
-		new_debit_JE_sql_script = '''INSERT INTO journal_entries(
+		new_JE_sql_script = '''INSERT INTO journal_entries(
 					JOURNAL_ENTRY_TIMESTAMP,
 					JOURNAL_ENTRY_NUMBER,
 					JOURNAL_ENTRY_DATE,
-					INVOICE_NUMBER,
-					GENERAL_LEDGER_NAME,
-					GENERAL_LEDGER_NUMBER,
-					GENERAL_LEDGER_TYPE,
-					OFFSET_GENERAL_LEDGER_NAME,
-					OFFSET_GENERAL_LEDGER_TYPE,
+					DEBIT_GENERAL_LEDGER_NAME,
+					DEBIT_GENERAL_LEDGER_NUMBER,
+					DEBIT_GENERAL_LEDGER_TYPE,
+					CREDIT_GENERAL_LEDGER_NAME,
+					CREDIT_GENERAL_LEDGER_NUMBER,
+					CREDIT_GENERAL_LEDGER_TYPE,
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
-					JOURNAL_ENTRY_NAME,
 					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			try:
 				cursor = connection.cursor()
-				cursor.execute(new_debit_JE_sql_script,self.new_journal_entry)
+				cursor.execute(new_JE_sql_script,self.new_journal_entry)
 				connection.commit()
 				cursor.close()
 
 			except sqlite3.Error as error:
-				print(f"debit_entry errror: {error}")
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	CREDIT_ENTRY FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-	def credit_entry(self):
-
-		new_credit_JE_sql_script = '''INSERT INTO journal_entries(
-					JOURNAL_ENTRY_TIMESTAMP,
-					JOURNAL_ENTRY_NUMBER,
-					JOURNAL_ENTRY_DATE,
-					INVOICE_NUMBER,
-					GENERAL_LEDGER_NAME,
-					GENERAL_LEDGER_NUMBER,
-					GENERAL_LEDGER_TYPE,
-					OFFSET_GENERAL_LEDGER_NAME,
-					OFFSET_GENERAL_LEDGER_TYPE,
-					JOURNAL_ENTRY_DEBIT_AMOUNT,
-					JOURNAL_ENTRY_CREDIT_AMOUNT,
-					JOURNAL_ENTRY_NAME,
-					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
-
-		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
-
-			try:
-				cursor = connection.cursor()
-				cursor.execute(new_credit_JE_sql_script,self.new_journal_entry)
-				connection.commit()
-				cursor.close()
-
-			except sqlite3.Error as error:
-				print(f"credit_entry error: {error}")
+				print(f"journal_entry errror: {error}")
 
 """
 [ ]
@@ -197,8 +156,8 @@ class NEW_JE_WINDOW(tk.Toplevel):
 		self.debit_GL_option_menu.place(x=20,y=125)
 		self.debit_GL_amount_label = ttk.Label(self,text="Debit Amount")
 		self.debit_GL_amount_label.place(x=220,y=100)
-		self.debit_GL_entry = ttk.Entry(self)
-		self.debit_GL_entry.place(x=220,y=125)
+		self.debit_GL_amount_entry = ttk.Entry(self)
+		self.debit_GL_amount_entry.place(x=220,y=125)
 
 		self.credit_GL_option_menu_label = ttk.Label(self,text="Credit General Ledger")
 		self.credit_GL_option_menu_label.place(x=420,y=100)
@@ -206,8 +165,8 @@ class NEW_JE_WINDOW(tk.Toplevel):
 		self.credit_GL_option_menu.place(x=420,y=125)
 		self.credit_GL_amount_label = ttk.Label(self,text="Credit Amount")
 		self.credit_GL_amount_label.place(x=620,y=100)
-		self.credit_GL_entry = ttk.Entry(self)
-		self.credit_GL_entry.place(x=620,y=125)
+		self.credit_GL_amount_entry = ttk.Entry(self)
+		self.credit_GL_amount_entry.place(x=620,y=125)
 
 		self.JE_notes_label = ttk.Label(self,text="Journal Entry Notes")
 		self.JE_notes_label.place(x=420,y=20)
@@ -232,35 +191,26 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 	def create_new_JE(self):
 
-		#Define debit data list and credit data list:
-		debit_JE_data = []
-		credit_JE_data = []
+		#Define journal entry data list and data variables:
+		JE_data = []
 
 		#Retrieve journal entry data:
 		new_JE_timestamp = datetime.datetime.now()
 		new_JE_number = self.JE_number_entry.get()
 		new_JE_date = self.JE_date_entry.get()
 
-		new_invoice_number = None
-
 		new_debit_GL_name = self.debit.get()
+		new_debit_GL_number = None
+		new_debit_GL_type = None
+
 		new_credit_GL_name = self.credit.get()
+		new_credit_GL_number = None
+		new_credit_GL_type = None
 
-		new_GL_number = None
-		new_GL_type = None
+		new_GL_debit = self.debit_GL_amount_entry.get()
+		new_GL_credit = self.credit_GL_amount_entry.get()
 
-		new_offset_GL_name_2 = self.credit.get()
-		new_offset_GL_name_1 = self.debit.get()
-
-		new_offset_GL_number = None
-		new_offset_GL_type = None
-
-		new_GL_debit = self.debit_GL_entry.get()
-		new_GL_credit = self.credit_GL_entry.get()
-
-		new_JE_name = None
 		new_JE_notes = self.JE_notes_entry.get()
-
 
 		if new_debit_GL_name == "Select General Ledger":
 
@@ -276,43 +226,24 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 		else:
 
-			debit_JE_data.append(new_JE_timestamp)
-			debit_JE_data.append(new_JE_number)
-			debit_JE_data.append(new_JE_date)
-			debit_JE_data.append(new_invoice_number)
-			debit_JE_data.append(new_debit_GL_name)
-			debit_JE_data.append(new_GL_number)
-			debit_JE_data.append(new_GL_type)
-			debit_JE_data.append(new_offset_GL_name_2)
-			#debit_JE_data.append(new_offset_GL_number)
-			debit_JE_data.append(new_offset_GL_type)
-			debit_JE_data.append(new_GL_debit)
-			debit_JE_data.append(0)
-			debit_JE_data.append(new_JE_name)
-			debit_JE_data.append(new_JE_notes)
-
-			credit_JE_data.append(new_JE_timestamp)
-			credit_JE_data.append(new_JE_number)
-			credit_JE_data.append(new_JE_date)
-			credit_JE_data.append(new_invoice_number)
-			credit_JE_data.append(new_credit_GL_name)
-			credit_JE_data.append(new_GL_number)
-			credit_JE_data.append(new_GL_type)
-			credit_JE_data.append(new_offset_GL_name_1)
-			#credit_JE_data.append(new_offset_GL_number)
-			credit_JE_data.append(new_offset_GL_type)
-			credit_JE_data.append(0)
-			credit_JE_data.append(new_GL_credit)
-			credit_JE_data.append(new_JE_name)
-			credit_JE_data.append(new_JE_notes)
+			JE_data.append(new_JE_timestamp)
+			JE_data.append(new_JE_number)
+			JE_data.append(new_JE_date)
+			JE_data.append(new_debit_GL_name)
+			JE_data.append(new_debit_GL_number)
+			JE_data.append(new_debit_GL_type)
+			JE_data.append(new_credit_GL_name)
+			JE_data.append(new_credit_GL_number)
+			JE_data.append(new_credit_GL_type)
+			JE_data.append(new_GL_debit)
+			JE_data.append(new_GL_credit)
+			JE_data.append(new_JE_notes)
 
 			try:
 
 				#NEW_JE_ENTRY class from above.
-				new_debit = NEW_JOURNAL_ENTRY(debit_JE_data)
-				new_credit = NEW_JOURNAL_ENTRY(credit_JE_data)
-				new_debit.debit_entry()
-				new_credit.credit_entry()
+				new_journal_entry = NEW_JOURNAL_ENTRY(JE_data)
+				new_journal_entry.journal_entry()
 
 				new_JE_confirmation_message = tk.messagebox.showinfo(title="New Journal Entry",message="New journal entry successfully entered.")
 
