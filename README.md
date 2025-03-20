@@ -1,5 +1,4 @@
 # PebbleSuite
-PebbleSuite is an open-source, GUI-based, user-friendly accounting system.
 
 
 PEBBLESUITE SETUP INSTRUCTIONS:
