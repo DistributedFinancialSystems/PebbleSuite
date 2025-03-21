@@ -254,8 +254,8 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		self.pay_invoice_date_label = ttk.Label(self,text="Payment Date:")
 		self.pay_invoice_date_label.place(x=400,y=575)
-		self.pay_invoice_entry_text = tk.StringVar()
-		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_entry_text)
+		self.pay_invoice_date_entry_text = tk.StringVar()
+		self.pay_invoice_date_entry = ttk.Entry(self,textvariable=self.pay_invoice_date_entry_text)
 		self.pay_invoice_date_entry.place(x=400,y=605)
 
 		self.pay_invoice_payment_account_label = ttk.Label(self,text="Payment Account")
@@ -355,7 +355,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		reference_vendor_name = self.invoice_name_entry_text.get()
 		reference_invoice_number = self.invoice_number_entry_text.get()
-		reference_invoice_paid_date = self.pay_invoice_entry_text.get()
+		reference_invoice_paid_date = self.pay_invoice_date_entry_text.get()
 
 
 
@@ -368,20 +368,20 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 #
 
 		#Define journal entry variables:
-		reference_JE_timestamp = None
+		reference_JE_timestamp = datetime.datetime.now()
 		reference_JE_number = None
-		reference_JE_entry_date = None
-		reference_vendor_invoice_number = None
-		reference_debit_GL_name = None
+		reference_JE_entry_date = self.pay_invoice_date_entry_text.get()
+		reference_vendor_invoice_number = self.invoice_number_entry_text.get()
+		reference_debit_GL_name = self.invoice_liability_GL_entry_text.get()
 		reference_debit_GL_number = None
 		reference_debit_GL_type = None
 		reference_credit_GL_name = self.pay_invoice_payment_account_text.get()
 		reference_credit_GL_number = None
 		reference_credit_GL_type = None
-		reference_debit_GL_amount = None
-		reference_credit_GL_amount = None
+		reference_debit_GL_amount = self.invoice_amount_entry_text.get()
+		reference_credit_GL_amount = self.invoice_amount_entry_text.get()
 		reference_JE_vendor_name = self.invoice_name_entry_text.get()
-		reference_JE_notes = None
+		reference_JE_notes = self.invoice_notes_entry_text.get()
 
 		try:
 
@@ -445,8 +445,8 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 			pay_invoice_journal_entry_data.append(reference_credit_GL_name)
 			pay_invoice_journal_entry_data.append(reference_credit_GL_number)
 			pay_invoice_journal_entry_data.append(reference_credit_GL_type)
-			pay_invoice_journal_entry_data.append(reference_JE_debit_amount)
-			pay_invoice_journal_entry_data.append(reference_JE_credit_amount)
+			pay_invoice_journal_entry_data.append(reference_debit_GL_amount)
+			pay_invoice_journal_entry_data.append(reference_credit_GL_amount)
 			pay_invoice_journal_entry_data.append(reference_JE_vendor_name)
 			pay_invoice_journal_entry_data.append(reference_JE_notes)
 
