@@ -46,6 +46,7 @@ from AR_delete_client import *
 from AR_new_invoice import *
 from AR_edit_invoice import *
 from AR_delete_invoice import *
+from AR_pay_invoice import *
 from AR_print_invoice import *
 from AR_new_credit_memo import *
 from AR_edit_credit_memo import *
@@ -133,7 +134,7 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="New Invoice",command=self.new_client_invoice)
 		self.AR_menu.add_command(label="Edit Invoice",command=self.edit_client_invoice)
 		self.AR_menu.add_command(label="Delete Invoice",command=self.delete_client_invoice)
-		self.AR_menu.add_command(label="Pay Invoice",command=self.new_AR)
+		self.AR_menu.add_command(label="Pay Invoice",command=self.pay_client_invoice)
 		self.AR_menu.add_command(label="Print Invoice",command=self.print_client_invoice)
 		self.AR_menu.add_separator()
 		self.AR_menu.add_command(label="New Credit Memo",command=self.new_client_credit_memo)
@@ -350,6 +351,11 @@ class MENU_BAR(tk.Menu):
 
 		if not AR_DELETE_INVOICE_WINDOW.alive:
 			self.secondary_window = AR_DELETE_INVOICE_WINDOW()
+
+	def pay_client_invoice(self):
+
+		if not AR_PAY_INVOICE_WINDOW.alive:
+			self.secondary_window = AR_PAY_INVOICE_WINDOW()
 
 	def print_client_invoice(self):
 
