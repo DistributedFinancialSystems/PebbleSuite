@@ -145,10 +145,12 @@ class MENU_BAR(tk.Menu):
 		self.add_cascade(label="Accounts Receivable",menu=self.AR_menu)
 
 		#Export Menu Tkinter widgets:
+		"""
 		self.company_menu = tk.Menu(self)
 		self.company_menu.add_command(label="Company Information",command=self.new_company)
 		self.company_menu.add_command(label="Export Database",command=self.new_company)
 		self.add_cascade(label="Company",menu=self.company_menu)
+		"""
 
 		#Financial Reports Menu Tkinter widgets
 		self.financial_reports_menu = tk.Menu(self)
@@ -189,6 +191,11 @@ class MENU_BAR(tk.Menu):
 		self.help_menu.add_command(label="Reports",command=self.new_help)
 		self.help_menu.add_command(label="Taxes",command=self.new_help)
 		self.add_cascade(label="Help",menu=self.help_menu)
+
+		#Inventory Menu
+		self.inventory_menu = tk.Menu(self)
+		self.inventory_menu.add_command(label="Add New Item",command=self.new_inventory)
+		self.add_cascade(label="Inventory",menu=self.inventory_menu)
 
 		#Journal Entries Menu Tkinter widgets
 		self.JE_menu = tk.Menu(self)
@@ -447,6 +454,21 @@ class MENU_BAR(tk.Menu):
 	def new_help(self):
 
 		showinfo(title="Help Menu",message="This is the Help menu!")
+
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	INVENTORY MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+	def new_inventory(self):
+
+		showinfo(title="Inventory Menu",message="This is the Inventory menu!")
 
 
 	"""
