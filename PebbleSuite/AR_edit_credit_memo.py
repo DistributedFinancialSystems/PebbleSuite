@@ -164,7 +164,7 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def search_credit_memos(self):
 
-		search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=?'''
+		search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS="Open";'''
 
 		for item in self.select_client_listbox.curselection():
 

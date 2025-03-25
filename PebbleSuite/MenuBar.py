@@ -52,6 +52,7 @@ from AR_print_invoice import *
 from AR_new_credit_memo import *
 from AR_edit_credit_memo import *
 from AR_delete_credit_memo import *
+from AR_apply_credit_memo import *
 from AR_print_credit_memo import *
 
 #Company Menu modules:
@@ -141,17 +142,9 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="New Credit Memo",command=self.new_client_credit_memo)
 		self.AR_menu.add_command(label="Edit Credit Memo",command=self.edit_client_credit_memo)
 		self.AR_menu.add_command(label="Delete Credit Memo",command=self.delete_client_credit_memo)
-		self.AR_menu.add_command(label="Apply Credit Memo",command=self.new_AR)
+		self.AR_menu.add_command(label="Apply Credit Memo",command=self.apply_client_credit_memo)
 		self.AR_menu.add_command(label="Print Credit Memo",command=self.print_client_credit_memo)
 		self.add_cascade(label="Accounts Receivable",menu=self.AR_menu)
-
-		#Export Menu Tkinter widgets:
-		"""
-		self.company_menu = tk.Menu(self)
-		self.company_menu.add_command(label="Company Information",command=self.new_company)
-		self.company_menu.add_command(label="Export Database",command=self.new_company)
-		self.add_cascade(label="Company",menu=self.company_menu)
-		"""
 
 		#Financial Reports Menu Tkinter widgets
 		self.financial_reports_menu = tk.Menu(self)
@@ -390,27 +383,16 @@ class MENU_BAR(tk.Menu):
 		if not DELETE_CLIENT_CREDIT_MEMO_WINDOW.alive:
 			self.secondary_window = DELETE_CLIENT_CREDIT_MEMO_WINDOW()
 
+	def apply_client_credit_memo(self):
+
+		if not AR_PAY_CREDIT_MEMO_WINDOW.alive:
+			self.secondary_window = AR_PAY_CREDIT_MEMO_WINDOW()
+
 	def print_client_credit_memo(self):
 
 		if not AR_PRINT_CREDIT_MEMO_WINDOW.alive:
 
 			self.secondary_window = AR_PRINT_CREDIT_MEMO_WINDOW()
-
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	COMPANY MENU FUNCTIONS:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-
-	def new_company(self):
-
-		new_company_message = tk.messagebox.showinfo(title="New Company",message="This is the Company Menu.")
 
 
 	"""

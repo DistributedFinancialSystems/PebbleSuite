@@ -199,7 +199,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.search_credit_memos_button.place(x=20,y=255)
 
 		self.clear_credit_memos_button = ttk.Button(self,text="Clear All Credit Memos",command=self.clear_credit_memos)
-		self.clear_credit_memos_button.place(x=120,y=725)
+		self.clear_credit_memos_button.place(x=160,y=725)
 
 		self.pay_credit_memo_button = ttk.Button(self,text="Select Credit Memo",command=self.select_credit_memo)
 		self.pay_credit_memo_button.place(x=20,y=725)
@@ -222,7 +222,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.credit_memo_due_date_entry_text,state=tk.DISABLED)
 		self.credit_memo_due_date_entry.place(x=400,y=185)
 
-		self.credit_memo_number_label = ttk.Label(self,text="credit_memo Number:")
+		self.credit_memo_number_label = ttk.Label(self,text="Credit Memo  Number:")
 		self.credit_memo_number_label.place(x=400,y=225)
 		self.credit_memo_number_entry_text = tk.StringVar()
 		self.credit_memo_number_entry = ttk.Entry(self,textvariable=self.credit_memo_number_entry_text,state=tk.DISABLED)
@@ -268,7 +268,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.cancel_credit_memo_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
 		self.cancel_credit_memo_changes_button.place(x=490,y=725)
 
-		self.submit_credit_memo_changes_button = ttk.Button(self,text="Pay Credit Memo",command=self.submit_payment)
+		self.submit_credit_memo_changes_button = ttk.Button(self,text="Submit",command=self.submit_payment)
 		self.submit_credit_memo_changes_button.place(x=400,y=725)
 
 

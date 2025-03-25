@@ -57,6 +57,7 @@ from AR_print_invoice import *
 from AR_new_credit_memo import *
 from AR_edit_credit_memo import *
 from AR_delete_credit_memo import *
+from AR_apply_credit_memo import *
 from AR_print_credit_memo import *
 
 #Company Menu modules:

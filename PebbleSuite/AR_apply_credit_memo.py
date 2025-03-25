@@ -151,7 +151,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=775)
-		self.title("Pay Client Invoice")
+		self.title("Pay Client Credit Memo")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -188,65 +188,65 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			cursor.close()
 
 
-		#Invoice selection listbox widget:
+		#Credit Memo selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=405)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
 		self.listbox.place(x=20,y=300,width=333,height=405)
 		self.scrollbar.config(command=self.listbox.yview)
 
-		self.search_credit_memos_button = ttk.Button(self,text="Search Invoices",command=self.search_credit_memos)
+		self.search_credit_memos_button = ttk.Button(self,text="Search Credit Memos",command=self.search_credit_memos)
 		self.search_credit_memos_button.place(x=20,y=255)
 
-		self.clear_credit_memos_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_credit_memos)
-		self.clear_credit_memos_button.place(x=120,y=725)
+		self.clear_credit_memos_button = ttk.Button(self,text="Clear All Credit Memos",command=self.clear_credit_memos)
+		self.clear_credit_memos_button.place(x=160,y=725)
 
-		self.pay_credit_memo_button = ttk.Button(self,text="Select Invoice",command=self.select_credit_memo)
+		self.pay_credit_memo_button = ttk.Button(self,text="Select Credit Memo",command=self.select_credit_memo)
 		self.pay_credit_memo_button.place(x=20,y=725)
 
-		self.credit_memo_name_label = ttk.Label(self,text="Client Invoice Name")
+		self.credit_memo_name_label = ttk.Label(self,text="Client Credit Memo Name")
 		self.credit_memo_name_label.place(x=400,y=15)
 		self.credit_memo_name_entry_text = tk.StringVar()
 		self.credit_memo_name_entry = ttk.Entry(self,textvariable=self.credit_memo_name_entry_text,state=tk.DISABLED)
 		self.credit_memo_name_entry.place(x=400,y=45)
 
-		self.credit_memo_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
+		self.credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date:")
 		self.credit_memo_issue_date_label.place(x=400,y=85)
 		self.credit_memo_issue_date_entry_text = tk.StringVar()
 		self.credit_memo_issue_date_entry = ttk.Entry(self,textvariable=self.credit_memo_issue_date_entry_text,state=tk.DISABLED)
 		self.credit_memo_issue_date_entry.place(x=400,y=115)
 
-		self.credit_memo_due_date_label = ttk.Label(self,text="Invoice Due Date:")
+		self.credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date:")
 		self.credit_memo_due_date_label.place(x=400,y=155)
 		self.credit_memo_due_date_entry_text = tk.StringVar()
 		self.credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.credit_memo_due_date_entry_text,state=tk.DISABLED)
 		self.credit_memo_due_date_entry.place(x=400,y=185)
 
-		self.credit_memo_number_label = ttk.Label(self,text="Invoice Number:")
+		self.credit_memo_number_label = ttk.Label(self,text="Credit Memo Number:")
 		self.credit_memo_number_label.place(x=400,y=225)
 		self.credit_memo_number_entry_text = tk.StringVar()
 		self.credit_memo_number_entry = ttk.Entry(self,textvariable=self.credit_memo_number_entry_text,state=tk.DISABLED)
 		self.credit_memo_number_entry.place(x=400,y=255)
 
-		self.credit_memo_asset_GL_label = ttk.Label(self,text="Invoice Asset GL:")
+		self.credit_memo_asset_GL_label = ttk.Label(self,text="Credit Memo Asset GL:")
 		self.credit_memo_asset_GL_label.place(x=400,y=295)
 		self.credit_memo_asset_GL_entry_text = tk.StringVar()
 		self.credit_memo_asset_GL_entry = ttk.Entry(self,textvariable=self.credit_memo_asset_GL_entry_text,state=tk.DISABLED)
 		self.credit_memo_asset_GL_entry.place(x=400,y=325)
 
-		self.credit_memo_income_GL_label = ttk.Label(self,text="Invoice Income GL:")
-		self.credit_memo_income_GL_label.place(x=400,y=365)
-		self.credit_memo_income_GL_entry_text = tk.StringVar()
-		self.credit_memo_income_GL_entry = ttk.Entry(self,textvariable=self.credit_memo_income_GL_entry_text,state=tk.DISABLED)
-		self.credit_memo_income_GL_entry.place(x=400,y=395)
+		self.credit_memo_expense_GL_label = ttk.Label(self,text="Credit Memo Expense GL:")
+		self.credit_memo_expense_GL_label.place(x=400,y=365)
+		self.credit_memo_expense_GL_entry_text = tk.StringVar()
+		self.credit_memo_expense_GL_entry = ttk.Entry(self,textvariable=self.credit_memo_expense_GL_entry_text,state=tk.DISABLED)
+		self.credit_memo_expense_GL_entry.place(x=400,y=395)
 
-		self.credit_memo_amount_label = ttk.Label(self,text="Invoice Amount:")
+		self.credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount:")
 		self.credit_memo_amount_label.place(x=400,y=435)
 		self.credit_memo_amount_entry_text = tk.StringVar()
 		self.credit_memo_amount_entry = ttk.Entry(self,textvariable=self.credit_memo_amount_entry_text,state=tk.DISABLED)
 		self.credit_memo_amount_entry.place(x=400,y=465)
 
-		self.credit_memo_notes_label = ttk.Label(self,text="Invoice Notes:")
+		self.credit_memo_notes_label = ttk.Label(self,text="Credit Memo Notes:")
 		self.credit_memo_notes_label.place(x=400,y=505)
 		self.credit_memo_notes_entry_text = tk.StringVar()
 		self.credit_memo_notes_entry = ttk.Entry(self,textvariable=self.credit_memo_notes_entry_text,state=tk.DISABLED)
@@ -268,7 +268,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.cancel_credit_memo_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
 		self.cancel_credit_memo_changes_button.place(x=490,y=725)
 
-		self.submit_credit_memo_changes_button = ttk.Button(self,text="Pay Invoice",command=self.submit_payment)
+		self.submit_credit_memo_changes_button = ttk.Button(self,text="Submit",command=self.submit_payment)
 		self.submit_credit_memo_changes_button.place(x=400,y=725)
 
 
@@ -334,7 +334,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				self.credit_memo_due_date_entry_text.set(f"{collect[0][2]}")
 				self.credit_memo_number_entry_text.set(f"{collect[0][3]}")
 				self.credit_memo_asset_GL_entry_text.set(f"{collect[0][4]}")
-				self.credit_memo_income_GL_entry_text.set(f"{collect[0][5]}")
+				self.credit_memo_expense_GL_entry_text.set(f"{collect[0][5]}")
 				self.credit_memo_amount_entry_text.set(f"{collect[0][6]}")
 				self.credit_memo_notes_entry_text.set(f"{collect[0][7]}")
 
@@ -348,7 +348,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def submit_payment(self):
 
-		#Define update invoice status variables:
+		#Define update credit memo status variables:
 		pay_credit_memo_update_status_data = []
 		pay_credit_memo_update_payment_data = []
 		pay_credit_memo_journal_entry_data = []
@@ -362,10 +362,10 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		reference_JE_number = None
 		reference_JE_entry_date = self.pay_credit_memo_date_entry_text.get()
 		reference_client_credit_memo_number = self.credit_memo_number_entry_text.get()
-		reference_debit_GL_name = self.pay_credit_memo_payment_account_text.get()
+		reference_debit_GL_name = self.credit_memo_asset_GL_entry_text.get()
 		reference_debit_GL_number = None
 		reference_debit_GL_type = None
-		reference_credit_GL_name = self.credit_memo_asset_GL_entry_text.get()
+		reference_credit_GL_name = self.pay_credit_memo_payment_account_text.get()
 		reference_credit_GL_number = None
 		reference_credit_GL_type = None
 		reference_debit_GL_amount = self.credit_memo_amount_entry_text.get()
@@ -383,7 +383,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			print("Error:  could not add data into pay_credit_memo_update_status_data list.")
 
 
-		#Update client invoice data:
+		#Update client credit memo data:
 
 		try:
 
@@ -394,7 +394,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		except sqlite3.Error as error:
 
-			update_payment_status_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"Invoice Status Error:  {error}")
+			update_payment_status_error_message = tk.messagebox.showinfo(title="Pay Client Credit Memo",message=f"Credit Memo Status Error:  {error}")
 
 
 		#Update client payment date data:
@@ -416,7 +416,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		except sqlite3.Error as error:
 
-			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"Invoice Date Error:  {error}")
+			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Client Credit Memo",message=f"Credit Memo Date Error:  {error}")
 
 
 		#Create new journal entries:
@@ -440,9 +440,9 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			pay_credit_memo_journal_entry_data.append(reference_JE_client_name)
 			pay_credit_memo_journal_entry_data.append(reference_JE_notes)
 
-			new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
+			new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
 			new_credit_memo_payment_journal_entry.pay_credit_memo()
-			pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Pay Client Invoice",message="Invoice payment successfully recorded.")
+			pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Pay Client Credit Memo",message="Credit Memo payment successfully recorded.")
 
 		except sqlite3.Error as error:
 
@@ -460,7 +460,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			self.credit_memo_due_date_entry_text.set("")
 			self.credit_memo_number_entry_text.set("")
 			self.credit_memo_asset_GL_entry_text.set("")
-			self.credit_memo_income_GL_entry_text.set("")
+			self.credit_memo_expense_GL_entry_text.set("")
 			self.credit_memo_amount_entry_text.set("")
 			self.credit_memo_notes_entry_text.set("")
 

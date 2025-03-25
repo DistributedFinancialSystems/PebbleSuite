@@ -147,7 +147,7 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=?'''
+		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
 
 		for item in self.select_client_listbox.curselection():
 

@@ -199,7 +199,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 		self.search_invoices_button.place(x=20,y=255)
 
 		self.clear_invoices_button = ttk.Button(self,text="Clear All Invoices",command=self.clear_invoices)
-		self.clear_invoices_button.place(x=120,y=725)
+		self.clear_invoices_button.place(x=125,y=725)
 
 		self.pay_invoice_button = ttk.Button(self,text="Select Invoice",command=self.select_invoice)
 		self.pay_invoice_button.place(x=20,y=725)
@@ -268,7 +268,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 		self.cancel_invoice_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
 		self.cancel_invoice_changes_button.place(x=490,y=725)
 
-		self.submit_invoice_changes_button = ttk.Button(self,text="Pay Invoice",command=self.submit_payment)
+		self.submit_invoice_changes_button = ttk.Button(self,text="Submit",command=self.submit_payment)
 		self.submit_invoice_changes_button.place(x=400,y=725)
 
 

@@ -327,11 +327,11 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_journal_entry_date = self.vendor_invoice_issue_date_entry.get()
 			new_invoice_number = self.vendor_invoice_number_entry.get()
 			new_debit_general_ledger_name = self.expense_GL_text.get()
-			new_debit_general_ledger_number = "INSERT GL NUMBER"
-			new_debit_general_ledger_type = "Expense"
+			new_debit_general_ledger_number = None
+			new_debit_general_ledger_type = None
 			new_credit_general_ledger_name = self.liability_GL_text.get()
-			new_credit_general_ledger_number = "INSERT GL NUMBER"
-			new_credit_general_ledger_type = "Liability"
+			new_credit_general_ledger_number = None
+			new_credit_general_ledger_type = None
 			new_journal_entry_debit_amount = self.vendor_invoice_amount_entry.get()
 			new_journal_entry_credit_amount = self.vendor_invoice_amount_entry.get()
 			new_journal_entry_name = self.clicked.get()

@@ -342,11 +342,11 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			new_journal_entry_date = self.vendor_credit_memo_issue_date_entry.get()
 			new_credit_memo_number = self.vendor_credit_memo_number_entry.get()
 			new_debit_general_ledger_name = self.asset_GL_text.get()
-			new_debit_general_ledger_number = "INSERT GL NUMBER"
-			new_debit_general_ledger_type = "Asset"
+			new_debit_general_ledger_number = None
+			new_debit_general_ledger_type = None
 			new_credit_general_ledger_name = self.income_GL_text.get()
-			new_credit_general_ledger_number = "INSERT GL NUMBER"
-			new_credit_general_ledger_type = "Income"
+			new_credit_general_ledger_number = None
+			new_credit_general_ledger_type = None
 			new_journal_entry_debit_amount = self.vendor_credit_memo_amount_entry.get()
 			new_journal_entry_credit_amount = self.vendor_credit_memo_amount_entry.get()
 			new_journal_entry_name = self.clicked.get()

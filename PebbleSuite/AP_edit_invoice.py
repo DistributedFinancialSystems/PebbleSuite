@@ -170,20 +170,18 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
+		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
 
 		for item in self.select_vendor_listbox.curselection():
 
 			select_vendor = self.select_vendor_listbox.get(item)
-
-		invoice_status = "Open"
 
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
-				cursor.execute(search_vendor_sql_script,(select_vendor,invoice_status))
+				cursor.execute(search_vendor_sql_script,[select_vendor])
 
 				for item in cursor:
 
