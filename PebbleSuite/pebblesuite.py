@@ -42,6 +42,7 @@ from AP_print_invoice import *
 from AP_new_credit_memo import *
 from AP_edit_credit_memo import *
 from AP_delete_credit_memo import *
+from AP_apply_credit_memo import *
 from AP_print_credit_memo import *
 
 #Accounts Receivable modules:

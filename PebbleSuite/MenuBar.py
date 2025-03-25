@@ -37,6 +37,7 @@ from AP_print_invoice import *
 from AP_new_credit_memo import *
 from AP_edit_credit_memo import *
 from AP_delete_credit_memo import *
+from AP_apply_credit_memo import *
 from AP_print_credit_memo import *
 
 #Accounts Receivable Menu modules:
@@ -121,7 +122,7 @@ class MENU_BAR(tk.Menu):
 		self.AP_menu.add_command(label="New Credit Memo",command=self.new_vendor_credit_memo)
 		self.AP_menu.add_command(label="Edit Credit Memo",command=self.edit_vendor_credit_memo)
 		self.AP_menu.add_command(label="Delete Credit Memo",command=self.delete_vendor_credit_memo)
-		self.AP_menu.add_command(label="Apply Credit Memo",command=self.new_AP)
+		self.AP_menu.add_command(label="Apply Credit Memo",command=self.apply_vendor_credit_memo)
 		self.AP_menu.add_command(label="Print Credit Memo",command=self.print_vendor_credit_memo)
 		self.add_cascade(label="Accounts Payable",menu=self.AP_menu)
 
@@ -302,6 +303,11 @@ class MENU_BAR(tk.Menu):
 
 		if not DELETE_VENDOR_CREDIT_MEMO_WINDOW.alive:
 			self.secondary_window = DELETE_VENDOR_CREDIT_MEMO_WINDOW()
+
+	def apply_vendor_credit_memo(self):
+
+		if not AP_PAY_CREDIT_MEMO_WINDOW.alive:
+			self.secondary_window = AP_PAY_CREDIT_MEMO_WINDOW()
 
 	def print_vendor_credit_memo(self):
 		if not AP_PRINT_CREDIT_MEMO_WINDOW.alive:
