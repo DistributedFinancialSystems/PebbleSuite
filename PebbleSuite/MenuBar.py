@@ -146,23 +146,10 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="Print Credit Memo",command=self.print_client_credit_memo)
 		self.add_cascade(label="Accounts Receivable",menu=self.AR_menu)
 
-		#Financial Reports Menu Tkinter widgets
-		self.financial_reports_menu = tk.Menu(self)
-		self.financial_reports_menu.add_command(label="AP Aging Report",command=self.new_reports)
-		self.financial_reports_menu.add_command(label="AR Aging Report",command=self.new_reports)
-		self.financial_reports_menu.add_command(label="Balance Sheet",command=self.new_reports)
-		self.financial_reports_menu.add_command(label="Cash Flows",command=self.new_reports)
-		self.financial_reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
-		self.financial_reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
-		self.financial_reports_menu.add_separator()
-		self.financial_reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
-		self.financial_reports_menu.add_command(label="Client Summary",command=self.client_summary)
-		self.add_cascade(label="Financial Reports",menu=self.financial_reports_menu)
-
-		#Financial Tools Menu Tkinter widgets:
-		self.financial_tools_menu = tk.Menu(self)
-		self.financial_tools_menu.add_command(label="Calculator",command=self.calculator)
-		self.add_cascade(label="Financial Tools",menu=self.financial_tools_menu)
+		#Customer Sales Tkinter widgets
+		self.customer_sales_menu = tk.Menu(self)
+		self.customer_sales_menu.add_command(label="New Sale",command=self.new_sale)
+		self.add_cascade(label="Customer Sales",menu=self.customer_sales_menu)
 
 		#GL Menu Tkinter widgets
 		self.GL_menu = tk.Menu(self)
@@ -188,7 +175,13 @@ class MENU_BAR(tk.Menu):
 
 		#Inventory Menu
 		self.inventory_menu = tk.Menu(self)
-		self.inventory_menu.add_command(label="Add New Item",command=self.new_inventory)
+		self.inventory_menu.add_command(label="New Product",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Edit Product",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Delete Product",command=self.new_inventory)
+		self.inventory_menu.add_separator()
+		self.inventory_menu.add_command(label="Add Inventory",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Edit Inventory",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Delete Inventory",command=self.new_inventory)
 		self.add_cascade(label="Inventory",menu=self.inventory_menu)
 
 		#Journal Entries Menu Tkinter widgets
@@ -201,6 +194,19 @@ class MENU_BAR(tk.Menu):
 		self.JE_menu.add_command(label="Export Journal Entries",command=self.new_JE)
 		self.JE_menu.add_command(label="Multi-Journal Entry",command=self.new_JE)
 		self.add_cascade(label="Journal Entries",menu=self.JE_menu)
+
+		#Financial Reports Menu Tkinter widgets
+		self.financial_reports_menu = tk.Menu(self)
+		self.financial_reports_menu.add_command(label="AP Aging Report",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="AR Aging Report",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Balance Sheet",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Cash Flows",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
+		self.financial_reports_menu.add_separator()
+		self.financial_reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
+		self.financial_reports_menu.add_command(label="Client Summary",command=self.client_summary)
+		self.add_cascade(label="Reports",menu=self.financial_reports_menu)
 
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
@@ -215,6 +221,11 @@ class MENU_BAR(tk.Menu):
 		self.taxes_menu.add_command(label="Create 1099-NEC Forms",command=self.new_taxes)
 		self.taxes_menu.add_command(label="Create Schedule C",command=self.new_taxes)
 		self.add_cascade(label="Taxation",menu=self.taxes_menu)
+
+		#Financial Tools Menu Tkinter widgets:
+		self.tools_menu = tk.Menu(self)
+		self.tools_menu.add_command(label="Calculator",command=self.calculator)
+		self.add_cascade(label="Tools",menu=self.tools_menu)
 
 
 	"""
@@ -393,6 +404,20 @@ class MENU_BAR(tk.Menu):
 		if not AR_PRINT_CREDIT_MEMO_WINDOW.alive:
 
 			self.secondary_window = AR_PRINT_CREDIT_MEMO_WINDOW()
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	CUSTOMER SALES FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+	def new_sale(self):
+
+		showinfo(title="Customer Sales",message="This is the Customer Sales menu.")
 
 
 	"""
