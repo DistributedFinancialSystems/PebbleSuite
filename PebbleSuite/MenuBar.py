@@ -148,7 +148,12 @@ class MENU_BAR(tk.Menu):
 
 		#Customer Sales Tkinter widgets
 		self.customer_sales_menu = tk.Menu(self)
-		self.customer_sales_menu.add_command(label="New Sale",command=self.new_sale)
+		self.customer_sales_menu.add_command(label="New Customer",command=self.new_sale)
+		self.customer_sales_menu.add_command(label="Edit Customer",command=self.new_sale)
+		self.customer_sales_menu.add_command(label="Delete Customer",command=self.new_sale)
+		self.customer_sales_menu.add_separator()
+		self.customer_sales_menu.add_command(label="New Transaction",command=self.new_sale)
+		self.customer_sales_menu.add_command(label="Delete Transaction",command=self.new_sale)
 		self.add_cascade(label="Customer Sales",menu=self.customer_sales_menu)
 
 		#GL Menu Tkinter widgets

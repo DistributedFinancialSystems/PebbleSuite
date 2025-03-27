@@ -77,12 +77,29 @@ class NEW_GL_WINDOW(tk.Toplevel):
 
 	alive = False
 
-	GL_types = ["Select GL Type","Select GL Type","Asset","Liability","Equity","Income","Expense"]
+	GL_types = 	[
+			"Select GL Type",
+			"Select GL Type",
+			"Asset - Bank Account",
+			"Asset - Inventory",
+			"Asset - Accounts Receivable",
+			"Asset - Fixed Asset",
+			"Asset - Other",
+			"Liability - Accounts Payable",
+			"Liability - Notes Payable",
+			"Liability - Long-Term Debt",
+			"Liability - Other",
+			"Equity - Owner's Equity",
+			"Equity - Other Investment",
+			"Income - Sales Income",
+			"Expense - Direct Expense",
+			"Expense - Indirect Expense"
+			]
 
 	def __init__(self,*args,**kwargs):
 
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=225)
+		self.config(width=425,height=225)
 		self.title("New General Ledger")
 		self.focus()
 		self.resizable(0,0)

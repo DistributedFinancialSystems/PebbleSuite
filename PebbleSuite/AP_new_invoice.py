@@ -123,7 +123,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 	#Define SQL.db scripts:
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
-	liability_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Liability";'''
+	liability_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Liability - Accounts Payable";'''
 	expense_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Expense";'''
 
 

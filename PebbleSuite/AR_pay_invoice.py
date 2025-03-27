@@ -110,7 +110,7 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset";'''
+	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
 
 	#Define class functions
@@ -118,7 +118,7 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		options = ["Select Client"]
 
-		payment_GL_options = ["Select Asset GL"]
+		payment_GL_options = ["Select Bank Account"]
 
 
 		#Retrieve client names from SQL.db, add them into options list:

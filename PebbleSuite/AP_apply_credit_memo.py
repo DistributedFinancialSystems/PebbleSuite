@@ -110,7 +110,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
-	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset";'''
+	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
 
 	#Define class functions
@@ -118,7 +118,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		options = ["Select Vendor"]
 
-		payment_GL_options = ["Select Asset GL"]
+		payment_GL_options = ["Select Bank Account"]
 
 
 		#Retrieve vendor names from SQL.db, add them into options list:

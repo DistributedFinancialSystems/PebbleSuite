@@ -132,7 +132,7 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	#Define SQL.db scripts:
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
-	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset";'''
+	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income";'''
 
 
@@ -161,7 +161,7 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 
 		#Retrieve asset GL data from SQL.db:
-		asset_GL_options = ["Select Asset GL"]
+		asset_GL_options = ["Select Bank Account"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
