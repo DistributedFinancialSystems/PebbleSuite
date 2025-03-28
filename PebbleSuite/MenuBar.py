@@ -67,6 +67,9 @@ from GL_delete_GL import *
 #Help Menu modules:
 from Help_commands import *
 
+#Inventory Menu modules:
+from Inventory_new_product import *
+
 #Journal Entries Menu modules:
 from JE_new_journal_entry import *
 
@@ -181,7 +184,7 @@ class MENU_BAR(tk.Menu):
 
 		#Inventory Menu
 		self.inventory_menu = tk.Menu(self)
-		self.inventory_menu.add_command(label="New Product",command=self.new_inventory)
+		self.inventory_menu.add_command(label="New Product",command=self.new_product)
 		self.inventory_menu.add_command(label="Edit Product",command=self.new_inventory)
 		self.inventory_menu.add_command(label="Delete Product",command=self.new_inventory)
 		self.inventory_menu.add_separator()
@@ -488,6 +491,12 @@ class MENU_BAR(tk.Menu):
 	def new_inventory(self):
 
 		showinfo(title="Inventory Menu",message="This is the Inventory menu!")
+
+	def new_product(self):
+
+		if not NEW_PRODUCT_WINDOW.alive:
+
+			self.secondary_window = NEW_PRODUCT_WINDOW()
 
 
 	"""

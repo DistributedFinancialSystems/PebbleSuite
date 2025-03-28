@@ -95,27 +95,27 @@ class database:
 						CREDIT_MEMO_STATUS TEXT,
 						CREDIT_MEMO_PAID_DATE TIMESTAMP);''')
 
-		customer_sales = ('''CREATE TABLE IF NOT EXISTS customer_sales(
-					SALE_DATE TIMESTAMP,
-					SALE_CUSTOMER_NAME TEXT,
-					SALE_INVENTORY_1_NAME TEXT,
-					SALE_INVENTORY_1_QUANTITY INTEGER
-					SALE_TOTAL_AMOUNT REAL
-					SALE_RECEIPT_NUMBER INTEGER);''')
+		customer_sales_sql_script = ('''CREATE TABLE IF NOT EXISTS customer_sales(
+						SALE_DATE TIMESTAMP,
+						SALE_CUSTOMER_NAME TEXT,
+						SALE_INVENTORY_1_NAME TEXT,
+						SALE_INVENTORY_1_QUANTITY INTEGER
+						SALE_TOTAL_AMOUNT REAL
+						SALE_RECEIPT_NUMBER INTEGER);''')
 
-		products = ('''CREATE TABLE IF NOT EXISTS products(
-				PRODUCT_NAME TEXT,
-				PRODUCT_NUMBER INTEGER,
-				PRODUCT_VENDOR_NAME TEXT,
-				PRODUCT_SALES_PRICE REAL;);''')
+		products_sql_script = ('''CREATE TABLE IF NOT EXISTS products(
+					PRODUCT_NAME TEXT,
+					PRODUCT_NUMBER INTEGER,
+					PRODUCT_VENDOR_NAME TEXT,
+					PRODUCT_SALES_PRICE REAL);''')
 
-		inventory = ('''CREATE TABLE IF NOT EXISTS inventory(
-				PRODUCT_NAME TEXT,
-				PRODUCT_PURCHASE_DATE TIMESTAMP,
-				PRODUCT_TOTAL_PURCHASE_PRICE REAL,
-				PRODUCT_EXPIRATION_DATE TIMESTAMP,
-				PRODUCT_UNIT_QUANTITY INTEGER,
-				PRODUCT_UNIT_WHOLESALE_PRICE REAL);''')
+		inventory_sql_script = ('''CREATE TABLE IF NOT EXISTS inventory(
+					PRODUCT_NAME TEXT,
+					PRODUCT_PURCHASE_DATE TIMESTAMP,
+					PRODUCT_TOTAL_PURCHASE_PRICE REAL,
+					PRODUCT_EXPIRATION_DATE TIMESTAMP,
+					PRODUCT_UNIT_QUANTITY INTEGER,
+					PRODUCT_UNIT_WHOLESALE_PRICE REAL);''')
 
 		general_ledger_sql_script = ('''CREATE TABLE IF NOT EXISTS general_ledgers(
 						GENERAL_LEDGER_NAME TEXT,
@@ -152,6 +152,9 @@ class database:
 			cursor.execute(client_invoices_sql_script)
 			cursor.execute(vendor_credit_memos_sql_script)
 			cursor.execute(client_credit_memos_sql_script)
+			cursor.execute(customer_sales_sql_script)
+			cursor.execute(products_sql_script)
+			cursor.execute(inventory_sql_script)
 			cursor.execute(general_ledger_sql_script)
 			cursor.execute(journal_entry_sql_script)
 			connection.commit()

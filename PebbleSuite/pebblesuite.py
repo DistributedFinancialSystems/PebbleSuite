@@ -72,6 +72,9 @@ from GL_delete_GL import *
 #Help Memu modules:
 from Help_commands import *
 
+#Inventory Menu modeules:
+from Inventory_new_product import *
+
 #Journal Entries modules:
 from JE_new_journal_entry import *
 
