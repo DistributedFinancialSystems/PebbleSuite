@@ -220,6 +220,8 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 		try:
 
+			self.edit_selection_temporary_memory.clear()
+
 			self.general_ledger_name_entry_text.set("")
 			self.general_ledger_number_entry_text.set("")
 			self.general_ledger_type_entry_text.set("")

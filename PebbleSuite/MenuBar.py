@@ -69,6 +69,7 @@ from Help_commands import *
 
 #Inventory Menu modules:
 from Inventory_new_product import *
+from Inventory_edit_product import *
 
 #Journal Entries Menu modules:
 from JE_new_journal_entry import *
@@ -185,7 +186,7 @@ class MENU_BAR(tk.Menu):
 		#Inventory Menu
 		self.inventory_menu = tk.Menu(self)
 		self.inventory_menu.add_command(label="New Product",command=self.new_product)
-		self.inventory_menu.add_command(label="Edit Product",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Edit Product",command=self.edit_product)
 		self.inventory_menu.add_command(label="Delete Product",command=self.new_inventory)
 		self.inventory_menu.add_separator()
 		self.inventory_menu.add_command(label="Add Inventory",command=self.new_inventory)
@@ -497,6 +498,12 @@ class MENU_BAR(tk.Menu):
 		if not NEW_PRODUCT_WINDOW.alive:
 
 			self.secondary_window = NEW_PRODUCT_WINDOW()
+
+	def edit_product(self):
+
+		if not EDIT_PRODUCT_WINDOW.alive:
+
+			self.secondary_window = EDIT_PRODUCT_WINDOW()
 
 
 	"""
