@@ -167,8 +167,32 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 		new_vendor_1099 = self.vendor_1099_entry_text.get()
 		new_vendor_data.append(new_vendor_1099)
 
+		#Verify vendor names in SQL.db:
 
-		if new_vendor_name == "":
+		vendor_names = []
+
+		verify_vendor_names_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(verify_vendor_names_sql_script)
+
+			for item in cursor:
+
+				vendor_names.append(*item)
+
+			connection.commit()
+
+			cursor.close()
+
+
+		if new_vendor_name in vendor_names:
+
+			duplicate_vendor_names_error_message = tk.messagebox.showinfo(title="New Vendor",message="Duplicate vendor name:  please use different name for new vendor.")
+
+		elif new_vendor_name == "":
 
 			new_vendor_name_error_message = tk.messagebox.showinfo(title="Error",message="Vendor name cannot be blank.")
 
@@ -181,13 +205,16 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 			try:
 
 				new_vendor = NEW_VENDOR_ENTRY(new_vendor_data)
+
 				new_vendor.enter_data()
+
+				vendor_names.clear()
+
+				create_new_vendor_confirmation_message = tk.messagebox.showinfo(title="New Vendor Entry",message="New Vendor Successfully Created!")
 
 			except sqlite3.Error as error:
 
 				create_new_vendor_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-			create_new_vendor_confirmation_message = tk.messagebox.showinfo(title="New Vendor Entry",message="New Vendor Successfully Created!")
 
 
 	def clear_vendor_data(self):
@@ -204,7 +231,10 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 			self.vendor_contact_phone_entry.delete(0,tk.END)
 			self.vendor_contact_email_entry.delete(0,tk.END)
 
+			vendor_names.clear()
+
 		except ValueError as error:
+
 			clear_vendor_data_error_message = tk.messagebox.showinfo(f"{error}")
 
 

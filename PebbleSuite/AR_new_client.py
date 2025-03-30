@@ -140,14 +140,34 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 		new_client_contact_email = self.client_contact_email_entry.get()
 		new_client_contact_notes = self.client_contact_notes_entry.get()
 
+		#Verify existing client names in SQL.db:
 
-		#Define create_new_client error message:
-		if new_client_name == "":
+		client_names = []
+
+		verify_client_names_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(verify_client_names_sql_script)
+
+			for item in cursor:
+
+				client_names.append(*item)
+
+			connection.commit()
+
+			cursor.close()
+
+		if new_client_name in client_names:
+
+			duplicate_client_name_error_message = tk.messagebox.showinfo(title="New Client",message="Duplicate client name:  please use a different name for new client.")
+
+		elif new_client_name == "":
 
 			new_client_name_error_message = tk.messagebox.showinfo(title="Error",message="Client name cannot be blank.")
 
-
-		#Format SQL.db entry data:
 		else:
 
 			new_client_data.append(new_client_name)
@@ -165,8 +185,12 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 			try:
 
 				new_client = NEW_CLIENT_ENTRY(new_client_data)
+
 				new_client.enter_data()
 
+				client_names.clear()
+
+				new_client_confirmation_message = tk.messagebox.showinfo(title="New Client",message="New client successfully created.")
 
 			except sqlite3.Error as error:
 

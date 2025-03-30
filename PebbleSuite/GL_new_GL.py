@@ -132,6 +132,7 @@ class NEW_GL_WINDOW(tk.Toplevel):
 	def create_new_GL(self):
 
 		GL_data = []
+
 		new_GL_name = self.GL_name_entry.get()
 		GL_data.append(new_GL_name)
 		new_GL_number = self.GL_number_entry.get()
@@ -139,17 +140,41 @@ class NEW_GL_WINDOW(tk.Toplevel):
 		new_GL_type = self.clicked.get()
 		GL_data.append(new_GL_type)
 
-		try:
+		GL_names = []
 
-			#NEW_GL_ENTRY class from above.
-			new_GL = NEW_GL_ENTRY(GL_data)
-			new_GL.enter_data()
-			new_GL_confirmation_message = tk.messagebox.showinfo(title="New General Ledger",message="New General Ledger created!")
-			new_GL_restart_message = tk.messagebox.showinfo(title="New General Ledger",message="Restart PebbleSuite to update General Ledger search lists.")
+		verify_GL_names_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
 
-		except sqlite3.Error as error:
+		with sqlite3.connect("SQL.db") as connection:
 
-			new_GL_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"Error: {error}")
+			cursor = connection.cursor()
+
+			cursor.execute(verify_GL_names_sql_script)
+
+			for item in cursor:
+
+				GL_names.append(*item)
+
+			connection.commit()
+
+			cursor.close()
+
+		if new_GL_name in GL_names:
+
+			duplicate_GL_name_error_message = tk.messagebox.showinfo(title="New General Ledger",message="Duplicate GL name:  please use a different name for new GL.")
+
+		else:
+
+			try:
+
+				#NEW_GL_ENTRY class from above.
+				new_GL = NEW_GL_ENTRY(GL_data)
+				new_GL.enter_data()
+				new_GL_confirmation_message = tk.messagebox.showinfo(title="New General Ledger",message="New General Ledger created!")
+				new_GL_restart_message = tk.messagebox.showinfo(title="New General Ledger",message="Restart PebbleSuite to update General Ledger search lists.")
+
+			except sqlite3.Error as error:
+
+				new_GL_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"Error: {error}")
 
 
 	def print_GL_data(self):

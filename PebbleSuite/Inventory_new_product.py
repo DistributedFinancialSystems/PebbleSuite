@@ -186,6 +186,8 @@ class NEW_PRODUCT_WINDOW(tk.Toplevel):
 				new_product.enter_data()
 				new_product_confirmation_message = tk.messagebox.showinfo(title="New Product",message="New Product created!")
 
+				verify_product_name_data.clear()
+
 		except sqlite3.Error as error:
 
 			new_product_error_message = tk.messagebox.showinfo(title="New Product",message=f"Error: {error}")
