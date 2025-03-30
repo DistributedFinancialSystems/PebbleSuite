@@ -135,7 +135,9 @@ class NEW_PRODUCT_WINDOW(tk.Toplevel):
 
 	def create_new_product(self):
 
+		#New product data variables:
 		product_data = []
+
 		new_product_name = self.product_name_entry.get()
 		product_data.append(new_product_name)
 		new_product_number = self.product_number_entry.get()
@@ -145,12 +147,44 @@ class NEW_PRODUCT_WINDOW(tk.Toplevel):
 		new_product_price = self.product_price_entry.get()
 		product_data.append(new_product_price)
 
+		#Verify existing PRODUCT_NAME data variables:
+
+		verify_product_name_data = []
+
+		verify_product_names_sql_script = '''SELECT PRODUCT_NAME FROM products;'''
+
 		try:
 
-			#NEW_product_ENTRY class from above.
-			new_product = NEW_PRODUCT_ENTRY(product_data)
-			new_product.enter_data()
-			new_product_confirmation_message = tk.messagebox.showinfo(title="New Product",message="New Product created!")
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(verify_product_names_sql_script)
+
+				for item in cursor:
+
+					verify_product_name_data.append(*item)
+
+				connection.commit()
+
+				cursor.close()
+
+		except sqlite3.Error as error:
+
+			verify_product_names_error_message = tk.messagebox.showinfo(title="New Product",message=f"{error}")
+
+
+		try:
+
+			if new_product_name in verify_product_name_data:
+
+				duplicate_product_name_error_message = tk.messagebox.showinfo(title="New Product",message="Duplicate product name:  please use a different name for new product.")
+
+			else:
+
+				new_product = NEW_PRODUCT_ENTRY(product_data)
+				new_product.enter_data()
+				new_product_confirmation_message = tk.messagebox.showinfo(title="New Product",message="New Product created!")
 
 		except sqlite3.Error as error:
 
