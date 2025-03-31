@@ -75,6 +75,7 @@ from Help_commands import *
 #Inventory Menu modeules:
 from Inventory_new_product import *
 from Inventory_edit_product import *
+from Inventory_delete_product import *
 
 #Journal Entries modules:
 from JE_new_journal_entry import *

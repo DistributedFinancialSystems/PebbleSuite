@@ -70,6 +70,7 @@ from Help_commands import *
 #Inventory Menu modules:
 from Inventory_new_product import *
 from Inventory_edit_product import *
+from Inventory_delete_product import *
 
 #Journal Entries Menu modules:
 from JE_new_journal_entry import *
@@ -187,7 +188,7 @@ class MENU_BAR(tk.Menu):
 		self.inventory_menu = tk.Menu(self)
 		self.inventory_menu.add_command(label="New Product",command=self.new_product)
 		self.inventory_menu.add_command(label="Edit Product",command=self.edit_product)
-		self.inventory_menu.add_command(label="Delete Product",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Delete Product",command=self.delete_product)
 		self.inventory_menu.add_separator()
 		self.inventory_menu.add_command(label="Add Inventory",command=self.new_inventory)
 		self.inventory_menu.add_command(label="Edit Inventory",command=self.new_inventory)
@@ -253,36 +254,30 @@ class MENU_BAR(tk.Menu):
 
 		showinfo(title="AP Menu",message="This is the Accounts Payable menu!")
 
-
 	def new_vendor(self):
 
 		if not NEW_VENDOR_WINDOW.alive:
 			self.secondary_window = NEW_VENDOR_WINDOW()
-
 
 	def edit_vendor(self):
 
 		if not EDIT_VENDOR_WINDOW.alive:
 			self.secondary_window = EDIT_VENDOR_WINDOW()
 
-
 	def delete_vendor(self):
 
 		if not DELETE_VENDOR_WINDOW.alive:
 			self.secondary_window = DELETE_VENDOR_WINDOW()
-
 
 	def new_vendor_invoice(self):
 
 		if not NEW_INVOICE_WINDOW.alive:
 			self.secondary_window = NEW_INVOICE_WINDOW()
 
-
 	def edit_vendor_invoice(self):
 
 		if not AP_EDIT_INVOICE_WINDOW.alive:
 			self.secondary_window = AP_EDIT_INVOICE_WINDOW()
-
 
 	def delete_vendor_invoice(self):
 
@@ -294,24 +289,20 @@ class MENU_BAR(tk.Menu):
 		if not AP_PAY_INVOICE_WINDOW.alive:
 			self.secondary_window = AP_PAY_INVOICE_WINDOW()
 
-
 	def print_vendor_invoice(self):
 
 		if not AP_PRINT_INVOICE_WINDOW.alive:
 			self.secondary_window = AP_PRINT_INVOICE_WINDOW()
-
 
 	def new_vendor_credit_memo(self):
 
 		if not NEW_VENDOR_CREDIT_MEMO_WINDOW.alive:
 			self.secondary_window = NEW_VENDOR_CREDIT_MEMO_WINDOW()
 
-
 	def edit_vendor_credit_memo(self):
 
 		if not AP_EDIT_CREDIT_MEMO_WINDOW.alive:
 			self.secondary_window = AP_EDIT_CREDIT_MEMO_WINDOW()
-
 
 	def delete_vendor_credit_memo(self):
 
@@ -343,36 +334,30 @@ class MENU_BAR(tk.Menu):
 
 		showinfo(title="AP Menu",message="This is the AR menu!")
 
-
 	def new_client(self):
 
 		if not NEW_CLIENT_WINDOW.alive:
 			self.secondary_window = NEW_CLIENT_WINDOW()
-
 
 	def edit_client(self):
 
 		if not EDIT_CLIENT_WINDOW.alive:
 			self.secondary_window = EDIT_CLIENT_WINDOW()
 
-
 	def delete_client(self):
 
 		if not DELETE_CLIENT_WINDOW.alive:
 			self.secondary_window = DELETE_CLIENT_WINDOW()
-
 
 	def new_client_invoice(self):
 
 		if not AR_NEW_INVOICE_WINDOW.alive:
 			self.secondary_window = AR_NEW_INVOICE_WINDOW()
 
-
 	def edit_client_invoice(self):
 
 		if not AR_EDIT_INVOICE_WINDOW.alive:
 			self.secondary_window = AR_EDIT_INVOICE_WINDOW()
-
 
 	def delete_client_invoice(self):
 
@@ -505,6 +490,11 @@ class MENU_BAR(tk.Menu):
 
 			self.secondary_window = EDIT_PRODUCT_WINDOW()
 
+	def delete_product(self):
+
+		if not DELETE_PRODUCT_WINDOW.alive:
+
+			self.secondary_window = DELETE_PRODUCT_WINDOW()
 
 	"""
 	[ ]
