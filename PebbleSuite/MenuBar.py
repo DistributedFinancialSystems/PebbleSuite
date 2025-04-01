@@ -160,7 +160,7 @@ class MENU_BAR(tk.Menu):
 		self.customer_sales_menu.add_command(label="New Transaction",command=self.new_sale)
 		self.customer_sales_menu.add_command(label="Delete Transaction",command=self.new_sale)
 		self.customer_sales_menu.add_command(label="Print Receipt",command=self.new_sale)
-		self.add_cascade(label="Customer Sales",menu=self.customer_sales_menu)
+		self.add_cascade(label="Customers",menu=self.customer_sales_menu)
 
 		#GL Menu Tkinter widgets
 		self.GL_menu = tk.Menu(self)
@@ -221,8 +221,8 @@ class MENU_BAR(tk.Menu):
 
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
-		self.settings_menu.add_command(label="Settings",command=self.new_settings)
-		self.add_cascade(label="Settings",menu=self.settings_menu)
+		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
+		self.add_cascade(label="System Settings",menu=self.settings_menu)
 
 		#Taxes Menu Tkinter widgets
 		self.taxes_menu = tk.Menu(self)
