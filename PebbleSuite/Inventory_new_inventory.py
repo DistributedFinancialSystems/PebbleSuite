@@ -39,11 +39,11 @@ class ADD_INVENTORY:
 
 				cursor.close()
 
-				add_inventory_confirmation_message = tk.messagebox.showinfo(f"New product inventory added.")
+				add_inventory_confirmation_message = tk.messagebox.showinfo(title="Add Inventry",message=f"New product inventory added.")
 
 		except sqlite3.Error as error:
 
-			add_inventory_error_message = tk.messagebox.showinfo(f"{error}")
+			add_inventory_error_message = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
 """
@@ -175,7 +175,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 		self.product_total_price_label = ttk.Label(self,text="Total Price:")
 		self.product_total_price_label.place(x=400,y=225)
 		self.product_total_price_entry_text = tk.StringVar()
-		self.product_total_price_entry = ttk.Entry(self,textvariable=self.product_total_price_entry_text,state=tk.DISABLED)
+		self.product_total_price_entry = ttk.Entry(self,textvariable=self.product_total_price_entry_text)
 		self.product_total_price_entry.place(x=400,y=255)
 
 		self.product_exp_date_label = ttk.Label(self,text="Expiration Date:")
@@ -196,7 +196,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 		self.product_unit_price_entry = ttk.Entry(self,textvariable=self.product_unit_price_entry_text)
 		self.product_unit_price_entry.place(x=400,y=465)
 
-		self.cancel_product_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
+		self.cancel_product_changes_button = ttk.Button(self,text="Close",command=self.cancel_changes)
 		self.cancel_product_changes_button.place(x=490,y=510)
 
 		self.submit_product_changes_button = ttk.Button(self,text="Save",command=self.submit_changes)
@@ -221,7 +221,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 				for item in cursor:
 
-					self.listbox.insert(0,item)
+					self.listbox.insert(0," ".join(item))
 
 				connection.commit()
 
@@ -254,13 +254,14 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 				cursor = connection.cursor()
 
-				cursor.execute(query_product_sql_script,select_product)
+				cursor.execute(query_product_sql_script,[select_product])
 
 				for item in cursor:
 
 					collect.append(item)
 
-				self.product_name_entry_text.set(f"{collect[0][1]}")
+				self.vendor_name_entry_text.set(f"{collect[0][2]}")
+				self.product_name_entry_text.set(f"{collect[0][0]}")
 
 				connection.commit()
 
@@ -301,11 +302,11 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 		try:
 
-			self.product_vendor_name_entry_text.set("")
+			self.vendor_name_entry_text.set("")
 			self.product_name_entry_text.set("")
 			self.product_purchase_date_entry_text.set("")
-			self.product_purchase_price_entry_text.set("")
-			self.product_expiration_date_entry_text.set("")
+			self.product_total_price_entry_text.set("")
+			self.product_exp_date_entry_text.set("")
 			self.product_unit_quantity_entry_text.set("")
 			self.product_unit_price_entry_text.set("")
 
