@@ -39,14 +39,14 @@ class ADD_INVENTORY:
 
 				cursor.close()
 
-				add_inventory_confirmation_message = tk.messagebox.showinfo(title="Add Inventry",message=f"New product inventory added.")
+				add_inventory_confirmation_message = tk.messagebox.showinfo(title="Add Inventory",message=f"New product inventory added.")
 
 		except sqlite3.Error as error:
 
 			add_inventory_error_message = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
-"""
+
 class INVENTORY_JOURNAL_ENTRY:
 
 	def __init__(self,inventory_journal_entry):
@@ -56,9 +56,21 @@ class INVENTORY_JOURNAL_ENTRY:
 	def enter_data(self):
 
 		journal_entry_sql_script = '''INSERT INTO journal_entries(
-						LDLDLD,
-						BABABA)
-						VALUES(?,?);'''
+						JOURNAL_ENTRY_TIMESTAMP,
+						JOURNAL_ENTRY_NUMBER,
+						JOURNAL_ENTRY_DATE,
+						VENDOR_INVOICE_NUMBER,
+						DEBIT_GENERAL_LEDGER_NAME,
+						DEBIT_GENERAL_LEDGER_NUMBER,
+						DEBIT_GENERAL_LEDGER_TYPE,
+						CREDIT_GENERAL_LEDGER_NAME,
+						CREDIT_GENERAL_LEDGER_NUMBER,
+						CREDIT_GENERAL_LEDGER_TYPE,
+						JOURNAL_ENTRY_DEBIT_AMOUNT,
+						JOURNAL_ENTRY_CREDIT_AMOUNT,
+						JOURNAL_ENTRY_VENDOR_NAME,
+						JOURNAL_ENTRY_NOTES)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -69,7 +81,7 @@ class INVENTORY_JOURNAL_ENTRY:
 			connection.commit()
 
 			cursor.close()
-"""
+
 
 
 class NEW_INVENTORY_WINDOW(tk.Toplevel):
@@ -79,11 +91,18 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
+	inventory_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Inventory";'''
+
+	offset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers;'''
+
 	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Vendor"]
 
+		debit_GL_options = ["Select Inventory Account"]
+
+		offset_GL_options = ["Select Offset Account"]
 
 		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
@@ -100,9 +119,39 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#Retrieve inventory GL names from SQL.db:
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(self.inventory_GL_sql_script)
+
+			for item in cursor:
+
+				debit_GL_options.append(" ".join(item))
+
+			connection.commit()
+
+			cursor.close()
+
+		#Retrieve offset GL names from SQL.db:
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(self.offset_GL_sql_script)
+
+			for item in cursor:
+
+				offset_GL_options.append(" ".join(item))
+
+			connection.commit()
+
+			cursor.close()
+
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
-		self.config(width=600,height=550)
+		self.config(width=600,height=750)
 		self.title("Add Vendor Inventory")
 		self.focus()
 		self.resizable(0,0)
@@ -149,7 +198,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 		self.search_products_button.place(x=20,y=255)
 
 		self.clear_products_button = ttk.Button(self,text="Clear List",command=self.clear_products)
-		self.clear_products_button.place(x=120,y=510)
+		self.clear_products_button.place(x=125,y=510)
 
 		self.select_product_button = ttk.Button(self,text="Select Product",command=self.select_product)
 		self.select_product_button.place(x=20,y=510)
@@ -166,41 +215,61 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 		self.product_name_entry = ttk.Entry(self,textvariable=self.product_name_entry_text,state=tk.DISABLED)
 		self.product_name_entry.place(x=400,y=115)
 
+		self.product_invoice_date_label = ttk.Label(self,text="Invoice Number:")
+		self.product_invoice_date_label.place(x=400,y=155)
+		self.product_invoice_date_entry_text = tk.StringVar()
+		self.product_invoice_date_entry = ttk.Entry(self,textvariable=self.product_invoice_date_entry_text)
+		self.product_invoice_date_entry.place(x=400,y=185)
+
 		self.product_purchase_date_label = ttk.Label(self,text="Purchase Date:")
-		self.product_purchase_date_label.place(x=400,y=155)
+		self.product_purchase_date_label.place(x=400,y=225)
 		self.product_purchase_date_entry_text = tk.StringVar()
 		self.product_purchase_date_entry = ttk.Entry(self,textvariable=self.product_purchase_date_entry_text)
-		self.product_purchase_date_entry.place(x=400,y=185)
+		self.product_purchase_date_entry.place(x=400,y=255)
 
 		self.product_total_price_label = ttk.Label(self,text="Total Price:")
-		self.product_total_price_label.place(x=400,y=225)
+		self.product_total_price_label.place(x=400,y=295)
 		self.product_total_price_entry_text = tk.StringVar()
 		self.product_total_price_entry = ttk.Entry(self,textvariable=self.product_total_price_entry_text)
-		self.product_total_price_entry.place(x=400,y=255)
+		self.product_total_price_entry.place(x=400,y=325)
 
 		self.product_exp_date_label = ttk.Label(self,text="Expiration Date:")
-		self.product_exp_date_label.place(x=400,y=295)
+		self.product_exp_date_label.place(x=400,y=365)
 		self.product_exp_date_entry_text = tk.StringVar()
 		self.product_exp_date_entry = ttk.Entry(self,textvariable=self.product_exp_date_entry_text)
-		self.product_exp_date_entry.place(x=400,y=325)
+		self.product_exp_date_entry.place(x=400,y=395)
 
 		self.product_unit_quantity_label = ttk.Label(self,text="Unit Quantity:")
-		self.product_unit_quantity_label.place(x=400,y=365)
+		self.product_unit_quantity_label.place(x=400,y=435)
 		self.product_unit_quantity_entry_text = tk.StringVar()
 		self.product_unit_quantity_entry = ttk.Entry(self,textvariable=self.product_unit_quantity_entry_text)
-		self.product_unit_quantity_entry.place(x=400,y=395)
+		self.product_unit_quantity_entry.place(x=400,y=465)
 
 		self.product_unit_price_label = ttk.Label(self,text="Unit Price:")
-		self.product_unit_price_label.place(x=400,y=435)
+		self.product_unit_price_label.place(x=400,y=505)
 		self.product_unit_price_entry_text = tk.StringVar()
 		self.product_unit_price_entry = ttk.Entry(self,textvariable=self.product_unit_price_entry_text)
-		self.product_unit_price_entry.place(x=400,y=465)
+		self.product_unit_price_entry.place(x=400,y=535)
+
+		self.product_debit_gl_label = ttk.Label(self,text="Debit GL:")
+		self.product_debit_gl_label.place(x=400,y=575)
+		self.product_debit_gl_entry_text = tk.StringVar()
+		self.product_debit_gl_entry_text.set(f"{debit_GL_options[0]}")
+		self.product_debit_gl_option_menu = ttk.OptionMenu(self,self.product_debit_gl_entry_text,debit_GL_options[0],*debit_GL_options)
+		self.product_debit_gl_option_menu.place(x=400,y=605)
+
+		self.product_credit_gl_label = ttk.Label(self,text="Credit GL:")
+		self.product_credit_gl_label.place(x=400,y=645)
+		self.product_credit_gl_entry_text = tk.StringVar()
+		self.product_credit_gl_entry_text.set(f"{offset_GL_options[0]}")
+		self.product_credit_gl_option_menu = ttk.OptionMenu(self,self.product_credit_gl_entry_text,offset_GL_options[0],*offset_GL_options)
+		self.product_credit_gl_option_menu.place(x=400,y=675)
 
 		self.cancel_product_changes_button = ttk.Button(self,text="Close",command=self.cancel_changes)
-		self.cancel_product_changes_button.place(x=490,y=510)
+		self.cancel_product_changes_button.place(x=490,y=715)
 
 		self.submit_product_changes_button = ttk.Button(self,text="Save",command=self.submit_changes)
-		self.submit_product_changes_button.place(x=400,y=510)
+		self.submit_product_changes_button.place(x=400,y=715)
 
 
 	def search_products(self):
@@ -274,7 +343,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 	def submit_changes(self):
 
-		#Define SQL.db scripts:
+		#Collect inventory sql entry data:
 
 		product_data = []
 
@@ -294,8 +363,51 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 		product_data.append(product_unit_quantity)
 		product_data.append(product_unit_price)
 
-		inventory_sql_entry = ADD_INVENTORY(product_data)
-		inventory_sql_entry.enter_data()
+		#Collect journal entry data for new inventory:
+
+		journal_entry_data = []
+
+		journal_entry_timestamp = datetime.datetime.now()
+		journal_entry_number = None
+		journal_entry_date = self.product_purchase_date_entry_text.get()
+		vendor_invoice_number = self.product_invoice_date_entry_text.get()
+		debit_general_ledger_name = self.product_debit_gl_entry_text.get()
+		debit_general_ledger_number = None
+		debit_general_ledger_type = None
+		credit_general_ledger_name = self.product_credit_gl_entry_text.get()
+		credit_general_ledger_number = None
+		credit_general_ledger_type = None
+		journal_entry_debit_amount = self.product_total_price_entry_text.get()
+		journal_entry_credit_amount = self.product_total_price_entry_text.get()
+		journal_entry_vendor_name = self.vendor_name_entry_text.get()
+		journal_entry_notes = None
+
+		journal_entry_data.append(journal_entry_timestamp)
+		journal_entry_data.append(journal_entry_number)
+		journal_entry_data.append(journal_entry_date)
+		journal_entry_data.append(vendor_invoice_number)
+		journal_entry_data.append(debit_general_ledger_name)
+		journal_entry_data.append(debit_general_ledger_number)
+		journal_entry_data.append(debit_general_ledger_type)
+		journal_entry_data.append(credit_general_ledger_name)
+		journal_entry_data.append(credit_general_ledger_number)
+		journal_entry_data.append(credit_general_ledger_type)
+		journal_entry_data.append(journal_entry_debit_amount)
+		journal_entry_data.append(journal_entry_credit_amount)
+		journal_entry_data.append(journal_entry_vendor_name)
+		journal_entry_data.append(journal_entry_notes)
+
+		try:
+
+			inventory_sql_entry = ADD_INVENTORY(product_data)
+			inventory_sql_entry.enter_data()
+
+			journal_entry_sql_entry = INVENTORY_JOURNAL_ENTRY(journal_entry_data)
+			journal_entry_sql_entry.enter_data()
+
+		except sqlite3.Error as error:
+
+			inventory_sql_entry_error = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
 	def cancel_changes(self):

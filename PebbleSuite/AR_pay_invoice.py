@@ -112,7 +112,6 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
-
 	#Define class functions
 	def __init__(self,*args,**kwargs):
 
@@ -120,11 +119,11 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		payment_GL_options = ["Select Bank Account"]
 
-
 		#Retrieve client names from SQL.db, add them into options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.client_sql_script)
 
 			for item in cursor:
@@ -132,12 +131,14 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
 		#Retrieve asset general ledger names from SQL.db, add them into payment_GL_options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.asset_GL_sql_script)
 
 			for item in cursor:
@@ -145,8 +146,8 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 				payment_GL_options.append(" ".join(item))
 
 			connection.commit()
-			cursor.close()
 
+			cursor.close()
 
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
