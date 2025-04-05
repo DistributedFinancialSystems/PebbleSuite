@@ -231,7 +231,7 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 			self.vendor_contact_phone_entry.delete(0,tk.END)
 			self.vendor_contact_email_entry.delete(0,tk.END)
 
-			vendor_names.clear()
+			#vendor_names.clear()
 
 		except ValueError as error:
 

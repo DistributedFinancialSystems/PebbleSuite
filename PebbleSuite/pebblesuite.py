@@ -109,7 +109,7 @@ class APP(tk.Tk):
 		#Initialize PebbleSuite parent class Tkinter widget.
 		super().__init__()
 		self.title("Distributed Financial Systems  -  PebbleSuite Solo")
-		self.geometry("960x605")
+		self.geometry("960x555")
 		self.resizable(0,0)
 
 		#Connect Menu Bar Tkinter widget to __main()__ PebbleSuite window.
@@ -129,9 +129,9 @@ class APP(tk.Tk):
 
 
 		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=377,y=165,width=20,height=385)
+		self.scrollbar.place(x=377,y=165,width=20,height=335)
 		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=165,width=357,height=385)
+		self.listbox.place(x=20,y=165,width=357,height=335)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		#Initialize SQL.db connection
@@ -160,9 +160,9 @@ class APP(tk.Tk):
 
 
 		self.text_scrollbar = ttk.Scrollbar(self)
-		self.text_scrollbar.place(x=920,y=165,width=20,height=385)
+		self.text_scrollbar.place(x=920,y=165,width=20,height=335)
 		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar)
-		self.textbox.place(x=430,y=165,width=490,height=385)
+		self.textbox.place(x=430,y=165,width=490,height=335)
 
 
 		"""
@@ -180,7 +180,7 @@ class APP(tk.Tk):
 		self.new_task_button.place(x=280,y=80)
 
 		self.clear_note_data_button = ttk.Button(self,text="Clear Task Entries",command=self.clear_note_entries)
-		self.clear_note_data_button.place(x=110,y=560)
+		self.clear_note_data_button.place(x=110,y=510)
 
 		self.new_task_name_label = ttk.Label(self,text="New Task Name:")
 		self.new_task_name_label.place(x=20,y=15)
@@ -210,16 +210,16 @@ class APP(tk.Tk):
 
 
 		self.open_task_note_button = ttk.Button(self,text="Open Task",command=self.display_note)
-		self.open_task_note_button.place(x=20,y=560)
+		self.open_task_note_button.place(x=20,y=510)
 
 		self.update_task_note_button = ttk.Button(self,text="Save Changes",command=self.save_note_changes)
-		self.update_task_note_button.place(x=430,y=560)
+		self.update_task_note_button.place(x=430,y=510)
 
 		self.clear_task_note_button = ttk.Button(self,text="Close Task",command=self.close_note)
-		self.clear_task_note_button.place(x=535,y=560)
+		self.clear_task_note_button.place(x=535,y=510)
 
 		self.delete_task_note_button = ttk.Button(self,text="Delete Task",command=self.delete_task_note)
-		self.delete_task_note_button.place(x=240,y=560)
+		self.delete_task_note_button.place(x=240,y=510)
 
 
 		"""
