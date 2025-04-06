@@ -61,8 +61,11 @@ class PAY_INVOICE_UPDATE_PAYMENT_DATE:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(invoice_payment_date_sql_script,self.pay_invoice_date)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -96,8 +99,11 @@ class PAY_INVOICE_JOURNAL_ENTRY:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_payment_JE_sql_script,self.pay_invoice_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -287,6 +293,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_vendor_sql_script,(select_vendor,invoice_status))
 
 				for item in cursor:
@@ -294,6 +301,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
 		except Exception as error:
@@ -330,9 +338,11 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_invoice_sql_script,select_invoice)
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.invoice_name_entry_text.set(f"{collect[0][0]}")
@@ -345,6 +355,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				self.invoice_notes_entry_text.set(f"{collect[0][7]}")
 
 				connection.commit()
+
 				cursor.close()
 
 		except Exception as error:
@@ -354,117 +365,81 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	def submit_payment(self):
 
-		#Define update invoice status variables:
-		pay_invoice_update_status_data = []
-		pay_invoice_update_payment_data = []
-		pay_invoice_journal_entry_data = []
-
-		reference_vendor_name = self.invoice_name_entry_text.get()
-		reference_invoice_number = self.invoice_number_entry_text.get()
-		reference_invoice_paid_date = self.pay_invoice_date_entry_text.get()
-
-
-
-#
-#
-#		CONTINUE WORKING HERE:
-#
-#		CHANGE GENERAL_LEDGER TO DEBIT_GENERAL_LEDGER AND OFFSET_GENERAL_LEDGER TO CREDIT_GENERAL_LEDGER.
-#
-#
-
-		#Define journal entry variables:
-		reference_JE_timestamp = datetime.datetime.now()
-		reference_JE_number = None
-		reference_JE_entry_date = self.pay_invoice_date_entry_text.get()
-		reference_vendor_invoice_number = self.invoice_number_entry_text.get()
-		reference_debit_GL_name = self.invoice_liability_GL_entry_text.get()
-		reference_debit_GL_number = None
-		reference_debit_GL_type = None
-		reference_credit_GL_name = self.pay_invoice_payment_account_text.get()
-		reference_credit_GL_number = None
-		reference_credit_GL_type = None
-		reference_debit_GL_amount = self.invoice_amount_entry_text.get()
-		reference_credit_GL_amount = self.invoice_amount_entry_text.get()
-		reference_JE_vendor_name = self.invoice_name_entry_text.get()
-		reference_JE_notes = self.invoice_notes_entry_text.get()
-
 		try:
 
-			pay_invoice_update_status_data.append(reference_vendor_name)
-			pay_invoice_update_status_data.append(reference_invoice_number)
+			pay_invoice_update_status_data = []
+			pay_invoice_update_payment_data = []
+			pay_invoice_journal_entry_data = []
 
-		except:
+			reference_vendor_name = self.invoice_name_entry_text.get()
+			reference_invoice_number = self.invoice_number_entry_text.get()
+			reference_invoice_paid_date = self.pay_invoice_date_entry_text.get()
 
-			print("Error:  could not add data into pay_invoice_update_status_data list.")
+			reference_JE_timestamp = datetime.datetime.now()
+			reference_JE_number = None
+			reference_JE_entry_date = self.pay_invoice_date_entry_text.get()
+			reference_vendor_invoice_number = self.invoice_number_entry_text.get()
+			reference_debit_GL_name = self.invoice_liability_GL_entry_text.get()
+			reference_debit_GL_number = None
+			reference_debit_GL_type = None
+			reference_credit_GL_name = self.pay_invoice_payment_account_text.get()
+			reference_credit_GL_number = None
+			reference_credit_GL_type = None
+			reference_debit_GL_amount = self.invoice_amount_entry_text.get()
+			reference_credit_GL_amount = self.invoice_amount_entry_text.get()
+			reference_JE_vendor_name = self.invoice_name_entry_text.get()
+			reference_JE_notes = self.invoice_notes_entry_text.get()
 
+			if reference_vendor_name == "":
 
-		#Update vendor invoice data:
+				submit_payment_error_message_1 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message="Vendor name cannot be blank.")
 
-		try:
+			elif reference_invoice_paid_date == "":
 
-			#PAY_INVOICE_UPDATE_STATUS class (from above):
+				submit_payment_error_message_2 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message="Invoice payment date cannot be blank.")
 
-			update_payment_status = PAY_INVOICE_UPDATE_STATUS(pay_invoice_update_status_data)
-			update_payment_status.pay_invoice()
+			elif reference_credit_GL_name == "Select Bank Account":
 
-		except sqlite3.Error as error:
+				submit_payment_error_message_3 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message="Please select payment bank account.")
 
-			update_payment_status_error_message = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"Invoice Status Error:  {error}")
+			else:
 
+				pay_invoice_update_status_data.append(reference_vendor_name)
+				pay_invoice_update_status_data.append(reference_invoice_number)
 
-		#Update vendor payment date data:
+				update_payment_status = PAY_INVOICE_UPDATE_STATUS(pay_invoice_update_status_data)
+				update_payment_status.pay_invoice()
 
-		try:
+				pay_invoice_update_payment_data.append(reference_invoice_paid_date)
+				pay_invoice_update_payment_data.append(reference_vendor_name)
+				pay_invoice_update_payment_data.append(reference_invoice_number)
 
-			pay_invoice_update_payment_data.append(reference_invoice_paid_date)
-			pay_invoice_update_payment_data.append(reference_vendor_name)
-			pay_invoice_update_payment_data.append(reference_invoice_number)
+				update_payment_date = PAY_INVOICE_UPDATE_PAYMENT_DATE(pay_invoice_update_payment_data)
+				update_payment_date.pay_invoice()
 
-		except:
+				pay_invoice_journal_entry_data.append(reference_JE_timestamp)
+				pay_invoice_journal_entry_data.append(reference_JE_number)
+				pay_invoice_journal_entry_data.append(reference_JE_entry_date)
+				pay_invoice_journal_entry_data.append(reference_vendor_invoice_number)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_name)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_number)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_type)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_name)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_number)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_type)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_amount)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_amount)
+				pay_invoice_journal_entry_data.append(reference_JE_vendor_name)
+				pay_invoice_journal_entry_data.append(reference_JE_notes)
 
-			print("Error:  could not add data into pay_invoice_update_payment_data list.")
+				new_invoice_payment_journal_entry = PAY_INVOICE_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
+				new_invoice_payment_journal_entry.pay_invoice()
 
-		try:
+				pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Vendor Invoice",message="Invoice payment successfully recorded.")
 
-			update_payment_date = PAY_INVOICE_UPDATE_PAYMENT_DATE(pay_invoice_update_payment_data)
-			update_payment_date.pay_invoice()
-
-		except sqlite3.Error as error:
-
-			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"Invoice Date Error:  {error}")
-
-
-		#Create new journal entries:
-
-		try:
-
-			#Continue working here:
-
-			pay_invoice_journal_entry_data.append(reference_JE_timestamp)
-			pay_invoice_journal_entry_data.append(reference_JE_number)
-			pay_invoice_journal_entry_data.append(reference_JE_entry_date)
-			pay_invoice_journal_entry_data.append(reference_vendor_invoice_number)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_name)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_number)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_type)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_name)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_number)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_type)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_amount)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_amount)
-			pay_invoice_journal_entry_data.append(reference_JE_vendor_name)
-			pay_invoice_journal_entry_data.append(reference_JE_notes)
-
-			new_invoice_payment_journal_entry = PAY_INVOICE_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
-			new_invoice_payment_journal_entry.pay_invoice()
-			pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Vendor Invoice",message="Invoice payment successfully recorded.")
-
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"{error}")
-
-
 
 
 	def cancel_changes(self):

@@ -92,6 +92,7 @@ class NEW_GL_WINDOW(tk.Toplevel):
 			"Equity - Owner's Equity",
 			"Equity - Other Investment",
 			"Income - Sales Income",
+			"Income - Other Income",
 			"Expense - Direct Expense",
 			"Expense - Indirect Expense"
 			]

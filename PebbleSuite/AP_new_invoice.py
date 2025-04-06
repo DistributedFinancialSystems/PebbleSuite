@@ -52,8 +52,11 @@ class NEW_INVOICE_ENTRY:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_invoice_sql_script,self.new_invoice_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -72,6 +75,7 @@ class NEW_JOURNAL_ENTRY:
 	"""
 
 	def __init__(self,new_journal_entry):
+
 		self.new_journal_entry = new_journal_entry
 
 	"""
@@ -108,8 +112,11 @@ class NEW_JOURNAL_ENTRY:
 			try:
 
 				cursor = connection.cursor()
+
 				cursor.execute(new_JE_sql_script,self.new_journal_entry)
+
 				connection.commit()
+
 				cursor.close()
 
 			except sqlite3.Error as error:
@@ -121,27 +128,20 @@ class NEW_JOURNAL_ENTRY:
 
 class NEW_INVOICE_WINDOW(tk.Toplevel):
 
-	#Define SQL.db scripts:
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 	liability_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Liability - Accounts Payable";'''
-	expense_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Expense";'''
+	expense_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Expense - Indirect Expense";'''
 
-
-	#Define class variables:
 	alive = False
 
-
-	#Define __init__ tkinter widgets:
-	#Initialize SQL.db connection:
 	def __init__(self,*args,**kwargs):
 
-
-		#Retrieve Vendor data from SQL.db:
 		options = ["Select Vendor"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
@@ -149,15 +149,15 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Retrieve liability GL data from SQL.db:
 		liability_GL_options = ["Select Liability GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.liability_GL_sql_script)
 
 			for item in cursor:
@@ -165,15 +165,15 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 				liability_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Retrieve expense GL data from SQL.db:
 		expense_GL_options = ["Select Expense GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.expense_GL_sql_script)
 
 			for item in cursor:
@@ -181,8 +181,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 				expense_GL_options.append(" ".join(item))
 
 			connection.commit()
-			cursor.close()
 
+			cursor.close()
 
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
@@ -366,9 +366,11 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(invoice_report_sql_script)
 
 				for item in cursor:
+
 					print(item)
 
 				connection.commit()
@@ -381,5 +383,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

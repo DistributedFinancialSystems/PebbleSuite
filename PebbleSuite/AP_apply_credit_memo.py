@@ -41,8 +41,11 @@ class PAY_CREDIT_MEMO_UPDATE_STATUS:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(credit_memo_payment_status_sql_script,self.pay_credit_memo_status)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -61,8 +64,11 @@ class PAY_CREDIT_MEMO_UPDATE_PAYMENT_DATE:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(credit_memo_payment_date_sql_script,self.pay_credit_memo_date)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -96,8 +102,11 @@ class PAY_CREDIT_MEMO_JOURNAL_ENTRY:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_payment_JE_sql_script,self.pay_credit_memo_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -105,26 +114,22 @@ class PAY_CREDIT_MEMO_JOURNAL_ENTRY:
 
 class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Vendor"]
 
 		payment_GL_options = ["Select Bank Account"]
 
-
-		#Retrieve vendor names from SQL.db, add them into options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
@@ -132,12 +137,13 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-		#Retrieve asset general ledger names from SQL.db, add them into payment_GL_options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.asset_GL_sql_script)
 
 			for item in cursor:
@@ -145,8 +151,8 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				payment_GL_options.append(" ".join(item))
 
 			connection.commit()
-			cursor.close()
 
+			cursor.close()
 
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
@@ -162,23 +168,20 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_name_label = ttk.Label(self,text="Vendor Name")
 		self.credit_memo_name_label.place(x=20,y=15)
 
-
-		#Search for vendor names in SQL.db.
-		#Insert vendor names into vendor search listbox widget.
 		self.select_vendor_scrollbar = ttk.Scrollbar(self)
 		self.select_vendor_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_vendor_listbox = tk.Listbox(self,yscrollcommand=self.select_vendor_scrollbar.set)
 		self.select_vendor_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_vendor_scrollbar.config(command=self.select_vendor_listbox.yview)
 
-
 		search_vendor_name_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_vendor_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -187,8 +190,6 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#Credit Memo selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=405)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -381,37 +382,51 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			#Error handling:
 
-			pay_credit_memo_update_status_data.append(reference_vendor_name)
-			pay_credit_memo_update_status_data.append(reference_credit_memo_number)
+			if reference_vendor_name == "":
 
-			update_payment_status = PAY_CREDIT_MEMO_UPDATE_STATUS(pay_credit_memo_update_status_data)
-			update_payment_status.pay_credit_memo()
+				submit_payment_error_message_1 = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message="Vendor name cannot be blank.")
 
-			pay_credit_memo_update_payment_data.append(reference_credit_memo_paid_date)
-			pay_credit_memo_update_payment_data.append(reference_vendor_name)
-			pay_credit_memo_update_payment_data.append(reference_credit_memo_number)
+			elif reference_credit_memo_paid_date == "":
 
-			update_payment_date = PAY_CREDIT_MEMO_UPDATE_PAYMENT_DATE(pay_credit_memo_update_payment_data)
-			update_payment_date.pay_credit_memo()
+				submit_payment_error_message_2 = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message="Credit memo payment date cannot be blank.")
 
-			pay_credit_memo_journal_entry_data.append(reference_JE_timestamp)
-			pay_credit_memo_journal_entry_data.append(reference_JE_number)
-			pay_credit_memo_journal_entry_data.append(reference_JE_entry_date)
-			pay_credit_memo_journal_entry_data.append(reference_vendor_credit_memo_number)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_name)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_number)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_type)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_name)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_number)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_type)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_amount)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_amount)
-			pay_credit_memo_journal_entry_data.append(reference_JE_vendor_name)
-			pay_credit_memo_journal_entry_data.append(reference_JE_notes)
+			elif reference_debit_GL_name == "Select Bank Account":
 
-			new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
-			new_credit_memo_payment_journal_entry.pay_credit_memo()
-			pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Pay Vendor Credit Memo",message="Credit Memo payment successfully recorded.")
+				submit_payment_error_message_3 = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message="Credit memo payment account cannot be blank.")
+
+			else:
+
+				pay_credit_memo_update_status_data.append(reference_vendor_name)
+				pay_credit_memo_update_status_data.append(reference_credit_memo_number)
+
+				update_payment_status = PAY_CREDIT_MEMO_UPDATE_STATUS(pay_credit_memo_update_status_data)
+				update_payment_status.pay_credit_memo()
+
+				pay_credit_memo_update_payment_data.append(reference_credit_memo_paid_date)
+				pay_credit_memo_update_payment_data.append(reference_vendor_name)
+				pay_credit_memo_update_payment_data.append(reference_credit_memo_number)
+
+				update_payment_date = PAY_CREDIT_MEMO_UPDATE_PAYMENT_DATE(pay_credit_memo_update_payment_data)
+				update_payment_date.pay_credit_memo()
+
+				pay_credit_memo_journal_entry_data.append(reference_JE_timestamp)
+				pay_credit_memo_journal_entry_data.append(reference_JE_number)
+				pay_credit_memo_journal_entry_data.append(reference_JE_entry_date)
+				pay_credit_memo_journal_entry_data.append(reference_vendor_credit_memo_number)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_name)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_number)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_type)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_name)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_number)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_type)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_amount)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_amount)
+				pay_credit_memo_journal_entry_data.append(reference_JE_vendor_name)
+				pay_credit_memo_journal_entry_data.append(reference_JE_notes)
+
+				new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
+				new_credit_memo_payment_journal_entry.pay_credit_memo()
+				pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Pay Vendor Credit Memo",message="Credit Memo payment successfully recorded.")
 
 		except Exception as error:
 
