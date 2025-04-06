@@ -113,37 +113,37 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.edit_credit_memo_button = ttk.Button(self,text="Edit Credit Memo",command=self.edit_credit_memo)
 		self.edit_credit_memo_button.place(x=20,y=510)
 
-		self.credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date:")
+		self.credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date: *")
 		self.credit_memo_issue_date_label.place(x=400,y=15)
 		self.credit_memo_issue_date_entry_text = tk.StringVar()
 		self.credit_memo_issue_date_entry = ttk.Entry(self,textvariable=self.credit_memo_issue_date_entry_text)
 		self.credit_memo_issue_date_entry.place(x=400,y=45)
 
-		self.credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date:")
+		self.credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date: *")
 		self.credit_memo_due_date_label.place(x=400,y=85)
 		self.credit_memo_due_date_entry_text = tk.StringVar()
 		self.credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.credit_memo_due_date_entry_text)
 		self.credit_memo_due_date_entry.place(x=400,y=115)
 
-		self.credit_memo_number_label = ttk.Label(self,text="Credit Memo Number:")
+		self.credit_memo_number_label = ttk.Label(self,text="Credit Memo Number: *")
 		self.credit_memo_number_label.place(x=400,y=155)
 		self.credit_memo_number_entry_text = tk.StringVar()
 		self.credit_memo_number_entry = ttk.Entry(self,textvariable=self.credit_memo_number_entry_text,state=tk.DISABLED)
 		self.credit_memo_number_entry.place(x=400,y=185)
 
-		self.credit_memo_liability_GL_label = ttk.Label(self,text="Credit Memo Liability GL:")
+		self.credit_memo_liability_GL_label = ttk.Label(self,text="Credit Memo Liability GL: *")
 		self.credit_memo_liability_GL_label.place(x=400,y=225)
 		self.credit_memo_liability_GL_entry_text = tk.StringVar()
 		self.credit_memo_liability_GL_entry = ttk.Entry(self,textvariable=self.credit_memo_liability_GL_entry_text,state=tk.DISABLED)
 		self.credit_memo_liability_GL_entry.place(x=400,y=255)
 
-		self.credit_memo_expense_GL_label = ttk.Label(self,text="Credit Memo Expense GL:")
+		self.credit_memo_expense_GL_label = ttk.Label(self,text="Credit Memo Expense GL: *")
 		self.credit_memo_expense_GL_label.place(x=400,y=295)
 		self.credit_memo_expense_GL_entry_text = tk.StringVar()
 		self.credit_memo_expense_GL_entry = ttk.Entry(self,textvariable=self.credit_memo_expense_GL_entry_text,state=tk.DISABLED)
 		self.credit_memo_expense_GL_entry.place(x=400,y=325)
 
-		self.credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount:")
+		self.credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount: *")
 		self.credit_memo_amount_label.place(x=400,y=365)
 		self.credit_memo_amount_entry_text = tk.StringVar()
 		self.credit_memo_amount_entry = ttk.Entry(self,textvariable=self.credit_memo_amount_entry_text)
@@ -166,15 +166,16 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		search_vendor_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM vendor_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS="Open";'''
 
-		for item in self.select_vendor_listbox.curselection():
-
-			select_vendor = self.select_vendor_listbox.get(item)
-
 		try:
+
+			for item in self.select_vendor_listbox.curselection():
+
+				select_vendor = self.select_vendor_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_vendor_sql_script,[select_vendor])
 
 				for item in cursor:
@@ -182,16 +183,23 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			search_credit_memos_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_credit_memos_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message=f"{error}")
 
 
 	def clear_credit_memos(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_credit_memos_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message=f"{error}")
 
 
 	def edit_credit_memo(self):
@@ -199,21 +207,22 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		#Define SQL.db scripts:
 		query_credit_memo_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 
-
-		for item in self.listbox.curselection():
-
-			select_credit_memo = self.listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_credit_memo = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_credit_memo_sql_script,select_credit_memo)
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.credit_memo_issue_date_entry_text.set(f"{collect[0][1]}")
@@ -225,16 +234,16 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				self.credit_memo_notes_entry_text.set(f"{collect[0][7]}")
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			edit_credit_memo_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_credit_memo_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message=f"{error}")
 
 
 	def submit_changes(self):
 
-		#Define SQL.db scripts:
 		retrieve_credit_memo_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?;'''
 		edit_credit_memo_issue_date_sql_script = '''UPDATE vendor_credit_memos SET CREDIT_MEMO_ISSUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
 		edit_credit_memo_due_date_sql_script = '''UPDATE vendor_credit_memos SET CREDIT_MEMO_DUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
@@ -247,47 +256,66 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE VENDOR_CREDIT_MEMO_NUMBER=?'''
 		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE VENDOR_CREDIT_MEMO_NUMBER=?'''
 
-
-		#Define function variables:
-		reference_credit_memo_number = self.credit_memo_number_entry_text.get()
-		new_credit_memo_issue_date = self.credit_memo_issue_date_entry_text.get()
-		new_credit_memo_due_date = self.credit_memo_due_date_entry_text.get()
-		new_credit_memo_amount = self.credit_memo_amount_entry_text.get()
-		new_credit_memo_notes = self.credit_memo_notes_entry_text.get()
-
 		try:
 
-			with sqlite3.connect("SQL.db") as connection:
+			reference_credit_memo_number = self.credit_memo_number_entry_text.get()
+			new_credit_memo_issue_date = self.credit_memo_issue_date_entry_text.get()
+			new_credit_memo_due_date = self.credit_memo_due_date_entry_text.get()
+			new_credit_memo_number = self.credit_memo_number_entry_text.get()
+			new_credit_memo_liability_GL = self.credit_memo_liability_GL_entry_text.get()
+			new_credit_memo_expense_GL = self.credit_memo_expense_GL_entry_text.get()
+			new_credit_memo_amount = self.credit_memo_amount_entry_text.get()
+			new_credit_memo_notes = self.credit_memo_notes_entry_text.get()
 
-				cursor = connection.cursor()
-				cursor.execute(edit_credit_memo_issue_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
-				cursor.execute(edit_credit_memo_due_date_sql_script,(new_credit_memo_due_date,reference_credit_memo_number))
-				cursor.execute(edit_credit_memo_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
-				cursor.execute(edit_credit_memo_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
-				connection.commit()
-				cursor.close()
+			if new_credit_memo_issue_date == "":
 
-		except sqlite3.Error as error:
+				submit_changes_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message="Please enter credit memo issue date.")
 
-			edit_credit_memo_error_message_2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			elif new_credit_memo_due_date == "":
 
-		try:
+				submit_changes_error_message_2 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message="Please enter credit memo due date.")
 
-			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+			elif new_credit_memo_number  == "":
 
-				cursor = connection.cursor()
-				cursor.execute(edit_JE_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
-				cursor.execute(edit_JE_debit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
-				cursor.execute(edit_JE_credit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
-				cursor.execute(edit_JE_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
-				connection.commit()
-				cursor.close()
+				submit_changes_error_message_3 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message="Please enter credit memo number.")
 
-				edit_credit_memo_confirmation_message = tk.messagebox.showinfo("Edit Vendor Credit Memo",message="Credit Memo successfully edited.")
+			elif new_credit_memo_liability_GL == "":
 
-		except sqlite3.Error as error:
+				submit_changes_error_message_4 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message="Please enter credit memo liability GL.")
 
-			edit_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			elif new_credit_memo_expense_GL == "":
+
+				submit_changes_error_message_5 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message="Please enter credit memo expense GL.")
+
+			elif new_credit_memo_amount == "":
+
+				submit_changes_error_message_6 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message="Please enter credit memo amount.")
+
+			else:
+
+				with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+
+					cursor = connection.cursor()
+
+					cursor.execute(edit_credit_memo_issue_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
+					cursor.execute(edit_credit_memo_due_date_sql_script,(new_credit_memo_due_date,reference_credit_memo_number))
+					cursor.execute(edit_credit_memo_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
+					cursor.execute(edit_credit_memo_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
+
+					cursor.execute(edit_JE_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
+					cursor.execute(edit_JE_debit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
+					cursor.execute(edit_JE_credit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
+					cursor.execute(edit_JE_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
+
+					connection.commit()
+
+					cursor.close()
+
+					edit_credit_memo_confirmation_message = tk.messagebox.showinfo("Edit Vendor Credit Memo",message="Credit Memo successfully edited.")
+
+		except Exception as error:
+
+			edit_credit_memo_error_message_2 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -302,11 +330,12 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			self.credit_memo_amount_entry_text.set("")
 			self.credit_memo_notes_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Credit Memo",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
 		return super().destroy()
