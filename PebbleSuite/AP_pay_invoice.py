@@ -276,13 +276,13 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
 
-		for item in self.select_vendor_listbox.curselection():
-
-			select_vendor = self.select_vendor_listbox.get(item)
-
 		invoice_status = "Open"
 
 		try:
+
+			for item in self.select_vendor_listbox.curselection():
+
+				select_vendor = self.select_vendor_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
@@ -296,14 +296,20 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				connection.commit()
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_invoices_error_message = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"{error}")
 
 
 	def clear_invoices(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_invoices_error_message_1 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"{error}")
 
 
 	def select_invoice(self):
@@ -311,13 +317,13 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 		#Define SQL.db scripts:
 		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
 
-		for item in self.listbox.curselection():
-
-			select_invoice = self.listbox.get(item)
-
 		#select_vendor = self.select_vendor_listbox.get(item)
 
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_invoice = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
@@ -341,9 +347,9 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				connection.commit()
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			pay_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			pay_invoice_error_message_1 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"{error}")
 
 
 	def submit_payment(self):
@@ -456,7 +462,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		except sqlite3.Error as error:
 
-			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"{error}")
 
 
 
@@ -474,11 +480,12 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 			self.invoice_amount_entry_text.set("")
 			self.invoice_notes_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message_1 = tk.messagebox.showinfo(title="Pay Vendor Invoice",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
 		return super().destroy()

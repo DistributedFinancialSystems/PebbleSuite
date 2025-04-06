@@ -118,16 +118,16 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=?'''
 
-		for item in self.select_vendor_listbox.curselection():
-
-			select_vendor = self.select_vendor_listbox.get(item)
-			print(select_vendor)
-
 		try:
+
+			for item in self.select_vendor_listbox.curselection():
+
+				select_vendor = self.select_vendor_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_vendor_sql_script,[select_vendor])
 
 				for item in cursor:
@@ -135,16 +135,23 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_invoices_error_message = tk.messagebox.showinfo(title="Delete Vendor Invoice",message=f"{error}")
 
 
 	def clear_invoices(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_invoices_error_message_1 = tk.messagebox.showinfo(title="")
 
 
 	def delete_invoice(self):
@@ -155,12 +162,11 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE VENDOR_INVOICE_NUMBER=?'''
 		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE VENDOR_INVOICE_NUMBER=?'''
 
-
-		for item in self.listbox.curselection():
-
-			select_invoice = self.listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_invoice = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
@@ -171,14 +177,15 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 				cursor.execute(delete_journal_entries_sql_script,select_invoice)
 				connection.commit()
 				cursor.close()
-				delete_invoice_confirmation_message = tk.messagebox.showinfo(title="Delete Invoice",message="Invoice successfully deleted.")
+				delete_invoice_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor Invoice",message="Invoice successfully deleted.")
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			delete_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			delete_invoice_error_message = tk.messagebox.showinfo(title="Delete Vendor Invoice",message=f"{error}")
 
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
 		return super().destroy()

@@ -172,32 +172,44 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
 
-		for item in self.select_vendor_listbox.curselection():
-
-			select_vendor = self.select_vendor_listbox.get(item)
-
 		try:
 
-			with sqlite3.connect("SQL.db") as connection:
+			for item in self.select_vendor_listbox.curselection():
 
-				cursor = connection.cursor()
-				cursor.execute(search_vendor_sql_script,[select_vendor])
+				select_vendor = self.select_vendor_listbox.get(item)
 
-				for item in cursor:
+			try:
 
-					self.listbox.insert(0,item)
+				with sqlite3.connect("SQL.db") as connection:
 
-				connection.commit()
-				cursor.close()
+					cursor = connection.cursor()
+					cursor.execute(search_vendor_sql_script,[select_vendor])
 
-		except sqlite3.Error as error:
+					for item in cursor:
 
-			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+						self.listbox.insert(0,item)
+
+					connection.commit()
+					cursor.close()
+
+			except sqlite3.Error as error:
+
+				search_invoices_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Invoice",message=f"{error}")
+
+		except:
+
+			search_invoices_error_message_2 = tk.messagebox.showinfo(title="Edit Vendor Invoice",message="Select vendor from list to view invoices.")
 
 
 	def clear_invoices(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except:
+
+			clear_invoices_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Invoice",message="Unable to clear invoice list.")
 
 
 	def edit_invoice(self):
@@ -205,13 +217,11 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		#Define SQL.db scripts:
 		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
 
-		for item in self.listbox.curselection():
-
-			select_invoice = self.listbox.get(item)
-
-		#select_vendor = self.select_vendor_listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_invoice = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
@@ -235,9 +245,9 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 				connection.commit()
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			edit_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_invoice_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor Invoice",message=f"{error}")
 
 
 	def submit_changes(self):
