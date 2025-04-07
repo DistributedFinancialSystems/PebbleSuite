@@ -194,6 +194,8 @@ class MENU_BAR(tk.Menu):
 		self.inventory_menu.add_command(label="Add Inventory",command=self.add_inventory)
 		self.inventory_menu.add_command(label="Edit Inventory",command=self.new_inventory)
 		self.inventory_menu.add_command(label="Delete Inventory",command=self.new_inventory)
+		self.inventory_menu.add_separator()
+		self.inventory_menu.add_command(label="Sales Tax",command=self.new_inventory)
 		self.add_cascade(label="Inventory",menu=self.inventory_menu)
 
 		#Journal Entries Menu Tkinter widgets
@@ -207,6 +209,12 @@ class MENU_BAR(tk.Menu):
 		self.JE_menu.add_command(label="Multi-Journal Entry",command=self.new_JE)
 		self.add_cascade(label="Journal Entries",menu=self.JE_menu)
 
+		#Month-End Menu Tkinter widgets:
+		self.month_end_menu = tk.Menu(self)
+		self.month_end_menu.add_command(label="Reconcile",command=self.new_ME)
+		self.month_end_menu.add_command(label="Close Books",command=self.new_ME)
+		self.add_cascade(label="Monthly Close",menu=self.month_end_menu)
+
 		#Financial Reports Menu Tkinter widgets
 		self.financial_reports_menu = tk.Menu(self)
 		self.financial_reports_menu.add_command(label="AP Aging Report",command=self.new_reports)
@@ -215,25 +223,18 @@ class MENU_BAR(tk.Menu):
 		self.financial_reports_menu.add_command(label="Cash Flows",command=self.new_reports)
 		self.financial_reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
 		self.financial_reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
+		self.financial_reports_menu.add_command(label="Schedule C",command=self.new_reports)
 		self.financial_reports_menu.add_separator()
 		self.financial_reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
 		self.financial_reports_menu.add_command(label="Client Summary",command=self.client_summary)
-		self.add_cascade(label="Reports",menu=self.financial_reports_menu)
+		self.financial_reports_menu.add_command(label="1099 Forms",command=self.new_reports)
+		self.add_cascade(label="Reporting",menu=self.financial_reports_menu)
 
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
 		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
 		self.settings_menu.add_command(label="Database Settings",command=self.new_settings)
-		self.add_cascade(label="System Settings",menu=self.settings_menu)
-
-		#Taxes Menu Tkinter widgets
-		self.taxes_menu = tk.Menu(self)
-		self.taxes_menu.add_command(label="Company Taxes",command=self.new_taxes)
-		self.taxes_menu.add_separator()
-		self.taxes_menu.add_command(label="Create 1099-MISC Forms",command=self.new_taxes)
-		self.taxes_menu.add_command(label="Create 1099-NEC Forms",command=self.new_taxes)
-		self.taxes_menu.add_command(label="Create Schedule C",command=self.new_taxes)
-		self.add_cascade(label="Taxation",menu=self.taxes_menu)
+		self.add_cascade(label="Settings",menu=self.settings_menu)
 
 		#Financial Tools Menu Tkinter widgets:
 		self.tools_menu = tk.Menu(self)
@@ -524,6 +525,10 @@ class MENU_BAR(tk.Menu):
 
 		if not NEW_JE_WINDOW.alive:
 			self.secondary_window = NEW_JE_WINDOW()
+
+	def new_ME(self):
+
+		showinfo(title="Month-End Menu",message="This is the Month-End menu!")
 
 
 	"""
