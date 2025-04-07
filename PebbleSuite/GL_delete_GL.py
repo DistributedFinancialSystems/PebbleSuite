@@ -31,15 +31,6 @@ from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	DELETE_GL_WINDOW CLASS:
-[ ]
-[ ]
-[ ]
-"""
 
 
 class DELETE_GL_WINDOW(tk.Toplevel):
@@ -49,20 +40,17 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 
 	delete_selection_temporary_memory = []
 
-
 	general_ledger_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select General Ledger"]
 
 
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.general_ledger_sql_script)
 
 			for item in cursor:
@@ -70,20 +58,9 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	DEFINE DELETE_GL_WINDOW TKINTER WIDGETS:
-		[ ]	DEFINE INITIAL SQL.db SCRIPTS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-			#Tkinter widgets here:
 
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=270)
@@ -104,25 +81,15 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 		self.select_general_ledger_listbox.place(x=20,y=45,width=333,height=170)
 		self.select_general_ledger_scrollbar.config(command=self.select_general_ledger_listbox.yview)
 
-
-			#SQL.db scripts:
-
 		search_general_ledger_name_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	CONNECT TO SQL.db, RETRIEVE NAMES OF ALL GENERAL LEDGERS:
-		[ ]
-		[ ]
-		[ ]
-		"""
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_general_ledger_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -131,15 +98,6 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	DEFINE 'DELETE_GL_WINDOW' TKINTER WIDGETS:
-		[ ]
-		[ ]
-		[ ]
-		"""
 
 		self.delete_general_ledger_button = ttk.Button(self,text="Select General Ledger",command=self.delete_general_ledger)
 		self.delete_general_ledger_button.place(x=20,y=230)
@@ -171,44 +129,26 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 
 	def delete_general_ledger(self):
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	DEFINE SQL.db SCRIPTS, RETRIEVE SELECTED GENERAL LEDGER FROM TKINTER LISTBOX.
-		[ ]
-		[ ]
-		[ ]
-		"""
-
 		query_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?'''
 
-
-		for item in self.select_general_ledger_listbox.curselection():
-
-			select_general_ledger = self.select_general_ledger_listbox.get(item)
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	CONNECT TO SQL.db, RETRIEVE DATA FOR SELECTED GENERAL LEDGER:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
 		try:
+
+			for item in self.select_general_ledger_listbox.curselection():
+
+				select_general_ledger = self.select_general_ledger_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_general_ledger_sql_script,[select_general_ledger])
 
 				for item in cursor:
+
 					collect.append(item)
+
 					self.delete_selection_temporary_memory.append(item)
 
 				self.general_ledger_name_entry_text.set(f"{collect[0][0]}")
@@ -216,185 +156,111 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 				self.general_ledger_type_entry_text.set(f"{collect[0][2]}")
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			delete_general_ledger_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			delete_general_ledger_error_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message=f"{error}")
 
 
 	def submit_changes(self):
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	DEFINE 'SUBMIT_CHANGES' SQL SCRIPTS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-		#Search general_ledgers table:
+		#general_ledgers SQL scripts:
 		retrieve_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
 		delete_general_ledger_name_sql_script = '''DELETE FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
 
-		#Search vendor_invoices_table:
+		#journal_entries SQL scripts:
+		retrieve_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE GENERAL_LEDGER_NAME=?;'''
+		delete_JE_debit_GL_name_sql_script = '''DELETE FROM journal_entries WHERE DEBIT_GENERAL_LEDGER_NAME=?;'''
+		delete_JE_credit_GL_name_sql_script = '''DELETE FROM journal_entries WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
+
+		#vendor_invoices SQL scripts:
 		retrieve_vendor_invoices_sql_script_1 = '''SELECT * FROM vendor_invoices WHERE INVOICE_LIABILITY_ACCOUNT=?;'''
 		retrieve_vendor_invoices_sql_script_2 = '''SELECT * FROM vendor_invoices WHERE INVOICE_EXPENSE_ACCOUNT=?;'''
 		delete_vendor_invoices_sql_script_1 = '''DELETE FROM vendor_invoices WHERE INVOICE_LIABILITY_ACCOUNT=?;'''
 		delete_vendor_invoices_sql_script_2 = '''DELETE FROM vendor_invoices WHERE INVOICE_EXPENSE_ACCOUNT=?;'''
 
-		#Search client_invoices_table:
+		#client_invoices SQL scripts:
 		retrieve_client_invoices_sql_script_1 = '''SELECT * FROM client_invoices WHERE INVOICE_ASSET_ACCOUNT=?;'''
 		retrieve_client_invoices_sql_script_2 = '''SELECT * FROM client_invoices WHERE INVOICE_INCOME_ACCOUNT=?;'''
 		delete_client_invoices_sql_script_1 = '''DELETE FROM client_invoices WHERE INVOICE_ASSET_ACCOUNT=?;'''
 		delete_client_invoices_sql_script_2 = '''DELETE FROM client_invoices WHERE INVOICE_INCOME_ACCOUNT=?;'''
 
-		#Search journal_entries table:
-		retrieve_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE GENERAL_LEDGER_NAME=?;'''
-		delete_JE_GL_name_sql_script = '''DELETE FROM journal_entries WHERE GENERAL_LEDGER_NAME=?;'''
-		delete_JE_offset_GL_name_sql_script = '''DELETE FROM journal_entries WHERE OFFSET_GENERAL_LEDGER_NAME=?;'''
+		#vendor_credit_memos SQL scripts:
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	DEFINE TEMPORARY MEMORY VARIABLES:
-		[ ]
-		[ ]
-		[ ]
-		"""
+		retrieve_vendor_credit_memos_sql_script_1 = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_ASSET_ACCOUNT=?;'''
+		retrieve_vendor_credit_memos_sql_script_2 = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_INCOME_ACCOUNT=?;'''
+		delete_vendor_credit_memos_sql_script_1 = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_ASSET_ACCOUNT=?;'''
+		delete_vendor_credit_memos_sql_script_2 = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_INCOME_ACCOUNT=?;'''
 
-		#Define function variables:
-		prev_general_ledger_name = self.delete_selection_temporary_memory[0][0]
-		prev_general_ledger_number = self.delete_selection_temporary_memory[0][1]
+		#client_credit_memos SQL scripts:
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	CONNECT TO SQL.db, DELETE GENERAL LEDGER DATA:
-		[ ]
-		[ ]
-		[ ]
-		"""
+		retrieve_client_credit_memos_sql_script_1 = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_LIABILITY_ACCOUNT=?;'''
+		retrieve_client_credit_memos_sql_script_2 = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_EXPENSE_ACCOUNT=?;'''
+		delete_client_credit_memos_sql_script_1 = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_LIABILITY_ACCOUNT=?;'''
+		delete_client_credit_memos_sql_script_2 = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_EXPENSE_ACCOUNT=?;'''
 
 		try:
+
+			prev_general_ledger_name = self.delete_selection_temporary_memory[0][0]
+			prev_general_ledger_number = self.delete_selection_temporary_memory[0][1]
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(retrieve_general_ledger_sql_script,[prev_general_ledger_name])
 				cursor.execute(delete_general_ledger_name_sql_script,[prev_general_ledger_name])
-				connection.commit()
-				cursor.close()
+
 				delete_general_ledger_confirmation_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="General Ledger data deleted")
 
-		except sqlite3.Error as error:
-
-			delete_general_ledger_error_message_1 = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	CONNECT TO SQL.db, DELETE JOURNAL ENTRY DATA:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-		try:
-
-			with sqlite3.connect("SQL.db") as connection:
-
-				cursor = connection.cursor()
 				cursor.execute(retrieve_general_ledger_sql_script,[prev_general_ledger_name])
-				cursor.execute(delete_JE_GL_name_sql_script,[prev_general_ledger_name])
-				cursor.execute(delete_JE_offset_GL_name_sql_script,[prev_general_ledger_name])
-				connection.commit()
-				cursor.close()
-				delete_journal_entries_confirmation_message = tk.messagebox.showinfo(title="Delete General Ledger",message="Journal Entries successfully deleted")
+				cursor.execute(delete_JE_debit_GL_name_sql_script,[prev_general_ledger_name])
+				cursor.execute(delete_JE_credit_GL_name_sql_script,[prev_general_ledger_name])
 
-		except sqlite3.Error as error:
+				delete_journal_entries_confirmation_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="Journal Entries successfully deleted")
 
-			delete_general_ledger_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	CONNECT TO SQL.db, DELETE VENDOR INVOICE DATA:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-		try:
-
-			with sqlite3.connect("SQL.db") as connection:
-
-				cursor = connection.cursor()
 				cursor.execute(retrieve_vendor_invoices_sql_script_1,[prev_general_ledger_name])
 				cursor.execute(delete_vendor_invoices_sql_script_1,[prev_general_ledger_name])
 				cursor.execute(retrieve_vendor_invoices_sql_script_2,[prev_general_ledger_name])
 				cursor.execute(delete_vendor_invoices_sql_script_2,[prev_general_ledger_name])
-				connection.commit()
-				cursor.close()
+
 				delete_vendor_invoices_confirmation_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="Vendor Invoice data successfully deleted")
 
-		except sqlite3.Error as error:
-
-			delete_vendor_invoices_error_message_2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	CONNECT TO SQL.db, DELETE CLIENT INVOICE DATA:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-		try:
-
-			with sqlite3.connect("SQL.db") as connection:
-
-				cursor = connection.cursor()
 				cursor.execute(retrieve_client_invoices_sql_script_1,[prev_general_ledger_name])
 				cursor.execute(delete_client_invoices_sql_script_1,[prev_general_ledger_name])
 				cursor.execute(retrieve_client_invoices_sql_script_2,[prev_general_ledger_name])
 				cursor.execute(delete_client_invoices_sql_script_2,[prev_general_ledger_name])
-				connection.commit()
-				cursor.close()
+
 				delete_client_invoices_confirmation_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="Client Invoice data successfully deleted")
 
-		except sqlite3.Error as error:
+				cursor.execute(retrieve_vendor_credit_memos_sql_script_1,[prev_general_ledger_name])
+				cursor.execute(retrieve_vendor_credit_memos_sql_script_2,[prev_general_ledger_name])
+				cursor.execute(delete_vendor_credit_memos_sql_script_1,[prev_general_ledger_name])
+				cursor.execute(delete_vendor_credit_memos_sql_script_2,[prev_general_ledger_name])
 
-			delete_client_invoices_error_message_1 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				delete_vendor_credit_memos_confirmation_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="Vendor credit memo data successfully deleted.")
 
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	DELETE MEMORY DATA FROM FUNCTION'S TEMPORARY MEMORY VARIABLES:
-		[ ]
-		[ ]
-		[ ]
-		"""
+				cursor.execute(retrieve_client_credit_memos_sql_script_1,[prev_general_ledger_name])
+				cursor.execute(retrieve_client_credit_memos_sql_script_2,[prev_general_ledger_name])
+				cursor.execute(delete_client_credit_memos_sql_script_1,[prev_general_ledger_name])
+				cursor.execute(delete_client_credit_memos_sql_script_2,[prev_general_ledger_name])
 
-		try:
+				delete_client_credit_memos_confirmation_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="Client credit memo data successfully deleted.")
+
+				connection.commit()
+
+				cursor.close()
 
 			self.delete_selection_temporary_memory.clear()
 			self.general_ledger_name_entry_text.set("")
 			self.general_ledger_number_entry_text.set("")
 			self.general_ledger_type_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			temporary_memory_error_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message="Cannot clear General Ledger entries")
+			temporary_memory_error_message_1 = tk.messagebox.showinfo(title="Delete General Ledger",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -405,11 +271,13 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 			self.general_ledger_number_entry_text.set("")
 			self.general_ledger_type_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Delete General Ledger",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

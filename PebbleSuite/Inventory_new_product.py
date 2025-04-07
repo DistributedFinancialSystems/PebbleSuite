@@ -25,15 +25,6 @@ from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	NEW_PRODUCT_ENTRY CLASS
-[ ]
-[ ]
-[ ]
-"""
 
 
 class NEW_PRODUCT_ENTRY:
@@ -55,23 +46,18 @@ class NEW_PRODUCT_ENTRY:
 
 			try:
 				cursor = connection.cursor()
+
 				cursor.execute(new_product_sql_script,self.new_product_entry)
+
 				connection.commit()
+
 				cursor.close()
 
 			except sqlite3.Error as error:
+
 				print(f"NEW_PRODUCT_ENTRY ERROR: {error}")
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	NEW_PRODUCT_WINDOW CLASS
-[ ]
-[ ]
-[ ]
-"""
 
 
 class NEW_PRODUCT_WINDOW(tk.Toplevel):
@@ -87,19 +73,22 @@ class NEW_PRODUCT_WINDOW(tk.Toplevel):
 	with sqlite3.connect("SQL.db") as connection:
 
 		cursor = connection.cursor()
+
 		cursor.execute(select_vendors_SQL_script)
 
 		for item in cursor:
+
 			product_vendors.append(" ".join(item))
 
 		connection.commit()
+
 		cursor.close()
 
 	def __init__(self,*args,**kwargs):
 
 		super().__init__(*args,**kwargs)
 		self.config(width=425,height=235)
-		self.title("New Product")
+		self.title("New Vendor Product")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -135,86 +124,102 @@ class NEW_PRODUCT_WINDOW(tk.Toplevel):
 
 	def create_new_product(self):
 
-		#New product data variables:
 		product_data = []
 
 		new_product_name = self.product_name_entry.get()
-		product_data.append(new_product_name)
 		new_product_number = self.product_number_entry.get()
-		product_data.append(new_product_number)
 		new_product_vendor_name = self.clicked.get()
-		product_data.append(new_product_vendor_name)
 		new_product_price = self.product_price_entry.get()
-		product_data.append(new_product_price)
 
-		#Verify existing PRODUCT_NAME data variables:
+		if new_product_name == "":
 
-		verify_product_name_data = []
+			new_product_name_error_message_1 = tk.messagebox.showinfo(title="New Vendor Product",message="Product name cannot be blank.")
 
-		verify_product_names_sql_script = '''SELECT PRODUCT_NAME FROM products;'''
+		elif new_product_number == "":
 
-		try:
+			new_product_number_error_message_1 = tk.messagebox.showinfo(title="New Vendor Product",message=f"New product number cannot be blank.")
 
-			with sqlite3.connect("SQL.db") as connection:
+		elif new_product_vendor_name == "Select Vendor":
 
-				cursor = connection.cursor()
+			new_product_vendor_name_error_message_1 = tk.messagebox.showinfo(title="New Vendor Product",message="Product vendor name cannot be blank.")
 
-				cursor.execute(verify_product_names_sql_script)
+		elif new_product_price == "":
 
-				for item in cursor:
+			new_product_price_error_message_1 = tk.messagebox.showinfo(title="New Vendor Product",message="Product price cannot be blank.")
 
-					verify_product_name_data.append(*item)
+		else:
 
-				connection.commit()
+			try:
 
-				cursor.close()
+				verify_product_name_data = []
 
-		except sqlite3.Error as error:
+				verify_product_names_sql_script = '''SELECT PRODUCT_NAME FROM products;'''
 
-			verify_product_names_error_message = tk.messagebox.showinfo(title="New Product",message=f"{error}")
+				with sqlite3.connect("SQL.db") as connection:
 
+					cursor = connection.cursor()
 
-		try:
+					cursor.execute(verify_product_names_sql_script)
 
-			if new_product_name in verify_product_name_data:
+					for item in cursor:
 
-				duplicate_product_name_error_message = tk.messagebox.showinfo(title="New Product",message="Duplicate product name:  please use a different name for new product.")
+						verify_product_name_data.append(*item)
 
-			else:
+					connection.commit()
 
-				new_product = NEW_PRODUCT_ENTRY(product_data)
-				new_product.enter_data()
-				new_product_confirmation_message = tk.messagebox.showinfo(title="New Product",message="New Product created!")
+					cursor.close()
 
-				verify_product_name_data.clear()
+				if new_product_name in verify_product_name_data:
 
-		except sqlite3.Error as error:
+					duplicate_product_name_error_message = tk.messagebox.showinfo(title="New Vendor Product",message="Duplicate product name:  please use a different name for new product.")
 
-			new_product_error_message = tk.messagebox.showinfo(title="New Product",message=f"Error: {error}")
+				else:
+
+					product_data.append(new_product_name)
+					product_data.append(new_product_number)
+					product_data.append(new_product_vendor_name)
+					product_data.append(new_product_price)
+
+					new_product = NEW_PRODUCT_ENTRY(product_data)
+
+					new_product.enter_data()
+
+					new_product_confirmation_message = tk.messagebox.showinfo(title="New Vendor Product",message="New Product created!")
+
+					verify_product_name_data.clear()
+
+			except Exception as error:
+
+				new_product_error_message = tk.messagebox.showinfo(title="New Vendor Product",message=f"{error}")
 
 
 	def print_product_data(self):
 
-		print_product_sql_script = '''SELECT * FROM products'''
+		print_product_sql_script = '''SELECT * FROM products;'''
 
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
+
 				cursor = connection.cursor()
+
 				cursor.execute(print_product_sql_script)
 
 				for item in cursor:
+
 					print(item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			print(f"print_product_data error: {error}")
+			print_product_data_error_message_1 = tk.messagebox.showinfo(title="New Vendor Product",message=f"{error}")
 
 
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

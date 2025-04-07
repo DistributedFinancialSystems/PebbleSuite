@@ -223,6 +223,7 @@ class MENU_BAR(tk.Menu):
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
 		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
+		self.settings_menu.add_command(label="Database Settings",command=self.new_settings)
 		self.add_cascade(label="System Settings",menu=self.settings_menu)
 
 		#Taxes Menu Tkinter widgets

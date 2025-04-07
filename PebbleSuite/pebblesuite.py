@@ -161,7 +161,7 @@ class APP(tk.Tk):
 
 		self.text_scrollbar = ttk.Scrollbar(self)
 		self.text_scrollbar.place(x=920,y=165,width=20,height=335)
-		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar)
+		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
 		self.textbox.place(x=430,y=165,width=490,height=335)
 
 
@@ -369,33 +369,45 @@ class APP(tk.Tk):
 		display_date_sql_script = '''SELECT TASK_DATE FROM tasks WHERE TASK_NAME=?;'''
 		display_note_sql_script = '''SELECT TASK_NOTE FROM tasks WHERE TASK_NAME=?;'''
 
-		for item in self.listbox.curselection():
+		try:
 
-			select_task = self.listbox.get(item)
+			for item in self.listbox.curselection():
 
-			with sqlite3.connect("SQL.db") as connection:
+				select_task = self.listbox.get(item)
 
-				#Select task note from SQL.db:
-				note_cursor = connection.cursor()
-				note_cursor.execute(display_note_sql_script,[select_task])
+				with sqlite3.connect("SQL.db") as connection:
 
-				for item in note_cursor:
-					self.textbox.insert(tk.END," ".join(item))
+					note_cursor = connection.cursor()
 
-				connection.commit()
-				note_cursor.close()
+					note_cursor.execute(display_note_sql_script,[select_task])
 
-				#Select task date from SQL.db:
-				date_cursor = connection.cursor()
-				date_cursor.execute(display_date_sql_script,[select_task])
-				connection.commit()
+					self.textbox.delete(1.0,tk.END)
 
-				for item in date_cursor:
-					self.editing_task_date_entry_text.set(item)
+					for item in note_cursor:
 
-				date_cursor.close()
+						self.textbox.insert(tk.END," ".join(item))
 
-		self.editing_task_name_entry_text.set(select_task)
+					connection.commit()
+
+					note_cursor.close()
+
+					date_cursor = connection.cursor()
+
+					date_cursor.execute(display_date_sql_script,[select_task])
+
+					connection.commit()
+
+					for item in date_cursor:
+
+						self.editing_task_date_entry_text.set(item)
+
+					date_cursor.close()
+
+				self.editing_task_name_entry_text.set(select_task)
+
+		except Exception as error:
+
+			display_note_error_message_1 = tk.messagebox.showinfo(title="Display Task",message=f"{error}")
 
 
 	"""

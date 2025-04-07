@@ -20,7 +20,6 @@ class database:
 					TASK_NAME TEXT,
 					TASK_NOTE TEXT);''')
 
-
 		vendors_sql_script = ('''CREATE TABLE IF NOT EXISTS vendors(
 					VENDOR_NAME TEXT,
 					VENDOR_ADDRESS1 TEXT,

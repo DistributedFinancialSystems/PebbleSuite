@@ -381,14 +381,6 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 			product_unit_quantity = self.product_unit_quantity_entry_text.get()
 			product_unit_price = self.product_unit_price_entry_text.get()
 
-			product_data.append(vendor_name)
-			product_data.append(product_name)
-			product_data.append(product_purchase_date)
-			product_data.append(product_purchase_price)
-			product_data.append(product_expiration_date)
-			product_data.append(product_unit_quantity)
-			product_data.append(product_unit_price)
-
 			#Collect journal entry data for new inventory:
 
 			journal_entry_data = []
@@ -408,48 +400,85 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 			journal_entry_vendor_name = self.vendor_name_entry_text.get()
 			journal_entry_notes = None
 
-			journal_entry_data.append(journal_entry_timestamp)
-			journal_entry_data.append(journal_entry_number)
-			journal_entry_data.append(journal_entry_date)
-			journal_entry_data.append(vendor_invoice_number)
-			journal_entry_data.append(debit_general_ledger_name)
-			journal_entry_data.append(debit_general_ledger_number)
-			journal_entry_data.append(debit_general_ledger_type)
-			journal_entry_data.append(credit_general_ledger_name)
-			journal_entry_data.append(credit_general_ledger_number)
-			journal_entry_data.append(credit_general_ledger_type)
-			journal_entry_data.append(journal_entry_debit_amount)
-			journal_entry_data.append(journal_entry_credit_amount)
-			journal_entry_data.append(journal_entry_vendor_name)
-			journal_entry_data.append(journal_entry_notes)
+			#Error handling:
 
-		except:
+			if vendor_name == "":
 
-			submit_changes_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message="Unable to collect data")
+				vendor_name_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Vendor name cannot be blank.")
 
-		try:
+			elif product_name == "":
 
-			if debit_general_ledger_name == "Select Inventory Account":
+				product_name_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Product name cannot be blank.")
 
-				debit_gl_error_message = tk.messagebox.showinfo(title="Add Inventory",message="Please select a debit GL")
-				product_data.clear()
-				journal_entry_data.clear()
+			elif vendor_invoice_number == "":
+
+				vendor_invoice_number_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Vendor invoice number cannot be blank.")
+
+			elif product_purchase_date == "":
+
+				product_purchase_date_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Product purchase date cannot be blank.")
+
+			elif product_purchase_price == "":
+
+				product_purchase_price_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Product total price cannot be blank.")
+
+			elif product_expiration_date == "":
+
+				product_expiration_date_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Product expiration date cannot be blank.")
+
+			elif product_unit_quantity == "":
+
+				product_unit_quantity_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Unit quantity cannot be blank.")
+
+			elif product_unit_price == "":
+
+				product_unit_price_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Invoice",message="Unit price cannot be blank.")
+
+			elif debit_general_ledger_name == "Select Inventory Account":
+
+				debit_gl_error_message = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Please select a debit GL")
 
 			elif credit_general_ledger_name == "Select Offset Account":
 
-				credit_gl_error_message = tk.messagebox.showinfo(title="Add Inventory",message="Please select a credit account")
+				credit_gl_error_message = tk.messagebox.showinfo(title="Add Vendor Inventory",message="Please select a credit account")
 
 			else:
+
+				product_data.append(vendor_name)
+				product_data.append(product_name)
+				product_data.append(product_purchase_date)
+				product_data.append(product_purchase_price)
+				product_data.append(product_expiration_date)
+				product_data.append(product_unit_quantity)
+				product_data.append(product_unit_price)
 
 				inventory_sql_entry = ADD_INVENTORY(product_data)
 				inventory_sql_entry.enter_data()
 
+				journal_entry_data.append(journal_entry_timestamp)
+				journal_entry_data.append(journal_entry_number)
+				journal_entry_data.append(journal_entry_date)
+				journal_entry_data.append(vendor_invoice_number)
+				journal_entry_data.append(debit_general_ledger_name)
+				journal_entry_data.append(debit_general_ledger_number)
+				journal_entry_data.append(debit_general_ledger_type)
+				journal_entry_data.append(credit_general_ledger_name)
+				journal_entry_data.append(credit_general_ledger_number)
+				journal_entry_data.append(credit_general_ledger_type)
+				journal_entry_data.append(journal_entry_debit_amount)
+				journal_entry_data.append(journal_entry_credit_amount)
+				journal_entry_data.append(journal_entry_vendor_name)
+				journal_entry_data.append(journal_entry_notes)
+
 				journal_entry_sql_entry = INVENTORY_JOURNAL_ENTRY(journal_entry_data)
 				journal_entry_sql_entry.enter_data()
 
-		except sqlite3.Error as error:
+				product_data.clear()
+				journal_entry_data.clear()
 
-			inventory_sql_entry_error = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
+		except Exception as error:
+
+			add_inventory_error_message = tk.messagebox.showinfo(title="Add Vendor Inventory",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -464,9 +493,9 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 			self.product_unit_quantity_entry_text.set("")
 			self.product_unit_price_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Add Vendor Inventory",message=f"{error}")
 
 
 	def destroy(self):
