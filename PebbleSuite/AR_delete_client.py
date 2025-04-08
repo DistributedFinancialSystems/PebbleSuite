@@ -18,7 +18,6 @@ class DELETE_CLIENT_ENTRY:
 
 	def delete_data(self):
 
-		#Define SQL.db database scripts:
 		query_client_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
 		delete_client_sql_script = '''DELETE FROM clients WHERE CLIENT_NAME=?'''
 		query_client_invoices_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NAME=?;'''
@@ -28,96 +27,70 @@ class DELETE_CLIENT_ENTRY:
 		query_vendor_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_CLIENT_NAME=?;'''
 		delete_vendor_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE JOURNAL_ENTRY_CLIENT_NAME=?;'''
 
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			try:
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_client_sql_script,[self.delete_client_entry])
 				cursor.execute(delete_client_sql_script,[self.delete_client_entry])
-				connection.commit()
-				cursor.close()
-				delete_client_confirmation_message = tk.messagebox.showinfo(title="Delete Client",message="Client contact data successfully deleted")
 
-			except sqlite3.Error as error:
+				delete_client_data_confirmation_message = tk.messagebox.showinfo(title="Delete Client",message="Client contact data successfully deleted")
 
-				delete_client_error_message = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
-
-			try:
-
-				cursor = connection.cursor()
 				cursor.execute(query_client_invoices_sql_script,[self.delete_client_entry])
 				cursor.execute(delete_client_invoices_sql_script,[self.delete_client_entry])
-				connection.commit()
-				cursor.close()
+
 				delete_client_invoices_confirmation_message = tk.messagebox.showinfo(title="Delete Client",message="Client invoice data successfully deleted")
 
-			except sqlite3.Error as error:
-
-				delete_client_invoices_error_message = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
-
-			try:
-
-				cursor = connection.cursor()
 				cursor.execute(query_client_credit_memos_sql_script,[self.delete_client_entry])
 				cursor.execute(delete_client_credit_memos_sql_script,[self.delete_client_entry])
-				connection.commit()
-				cursor.close()
+
 				delete_client_credit_memos_confirmation_messages = tk.messagebox.showinfo(title="Delete Client",message="Client credit memo data successfully deleted")
 
-			except sqlite3.Error as error:
-
-				delete_client_credit_memos_error_message = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
-
-
-			try:
-
-				cursor = connection.cursor()
 				cursor.execute(query_vendor_journal_entries_sql_script,[self.delete_client_entry])
 				cursor.execute(delete_vendor_journal_entries_sql_script,[self.delete_client_entry])
-				connection.commit()
-				cursor.close()
+
 				delete_client_journal_entries_confirmation_message = tk.messagebox.showinfo(title="Delete Client",message="Client journal entries successfully deleted")
 
-			except sqlite3.Error as error:
+				connection.commit()
 
-				delete_client_journal_entries_error_message = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
+				cursor.close()
+
+			except Exception as error:
+
+				delete_client_error_message_1 = tk.messagebox.showinfo(title="Delete Client",message=f"{error}")
 
 
 
 class DELETE_CLIENT_WINDOW(tk.Toplevel):
 
-	#Define SQL database scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-
-	#Define class variables
 	alive = False
+
 	dummy_variable = "null"
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		client_data = []
+
 		options = ["Select Client"]
 
-
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.client_sql_script)
 
 			for item in cursor:
+
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define DELETE_CLIENT_WINDOW tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=150)
 		self.title("Delete Client")
@@ -136,25 +109,21 @@ class DELETE_CLIENT_WINDOW(tk.Toplevel):
 
 	def delete_client(self):
 
-
-		#Define delete_client variables:
 		client_data = self.clicked.get()
 
-
-		#Define delete_client error message:
 		if client_data == "Select Client":
 
-			delete_client_error_message = tk.messagebox.showinfo(title="Error",message="Select a client to delete.")
+			delete_client_error_message = tk.messagebox.showinfo(title="Delete Client",message="Select a client to delete.")
 
-
-		#Initialize SQL.db connection:
 		else:
 
 			delete_object = DELETE_CLIENT_ENTRY(client_data)
+
 			delete_object.delete_data()
 
 
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

@@ -13,23 +13,18 @@ from tkinter.messagebox import showinfo
 
 class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
-
 
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Client"]
 
-
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.client_sql_script)
 
 			for item in cursor:
@@ -37,10 +32,9 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=550)
 		self.title("Edit Client Invoice")
@@ -54,23 +48,20 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_name_label = ttk.Label(self,text="Client Name")
 		self.invoice_name_label.place(x=20,y=15)
 
-
-		#Search for client names in SQL.db.
-		#Insert client names into client search listbox widget.
 		self.select_client_scrollbar = ttk.Scrollbar(self)
 		self.select_client_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_client_listbox = tk.Listbox(self,yscrollcommand=self.select_client_scrollbar.set)
 		self.select_client_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_client_scrollbar.config(command=self.select_client_listbox.yview)
 
-
 		search_client_name_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_client_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -79,8 +70,6 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#Invoice selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=200)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -114,13 +103,13 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_number_entry = ttk.Entry(self,textvariable=self.invoice_number_entry_text,state=tk.DISABLED)
 		self.invoice_number_entry.place(x=400,y=185)
 
-		self.invoice_asset_GL_label = ttk.Label(self,text="Invoice asset GL:")
+		self.invoice_asset_GL_label = ttk.Label(self,text="Invoice Asset GL:")
 		self.invoice_asset_GL_label.place(x=400,y=225)
 		self.invoice_asset_GL_entry_text = tk.StringVar()
 		self.invoice_asset_GL_entry = ttk.Entry(self,textvariable=self.invoice_asset_GL_entry_text,state=tk.DISABLED)
 		self.invoice_asset_GL_entry.place(x=400,y=255)
 
-		self.invoice_income_GL_label = ttk.Label(self,text="Invoice income GL:")
+		self.invoice_income_GL_label = ttk.Label(self,text="Invoice Income GL:")
 		self.invoice_income_GL_label.place(x=400,y=295)
 		self.invoice_income_GL_entry_text = tk.StringVar()
 		self.invoice_income_GL_entry = ttk.Entry(self,textvariable=self.invoice_income_GL_entry_text,state=tk.DISABLED)
@@ -149,15 +138,16 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
 
-		for item in self.select_client_listbox.curselection():
-
-			select_client = self.select_client_listbox.get(item)
-
 		try:
+
+			for item in self.select_client_listbox.curselection():
+
+				select_client = self.select_client_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_client_sql_script,[select_client])
 
 				for item in cursor:
@@ -165,38 +155,45 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_invoices_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message=f"{error}")
 
 
 	def clear_invoices(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_invoice_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message=f"{error}")
 
 
 	def edit_invoice(self):
 
-		#Define SQL.db scripts:
 		query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?'''
 
-
-		for item in self.listbox.curselection():
-
-			select_invoice = self.listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_invoice = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_invoice_sql_script,select_invoice)
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.invoice_issue_date_entry_text.set(f"{collect[0][1]}")
@@ -208,16 +205,16 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 				self.invoice_notes_entry_text.set(f"{collect[0][7]}")
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			edit_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
 	def submit_changes(self):
 
-		#Define SQL.db scripts:
 		retrieve_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?;'''
 		edit_invoice_issue_date_sql_script = '''UPDATE client_invoices SET INVOICE_ISSUE_DATE=? WHERE INVOICE_NUMBER=?;'''
 		edit_invoice_due_date_sql_script = '''UPDATE client_invoices SET INVOICE_DUE_DATE=? WHERE INVOICE_NUMBER=?;'''
@@ -230,44 +227,64 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
 		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_INVOICE_NUMBER=?'''
 
-
-		#Define function variables:
 		reference_invoice_number = self.invoice_number_entry_text.get()
 		new_invoice_issue_date = self.invoice_issue_date_entry_text.get()
 		new_invoice_due_date = self.invoice_due_date_entry_text.get()
+		new_invoice_number = self.invoice_number_entry_text.get()
+		new_invoice_asset_GL = self.invoice_asset_GL_entry_text.get()
+		new_invoice_income_GL = self.invoice_income_GL_entry_text.get()
 		new_invoice_amount = self.invoice_amount_entry_text.get()
 		new_invoice_notes = self.invoice_notes_entry_text.get()
 
 		try:
 
-			with sqlite3.connect("SQL.db") as connection:
+			if new_invoice_issue_date == "":
 
-				cursor = connection.cursor()
-				cursor.execute(edit_invoice_issue_date_sql_script,(new_invoice_issue_date,reference_invoice_number))
-				cursor.execute(edit_invoice_due_date_sql_script,(new_invoice_due_date,reference_invoice_number))
-				cursor.execute(edit_invoice_amount_sql_script,(new_invoice_amount,reference_invoice_number))
-				cursor.execute(edit_invoice_notes_sql_script,(new_invoice_notes,reference_invoice_number))
-				connection.commit()
-				cursor.close()
+				new_invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message="Invoice issue date cannot be blank.")
 
-		except sqlite3.Error as error:
+			elif new_invoice_due_date == "":
 
-			edit_invoice_error_message_2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				new_invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message="Invoice due date cannot be blank.")
 
-		try:
+			elif new_invoice_number == "":
 
-			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+				new_invoice_number_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message="Invoice number cannot be blank.")
 
-				cursor = connection.cursor()
-				cursor.execute(edit_JE_date_sql_script,(new_invoice_issue_date,reference_invoice_number))
-				cursor.execute(edit_JE_debit_amount_sql_script,(new_invoice_amount,reference_invoice_number))
-				cursor.execute(edit_JE_credit_amount_sql_script,(new_invoice_amount,reference_invoice_number))
-				cursor.execute(edit_JE_notes_sql_script,(new_invoice_notes,reference_invoice_number))
-				connection.commit()
-				cursor.close()
-				edit_invoice_confirmation_message = tk.messagebox.showinfo("Edit client Invoice",message="Invoice successfully edited.")
+			elif new_invoice_asset_GL == "":
 
-		except sqlite3.Error as error:
+				new_invoice_asset_GL_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message="Asset GL cannot be blank.")
+
+			elif new_invoice_income_GL == "":
+
+				new_invoice_income_GL_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message="Income GL cannot be blank.")
+
+			elif new_invoice_amount == "":
+
+				new_invoice_amount_error_message_1 = tk.messagebox.showinfo(title="Edit Client Invoice",message="Invoice amount cannot be blank.")
+
+			else:
+
+				with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+
+					cursor = connection.cursor()
+
+					cursor.execute(edit_invoice_issue_date_sql_script,(new_invoice_issue_date,reference_invoice_number))
+					cursor.execute(edit_invoice_due_date_sql_script,(new_invoice_due_date,reference_invoice_number))
+					cursor.execute(edit_invoice_amount_sql_script,(new_invoice_amount,reference_invoice_number))
+					cursor.execute(edit_invoice_notes_sql_script,(new_invoice_notes,reference_invoice_number))
+
+					cursor.execute(edit_JE_date_sql_script,(new_invoice_issue_date,reference_invoice_number))
+					cursor.execute(edit_JE_debit_amount_sql_script,(new_invoice_amount,reference_invoice_number))
+					cursor.execute(edit_JE_credit_amount_sql_script,(new_invoice_amount,reference_invoice_number))
+					cursor.execute(edit_JE_notes_sql_script,(new_invoice_notes,reference_invoice_number))
+
+					connection.commit()
+
+					cursor.close()
+
+					edit_invoice_confirmation_message = tk.messagebox.showinfo("Edit client Invoice",message="Invoice successfully edited.")
+
+		except Exception as error:
 
 			edit_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
@@ -284,11 +301,13 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 			self.invoice_amount_entry_text.set("")
 			self.invoice_notes_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

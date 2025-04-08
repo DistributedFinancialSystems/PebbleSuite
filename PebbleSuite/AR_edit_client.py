@@ -13,10 +13,8 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 	#Define SQL database scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-
 	#Define class variables
 	alive = False
-
 
 	#Define class functions
 	def __init__(self,*args,**kwargs):
@@ -25,19 +23,20 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 		options = ["Select Client"]
 
-
 		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.client_sql_script)
 
 			for item in cursor:
+
 				options.append(" ".join(item))
 
 			connection.commit()
-			cursor.close()
 
+			cursor.close()
 
 		#Define EDIT_CLIENT tkinter widgets:
 		super().__init__(*args,**kwargs)
@@ -124,20 +123,16 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 	def search_client_data(self):
 
-
 		#Define SQL.db scripts:
 		search_clients_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
-
 
 		#Retrieve client name from data form:
 		search_client_name = self.clicked.get()
 
-
 		#Define search_client_data error message:
 		if search_client_name == "Select Client":
 
-			search_client_data_error_message = tk.messagebox.showinfo(title="Error",message="Select a client to edit.")
-
+			search_client_data_error_message = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
 
 		#Initialized SQL.db connection:
 		else:
@@ -147,9 +142,11 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_clients_sql_script,[search_client_name])
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.client_address1_entry_text.set(f"{collect[0][1]}")
@@ -164,11 +161,11 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 				self.client_contact_notes_entry_text.set(f"{collect[0][10]}")
 
 				connection.commit()
+
 				cursor.close()
 
 
 	def change_client_data(self):
-
 
 		#Define SQL.db database scripts:
 		retrieve_clients_sql_script = '''SELECT * FROM clients;'''
@@ -183,7 +180,6 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 		edit_contact_email_sql_script = '''UPDATE clients SET CONTACT_EMAIL=? WHERE CLIENT_NAME=?;'''
 		edit_client_notes_sql_script = '''UPDATE clients SET CONTACT_NOTES=? WHERE CLIENT_NAME=?;'''
 
-
 		#Retrieve client data from entry form:
 		search_client_name = self.clicked.get()
 		new_address1 = self.client_address1_entry.get()
@@ -197,12 +193,10 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 		new_contact_email = self.client_contact_email_entry.get()
 		new_client_notes = self.client_contact_notes_entry.get()
 
-
 		#Define change_client_data error message:
 		if search_client_name == "Select Client":
 
-			change_client_data_error_message = tk.messagebox.showinfo(title="Error",message="Select a client to edit.")
-
+			change_client_data_error_message = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
 
 		#Initialize SQL.db connection:
 		else:
@@ -222,6 +216,7 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 				cursor.execute(edit_client_notes_sql_script,(new_client_notes,search_client_name))
 
 				connection.commit()
+
 				cursor.close()
 
 			edit_client_confirmation_message = tk.messagebox.showinfo(title="Edit Client",message="Changes successfully entered")
@@ -230,4 +225,5 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

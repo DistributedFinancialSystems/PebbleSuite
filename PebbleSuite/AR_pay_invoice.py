@@ -96,8 +96,11 @@ class PAY_INVOICE_JOURNAL_ENTRY:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_payment_JE_sql_script,self.pay_invoice_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -105,21 +108,18 @@ class PAY_INVOICE_JOURNAL_ENTRY:
 
 class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Client"]
 
 		payment_GL_options = ["Select Bank Account"]
 
-		#Retrieve client names from SQL.db, add them into options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -134,7 +134,6 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Retrieve asset general ledger names from SQL.db, add them into payment_GL_options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -149,7 +148,6 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=775)
 		self.title("Pay Client Invoice")
@@ -163,23 +161,20 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_name_label = ttk.Label(self,text="Client Name")
 		self.invoice_name_label.place(x=20,y=15)
 
-
-		#Search for client names in SQL.db.
-		#Insert client names into client search listbox widget.
 		self.select_client_scrollbar = ttk.Scrollbar(self)
 		self.select_client_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_client_listbox = tk.Listbox(self,yscrollcommand=self.select_client_scrollbar.set)
 		self.select_client_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_client_scrollbar.config(command=self.select_client_listbox.yview)
 
-
 		search_client_name_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_client_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -188,8 +183,6 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#Invoice selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=405)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -277,17 +270,18 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
 
-		for item in self.select_client_listbox.curselection():
-
-			select_client = self.select_client_listbox.get(item)
-
 		invoice_status = "Open"
 
 		try:
 
+			for item in self.select_client_listbox.curselection():
+
+				select_client = self.select_client_listbox.get(item)
+
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_client_sql_script,(select_client,invoice_status))
 
 				for item in cursor:
@@ -295,39 +289,45 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
 		except sqlite3.Error as error:
 
-			search_invoices_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_invoices_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"{error}")
 
 
 	def clear_invoices(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_invoices_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"{error}")
 
 
 	def select_invoice(self):
 
-		#Define SQL.db scripts:
 		query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?;'''
 
-		for item in self.listbox.curselection():
-
-			select_invoice = self.listbox.get(item)
-
-		#select_client = self.select_client_listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_invoice = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_invoice_sql_script,select_invoice)
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.invoice_name_entry_text.set(f"{collect[0][0]}")
@@ -340,6 +340,7 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 				self.invoice_notes_entry_text.set(f"{collect[0][7]}")
 
 				connection.commit()
+
 				cursor.close()
 
 		except sqlite3.Error as error:
@@ -349,7 +350,6 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	def submit_payment(self):
 
-		#Define update invoice status variables:
 		pay_invoice_update_status_data = []
 		pay_invoice_update_payment_data = []
 		pay_invoice_journal_entry_data = []
@@ -358,7 +358,6 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 		reference_invoice_number = self.invoice_number_entry_text.get()
 		reference_invoice_paid_date = self.pay_invoice_date_entry_text.get()
 
-		#Define journal entry variables:
 		reference_JE_timestamp = datetime.datetime.now()
 		reference_JE_number = None
 		reference_JE_entry_date = self.pay_invoice_date_entry_text.get()
@@ -383,12 +382,7 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 			print("Error:  could not add data into pay_invoice_update_status_data list.")
 
-
-		#Update client invoice data:
-
 		try:
-
-			#PAY_INVOICE_UPDATE_STATUS class (from above):
 
 			update_payment_status = PAY_INVOICE_UPDATE_STATUS(pay_invoice_update_status_data)
 			update_payment_status.pay_invoice()
