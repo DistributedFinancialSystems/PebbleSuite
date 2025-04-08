@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES
-[ ]
-[ ]
-[ ]
-"""
 
 
 #Python Standard Library modules.
@@ -84,30 +75,9 @@ from Reports_vendor_summary import *
 from Reports_client_summary import *
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	MENU_BAR CLASS:
-[ ]
-[ ]
-[ ]
-"""
 
 
 class MENU_BAR(tk.Menu):
-
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	INITIALIZE CLASS WIDGETS:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
 
 	def __init__(self,root):
 
@@ -194,6 +164,7 @@ class MENU_BAR(tk.Menu):
 		self.inventory_menu.add_command(label="Add Inventory",command=self.add_inventory)
 		self.inventory_menu.add_command(label="Edit Inventory",command=self.new_inventory)
 		self.inventory_menu.add_command(label="Delete Inventory",command=self.new_inventory)
+		self.inventory_menu.add_command(label="Inventory Stock",command=self.new_inventory)
 		self.inventory_menu.add_separator()
 		self.inventory_menu.add_command(label="Sales Tax",command=self.new_inventory)
 		self.add_cascade(label="Inventory",menu=self.inventory_menu)
@@ -240,17 +211,6 @@ class MENU_BAR(tk.Menu):
 		self.tools_menu = tk.Menu(self)
 		self.tools_menu.add_command(label="Calculator",command=self.calculator)
 		self.add_cascade(label="Tools",menu=self.tools_menu)
-
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	ACCOUNTS PAYABLE MENU FUNCTIONS:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 
 	def new_AP(self):

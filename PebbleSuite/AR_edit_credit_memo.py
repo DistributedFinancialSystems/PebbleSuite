@@ -7,15 +7,7 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
+
 
 import datetime
 from datetime import date
@@ -30,23 +22,18 @@ from tkinter.messagebox import showinfo
 
 class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
-
 
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Client"]
 
-
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.client_sql_script)
 
 			for item in cursor:
@@ -54,10 +41,9 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=550)
 		self.title("Edit Client Credit Memo")
@@ -71,23 +57,20 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_name_label = ttk.Label(self,text="Client Name")
 		self.credit_memo_name_label.place(x=20,y=15)
 
-
-		#Search for client names in SQL.db.
-		#Insert client names into client search listbox widget.
 		self.select_client_scrollbar = ttk.Scrollbar(self)
 		self.select_client_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_client_listbox = tk.Listbox(self,yscrollcommand=self.select_client_scrollbar.set)
 		self.select_client_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_client_scrollbar.config(command=self.select_client_listbox.yview)
 
-
 		search_client_name_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_client_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -96,8 +79,6 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#credit_memo selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=200)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -166,15 +147,16 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS="Open";'''
 
-		for item in self.select_client_listbox.curselection():
-
-			select_client = self.select_client_listbox.get(item)
-
 		try:
+
+			for item in self.select_client_listbox.curselection():
+
+				select_client = self.select_client_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_client_sql_script,[select_client])
 
 				for item in cursor:
@@ -182,38 +164,45 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			search_credit_memos_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_credit_memos_error_message = tk.messagebox.showinfo(title="Edit Client Credit Memo",message=f"{error}")
 
 
 	def clear_credit_memos(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_credit_memo_error_message_1 = tk.messagebox.showinfo(title="Edit Client Credit Memo",message=f"{error}")
 
 
 	def edit_credit_memo(self):
 
-		#Define SQL.db scripts:
 		query_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 
-
-		for item in self.listbox.curselection():
-
-			select_credit_memo = self.listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_credit_memo = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_credit_memo_sql_script,select_credit_memo)
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.credit_memo_issue_date_entry_text.set(f"{collect[0][1]}")
@@ -225,16 +214,16 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				self.credit_memo_notes_entry_text.set(f"{collect[0][7]}")
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			edit_credit_memo_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_credit_memo_error_message = tk.messagebox.showinfo(title="Edit Client Credit Memo",message=f"{error}")
 
 
 	def submit_changes(self):
 
-		#Define SQL.db scripts:
 		retrieve_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?;'''
 		edit_credit_memo_issue_date_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_ISSUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
 		edit_credit_memo_due_date_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_DUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
@@ -247,8 +236,6 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
 		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
 
-
-		#Define function variables:
 		reference_credit_memo_number = self.credit_memo_number_entry_text.get()
 		new_credit_memo_issue_date = self.credit_memo_issue_date_entry_text.get()
 		new_credit_memo_due_date = self.credit_memo_due_date_entry_text.get()
@@ -257,37 +244,47 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		try:
 
-			with sqlite3.connect("SQL.db") as connection:
+			if new_credit_memo_issue_date == "":
 
-				cursor = connection.cursor()
-				cursor.execute(edit_credit_memo_issue_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
-				cursor.execute(edit_credit_memo_due_date_sql_script,(new_credit_memo_due_date,reference_credit_memo_number))
-				cursor.execute(edit_credit_memo_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
-				cursor.execute(edit_credit_memo_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
-				connection.commit()
-				cursor.close()
+				new_credit_memo_issue_date_error_message_1 = tk.messagebox.showinfo(title="Edit Client Credit Memo",message="Credit memo issue date cannot be blank.")
 
-		except sqlite3.Error as error:
+			elif new_credit_memo_due_date == "":
 
-			edit_credit_memo_error_message_2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				new_credit_memo_due_date_error_message_1 = tk.messagebox.showinfo(title="Edit Client Credit Memo",message="Credit memo due date cannot be blank.")
 
-		try:
+			elif new_credit_memo_amount == "":
 
-			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+				new_credit_memo_amount_error_message_1 = tk.messagebox.showinfo(title="Edit Client Credit Memo",message="Credit memo amount cannot be blank.")
 
-				cursor = connection.cursor()
-				cursor.execute(edit_JE_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
-				cursor.execute(edit_JE_debit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
-				cursor.execute(edit_JE_credit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
-				cursor.execute(edit_JE_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
-				connection.commit()
-				cursor.close()
+			elif reference_credit_memo_number == "":
 
-				edit_credit_memo_confirmation_message = tk.messagebox.showinfo("Edit Client Credit Memo",message="Credit Memo successfully edited.")
+				reference_credit_memo_number_error_message_1 = tk.messagebox.showinfo(title="Edit Client Credit Memo",message="Credit memo number cannot be blank.")
 
-		except sqlite3.Error as error:
+			else:
 
-			edit_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+
+					cursor = connection.cursor()
+
+					cursor.execute(edit_credit_memo_issue_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
+					cursor.execute(edit_credit_memo_due_date_sql_script,(new_credit_memo_due_date,reference_credit_memo_number))
+					cursor.execute(edit_credit_memo_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
+					cursor.execute(edit_credit_memo_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
+
+					cursor.execute(edit_JE_date_sql_script,(new_credit_memo_issue_date,reference_credit_memo_number))
+					cursor.execute(edit_JE_debit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
+					cursor.execute(edit_JE_credit_amount_sql_script,(new_credit_memo_amount,reference_credit_memo_number))
+					cursor.execute(edit_JE_notes_sql_script,(new_credit_memo_notes,reference_credit_memo_number))
+
+					connection.commit()
+
+					cursor.close()
+
+					edit_credit_memo_confirmation_message = tk.messagebox.showinfo("Edit Client Credit Memo",message="Credit Memo successfully edited.")
+
+		except Exception as error:
+
+			edit_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Edit Client Credit Memo",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -302,11 +299,13 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			self.credit_memo_amount_entry_text.set("")
 			self.credit_memo_notes_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Edit Client Credit Memo",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()
