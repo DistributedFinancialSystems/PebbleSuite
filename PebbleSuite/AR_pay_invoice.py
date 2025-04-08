@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -30,9 +21,11 @@ from tkinter.messagebox import showinfo
 
 class PAY_INVOICE_UPDATE_STATUS:
 
+
 	def __init__(self,pay_invoice_status):
 
 		self.pay_invoice_status = pay_invoice_status
+
 
 	def pay_invoice(self):
 
@@ -41,8 +34,11 @@ class PAY_INVOICE_UPDATE_STATUS:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(invoice_payment_status_sql_script,self.pay_invoice_status)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -50,9 +46,11 @@ class PAY_INVOICE_UPDATE_STATUS:
 
 class PAY_INVOICE_UPDATE_PAYMENT_DATE:
 
+
 	def __init__(self,pay_invoice_date):
 
 		self.pay_invoice_date = pay_invoice_date
+
 
 	def pay_invoice(self):
 
@@ -61,8 +59,11 @@ class PAY_INVOICE_UPDATE_PAYMENT_DATE:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(invoice_payment_date_sql_script,self.pay_invoice_date)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -70,9 +71,11 @@ class PAY_INVOICE_UPDATE_PAYMENT_DATE:
 
 class PAY_INVOICE_JOURNAL_ENTRY:
 
+
 	def __init__(self,pay_invoice_entry):
 
 		self.pay_invoice_entry = pay_invoice_entry
+
 
 	def pay_invoice(self):
 
@@ -292,7 +295,7 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			search_invoices_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"{error}")
 
@@ -343,9 +346,9 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			pay_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			pay_invoice_error_message_1 = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"{error}")
 
 
 	def submit_payment(self):
@@ -375,75 +378,63 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 		try:
 
-			pay_invoice_update_status_data.append(reference_client_name)
-			pay_invoice_update_status_data.append(reference_invoice_number)
+			if reference_client_name == "":
 
-		except:
+				reference_client_name_error_message_1 = tk.messagebox.showinfo(title="Pay Client Invoice",message="Client name cannot be blank.")
 
-			print("Error:  could not add data into pay_invoice_update_status_data list.")
+			elif reference_invoice_number == "":
 
-		try:
+				reference_invoice_number_error_message_1 = tk.messagebox.showinfo(title="Pay Client Invoice",message="Invoice number cannot be blank")
 
-			update_payment_status = PAY_INVOICE_UPDATE_STATUS(pay_invoice_update_status_data)
-			update_payment_status.pay_invoice()
+			elif reference_invoice_paid_date == "":
 
-		except sqlite3.Error as error:
+				reference_invoice_paid_date_error_message_1 = tk.messagebox.showinfo(title="Pay Client Invoice",message="Payment date cannot be blank.")
 
-			update_payment_status_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"Invoice Status Error:  {error}")
+			elif reference_debit_GL_name == "Select Bank Account":
 
+				reference_debit_GL_name_error_message_1 = tk.messagebox.showinfo(title="Pay Client Invoice",message="Payment account cannot be blank.")
 
-		#Update client payment date data:
+			else:
 
-		try:
+				pay_invoice_update_status_data.append(reference_client_name)
+				pay_invoice_update_status_data.append(reference_invoice_number)
 
-			pay_invoice_update_payment_data.append(reference_invoice_paid_date)
-			pay_invoice_update_payment_data.append(reference_client_name)
-			pay_invoice_update_payment_data.append(reference_invoice_number)
+				update_payment_status = PAY_INVOICE_UPDATE_STATUS(pay_invoice_update_status_data)
+				update_payment_status.pay_invoice()
 
-		except:
+				pay_invoice_update_payment_data.append(reference_invoice_paid_date)
+				pay_invoice_update_payment_data.append(reference_client_name)
+				pay_invoice_update_payment_data.append(reference_invoice_number)
 
-			print("Error:  could not add data into pay_invoice_update_payment_data list.")
+				update_payment_date = PAY_INVOICE_UPDATE_PAYMENT_DATE(pay_invoice_update_payment_data)
+				update_payment_date.pay_invoice()
 
-		try:
+				pay_invoice_journal_entry_data.append(reference_JE_timestamp)
+				pay_invoice_journal_entry_data.append(reference_JE_number)
+				pay_invoice_journal_entry_data.append(reference_JE_entry_date)
+				pay_invoice_journal_entry_data.append(reference_client_invoice_number)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_name)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_number)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_type)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_name)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_number)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_type)
+				pay_invoice_journal_entry_data.append(reference_debit_GL_amount)
+				pay_invoice_journal_entry_data.append(reference_credit_GL_amount)
+				pay_invoice_journal_entry_data.append(reference_JE_client_name)
+				pay_invoice_journal_entry_data.append(reference_JE_notes)
 
-			update_payment_date = PAY_INVOICE_UPDATE_PAYMENT_DATE(pay_invoice_update_payment_data)
-			update_payment_date.pay_invoice()
+				new_invoice_payment_journal_entry = PAY_INVOICE_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
+				new_invoice_payment_journal_entry.pay_invoice()
+				pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Client Invoice",message="Invoice payment successfully recorded.")
 
-		except sqlite3.Error as error:
+				pay_invoice_update_status_data.clear()
+				pay_invoice_update_payment_data.clear()
+				pay_invoice_journal_entry_data.clear()
 
-			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"Invoice Date Error:  {error}")
+		except Exception as error:
 
-
-		#Create new journal entries:
-
-		try:
-
-			#Continue working here:
-
-			pay_invoice_journal_entry_data.append(reference_JE_timestamp)
-			pay_invoice_journal_entry_data.append(reference_JE_number)
-			pay_invoice_journal_entry_data.append(reference_JE_entry_date)
-			pay_invoice_journal_entry_data.append(reference_client_invoice_number)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_name)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_number)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_type)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_name)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_number)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_type)
-			pay_invoice_journal_entry_data.append(reference_debit_GL_amount)
-			pay_invoice_journal_entry_data.append(reference_credit_GL_amount)
-			pay_invoice_journal_entry_data.append(reference_JE_client_name)
-			pay_invoice_journal_entry_data.append(reference_JE_notes)
-
-			new_invoice_payment_journal_entry = PAY_INVOICE_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
-			new_invoice_payment_journal_entry.pay_invoice()
-			pay_invoice_confirmation_message = tk.messagebox.showinfo("Pay Client Invoice",message="Invoice payment successfully recorded.")
-
-		except sqlite3.Error as error:
-
-			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-
+			pay_invoice_error_message_3 = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -459,11 +450,13 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 			self.invoice_amount_entry_text.set("")
 			self.invoice_notes_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Pay Client Invoice",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

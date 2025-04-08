@@ -124,7 +124,7 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 	#Define SQL.db scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Accounts Receivable";'''
-	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income";'''
+	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income - Sales Income";'''
 
 
 	#Define class variables:

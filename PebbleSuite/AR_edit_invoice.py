@@ -210,7 +210,7 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			edit_invoice_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_invoice_error_message = tk.messagebox.showinfo(title="Edit Client Invoice",message=f"{error}")
 
 
 	def submit_changes(self):
@@ -282,11 +282,11 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 					cursor.close()
 
-					edit_invoice_confirmation_message = tk.messagebox.showinfo("Edit client Invoice",message="Invoice successfully edited.")
+					edit_invoice_confirmation_message = tk.messagebox.showinfo(title="Edit Client Invoice",message="Invoice successfully edited.")
 
 		except Exception as error:
 
-			edit_invoice_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_invoice_error_message_3 = tk.messagebox.showinfo(title="Edit Client Invoice",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -303,7 +303,7 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Edit Client Invoice",message=f"{error}")
 
 
 	def destroy(self):
