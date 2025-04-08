@@ -33,27 +33,29 @@ class NEW_CLIENT_ENTRY:
 		with sqlite3.connect("SQL.db") as connection:
 
 			try:
+
 				cursor = connection.cursor()
+
 				cursor.execute(new_client_sql_script,self.new_client_entry)
+
 				connection.commit()
+
 				cursor.close()
+
 				new_client_confirmation_message = tk.messagebox.showinfo(title="Add New Client",message="New client successfully created.")
 
 			except sqlite3.Error as error:
+
 				new_client_error_message = tk.messagebox.showinfo(title="Add New Client",message=f"Error: {error}")
 
 
 
 class NEW_CLIENT_WINDOW(tk.Toplevel):
 
-	#Define class variables
-
 	alive = False
 
-
-	#Define class functions
-
 	def __init__(self,*args,**kwargs):
+
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=520)
 		self.title("Add New Client")
@@ -125,7 +127,6 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 
 	def create_new_client(self):
 
-		#Define function variables:
 		new_client_data = []
 
 		new_client_name = self.client_name_entry.get()
@@ -139,8 +140,6 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 		new_client_contact_phone = self.client_contact_phone_entry.get()
 		new_client_contact_email = self.client_contact_email_entry.get()
 		new_client_contact_notes = self.client_contact_notes_entry.get()
-
-		#Verify existing client names in SQL.db:
 
 		client_names = []
 
@@ -162,11 +161,11 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 
 		if new_client_name in client_names:
 
-			duplicate_client_name_error_message = tk.messagebox.showinfo(title="New Client",message="Duplicate client name:  please use a different name for new client.")
+			duplicate_client_name_error_message = tk.messagebox.showinfo(title="Add New Client",message="Duplicate client name:  please use a different name for new client.")
 
 		elif new_client_name == "":
 
-			new_client_name_error_message = tk.messagebox.showinfo(title="Error",message="Client name cannot be blank.")
+			new_client_name_error_message = tk.messagebox.showinfo(title="Add New Client",message="Client name cannot be blank.")
 
 		else:
 
@@ -190,11 +189,11 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 
 				client_names.clear()
 
-				new_client_confirmation_message = tk.messagebox.showinfo(title="New Client",message="New client successfully created.")
+				new_client_confirmation_message = tk.messagebox.showinfo(title="Add New Client",message="New client successfully created.")
 
-			except sqlite3.Error as error:
+			except Exception as error:
 
-				error_message = tk.messagebox.showinfo(title="Error Message",message=f"{error}")
+				error_message = tk.messagebox.showinfo(title="Add New Client",message=f"{error}")
 
 
 	def clear_client_data(self):
@@ -213,12 +212,13 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 			self.client_contact_email_entry.delete(0,tk.END)
 			self.client_contact_notes_entry.delete(0,tk.END)
 
-		except ValueError as error:
+		except Exception as error:
 
-			clear_client_data_error_message = tk.messagebox.showinfo(f"{error}")
+			clear_client_data_error_message = tk.messagebox.showinfo(title="Add New Client",message=f"{error}")
 
 
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

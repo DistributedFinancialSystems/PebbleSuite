@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -157,7 +148,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=775)
-		self.title("Pay Vendor Credit Memo")
+		self.title("Apply Vendor Credit Memo")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -299,7 +290,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			search_credit_memos_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_credit_memos_error_message = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message=f"{error}")
 
 
 	def clear_credit_memos(self):
@@ -310,7 +301,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			clear_credit_memos_error_message_1 = tk.messagebox.showinfo(title="Apply Credit Memo",message=f"{error}")
+			clear_credit_memos_error_message_1 = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message=f"{error}")
 
 
 	def select_credit_memo(self):
@@ -350,7 +341,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			pay_credit_memo_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			pay_credit_memo_error_message = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message=f"{error}")
 
 
 	def submit_payment(self):

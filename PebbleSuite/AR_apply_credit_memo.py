@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -41,8 +32,11 @@ class PAY_CREDIT_MEMO_UPDATE_STATUS:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(credit_memo_payment_status_sql_script,self.pay_credit_memo_status)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -61,8 +55,11 @@ class PAY_CREDIT_MEMO_UPDATE_PAYMENT_DATE:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(credit_memo_payment_date_sql_script,self.pay_credit_memo_date)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -96,8 +93,11 @@ class PAY_CREDIT_MEMO_JOURNAL_ENTRY:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_payment_JE_sql_script,self.pay_credit_memo_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -105,23 +105,18 @@ class PAY_CREDIT_MEMO_JOURNAL_ENTRY:
 
 class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Client"]
 
 		payment_GL_options = ["Select Bank Account"]
 
-
-		#Retrieve client names from SQL.db, add them into options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -132,12 +127,13 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-		#Retrieve asset general ledger names from SQL.db, add them into payment_GL_options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.asset_GL_sql_script)
 
 			for item in cursor:
@@ -145,13 +141,12 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				payment_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=775)
-		self.title("Pay Client Credit Memo")
+		self.title("Apply Client Credit Memo")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -162,23 +157,20 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_name_label = ttk.Label(self,text="Client Name")
 		self.credit_memo_name_label.place(x=20,y=15)
 
-
-		#Search for client names in SQL.db.
-		#Insert client names into client search listbox widget.
 		self.select_client_scrollbar = ttk.Scrollbar(self)
 		self.select_client_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_client_listbox = tk.Listbox(self,yscrollcommand=self.select_client_scrollbar.set)
 		self.select_client_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_client_scrollbar.config(command=self.select_client_listbox.yview)
 
-
 		search_client_name_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_client_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -187,8 +179,6 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#Credit Memo selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=405)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -287,6 +277,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_client_sql_script,(select_client,credit_memo_status))
 
 				for item in cursor:
@@ -294,39 +285,45 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			search_credit_memos_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			search_credit_memos_error_message = tk.messagebox.showinfo(title="Apply Client Credit Memo",message=f"{error}")
 
 
 	def clear_credit_memos(self):
 
-		self.listbox.delete(0,tk.END)
+		try:
+
+			self.listbox.delete(0,tk.END)
+
+		except Exception as error:
+
+			clear_credit_memos_error_message_1 = tk.messagebox.showinfo(title="Apply Client Credit Memo",message=f"{error}")
 
 
 	def select_credit_memo(self):
 
-		#Define SQL.db scripts:
 		query_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?;'''
 
-		for item in self.listbox.curselection():
-
-			select_credit_memo = self.listbox.get(item)
-
-		#select_client = self.select_client_listbox.get(item)
-
 		try:
+
+			for item in self.listbox.curselection():
+
+				select_credit_memo = self.listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_credit_memo_sql_script,select_credit_memo)
 
 				for item in cursor:
+
 					collect.append(item)
 
 				self.credit_memo_name_entry_text.set(f"{collect[0][0]}")
@@ -339,16 +336,16 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				self.credit_memo_notes_entry_text.set(f"{collect[0][7]}")
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			pay_credit_memo_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			pay_credit_memo_error_message = tk.messagebox.showinfo(title="Apply Client Credit Memo",message=f"{error}")
 
 
 	def submit_payment(self):
 
-		#Define update credit memo status variables:
 		pay_credit_memo_update_status_data = []
 		pay_credit_memo_update_payment_data = []
 		pay_credit_memo_journal_entry_data = []
@@ -357,7 +354,6 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		reference_credit_memo_number = self.credit_memo_number_entry_text.get()
 		reference_credit_memo_paid_date = self.pay_credit_memo_date_entry_text.get()
 
-		#Define journal entry variables:
 		reference_JE_timestamp = datetime.datetime.now()
 		reference_JE_number = None
 		reference_JE_entry_date = self.pay_credit_memo_date_entry_text.get()
@@ -375,80 +371,60 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		try:
 
-			pay_credit_memo_update_status_data.append(reference_client_name)
-			pay_credit_memo_update_status_data.append(reference_credit_memo_number)
+			if reference_client_name == "":
 
-		except:
+				reference_client_name_error_message_1 = tk.messagebox.showinfo(title="Apply Client Credit Memo",message="Credit memo name cannot be blank.")
 
-			print("Error:  could not add data into pay_credit_memo_update_status_data list.")
+			elif reference_credit_memo_number == "":
 
+				reference_credit_memo_number_error_message_1 = tk.messagebox.showinfo(title="Apply Client Credit Memo",message="Credit memo number cannot be blank.")
 
-		#Update client credit memo data:
+			elif reference_credit_memo_paid_date == "":
 
-		try:
+				reference_credit_memo_number_error_message_1 = tk.messagebox.showinfo(title="Apply Client Credit Memo",message="Payment date cannot be blank.")
 
-			#PAY_CREDIT_MEMO_UPDATE_STATUS class (from above):
+			elif reference_credit_GL_name == "Select Bank Account":
 
-			update_payment_status = PAY_CREDIT_MEMO_UPDATE_STATUS(pay_credit_memo_update_status_data)
-			update_payment_status.pay_credit_memo()
+				reference_credit_GL_name = tk.messagebox.showinfo(title="Apply Client Credit Memo",message="Select payment account.")
 
-		except sqlite3.Error as error:
+			else:
 
-			update_payment_status_error_message = tk.messagebox.showinfo(title="Pay Client Credit Memo",message=f"Credit Memo Status Error:  {error}")
+				pay_credit_memo_update_status_data.append(reference_client_name)
+				pay_credit_memo_update_status_data.append(reference_credit_memo_number)
 
+				update_payment_status = PAY_CREDIT_MEMO_UPDATE_STATUS(pay_credit_memo_update_status_data)
+				update_payment_status.pay_credit_memo()
 
-		#Update client payment date data:
+				pay_credit_memo_update_payment_data.append(reference_credit_memo_paid_date)
+				pay_credit_memo_update_payment_data.append(reference_client_name)
+				pay_credit_memo_update_payment_data.append(reference_credit_memo_number)
 
-		try:
+				update_payment_date = PAY_CREDIT_MEMO_UPDATE_PAYMENT_DATE(pay_credit_memo_update_payment_data)
+				update_payment_date.pay_credit_memo()
 
-			pay_credit_memo_update_payment_data.append(reference_credit_memo_paid_date)
-			pay_credit_memo_update_payment_data.append(reference_client_name)
-			pay_credit_memo_update_payment_data.append(reference_credit_memo_number)
+				pay_credit_memo_journal_entry_data.append(reference_JE_timestamp)
+				pay_credit_memo_journal_entry_data.append(reference_JE_number)
+				pay_credit_memo_journal_entry_data.append(reference_JE_entry_date)
+				pay_credit_memo_journal_entry_data.append(reference_client_credit_memo_number)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_name)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_number)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_type)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_name)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_number)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_type)
+				pay_credit_memo_journal_entry_data.append(reference_debit_GL_amount)
+				pay_credit_memo_journal_entry_data.append(reference_credit_GL_amount)
+				pay_credit_memo_journal_entry_data.append(reference_JE_client_name)
+				pay_credit_memo_journal_entry_data.append(reference_JE_notes)
 
-		except:
+				new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
+				new_credit_memo_payment_journal_entry.pay_credit_memo()
 
-			print("Error:  could not add data into pay_credit_memo_update_payment_data list.")
+				pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Apply Client Credit Memo",message="Credit Memo payment successfully recorded.")
 
-		try:
+		except Exception as error:
 
-			update_payment_date = PAY_CREDIT_MEMO_UPDATE_PAYMENT_DATE(pay_credit_memo_update_payment_data)
-			update_payment_date.pay_credit_memo()
-
-		except sqlite3.Error as error:
-
-			update_payment_date_error_message = tk.messagebox.showinfo(title="Pay Client Credit Memo",message=f"Credit Memo Date Error:  {error}")
-
-
-		#Create new journal entries:
-
-		try:
-
-			#Continue working here:
-
-			pay_credit_memo_journal_entry_data.append(reference_JE_timestamp)
-			pay_credit_memo_journal_entry_data.append(reference_JE_number)
-			pay_credit_memo_journal_entry_data.append(reference_JE_entry_date)
-			pay_credit_memo_journal_entry_data.append(reference_client_credit_memo_number)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_name)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_number)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_type)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_name)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_number)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_type)
-			pay_credit_memo_journal_entry_data.append(reference_debit_GL_amount)
-			pay_credit_memo_journal_entry_data.append(reference_credit_GL_amount)
-			pay_credit_memo_journal_entry_data.append(reference_JE_client_name)
-			pay_credit_memo_journal_entry_data.append(reference_JE_notes)
-
-			new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
-			new_credit_memo_payment_journal_entry.pay_credit_memo()
-			pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Pay Client Credit Memo",message="Credit Memo payment successfully recorded.")
-
-		except sqlite3.Error as error:
-
-			pay_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-
+			pay_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Apply Client Credit Memo",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -463,12 +439,15 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			self.credit_memo_expense_GL_entry_text.set("")
 			self.credit_memo_amount_entry_text.set("")
 			self.credit_memo_notes_entry_text.set("")
+			self.pay_credit_memo_date_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Apply Client Credit Memo",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

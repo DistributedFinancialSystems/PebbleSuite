@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -51,8 +42,11 @@ class AR_NEW_INVOICE_ENTRY:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_invoice_sql_script,self.new_invoice_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -61,28 +55,10 @@ class AR_NEW_INVOICE_ENTRY:
 class NEW_JOURNAL_ENTRY:
 
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	INITIALIZE CLASS VARIABLES:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
 	def __init__(self,new_journal_entry):
+
 		self.new_journal_entry = new_journal_entry
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	JOURNAL_ENTRY FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def journal_entry(self):
 
@@ -108,8 +84,11 @@ class NEW_JOURNAL_ENTRY:
 			try:
 
 				cursor = connection.cursor()
+
 				cursor.execute(new_JE_sql_script,self.new_journal_entry)
+
 				connection.commit()
+
 				cursor.close()
 
 			except sqlite3.Error as error:
@@ -121,27 +100,20 @@ class NEW_JOURNAL_ENTRY:
 
 class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
-	#Define SQL.db scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Accounts Receivable";'''
 	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income - Sales Income";'''
 
-
-	#Define class variables:
 	alive = False
 
-
-	#Define __init__ tkinter widgets:
-	#Initialize SQL.db connection:
 	def __init__(self,*args,**kwargs):
 
-
-		#Retrieve Vendor data from SQL.db:
 		options = ["Select Vendor"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.client_sql_script)
 
 			for item in cursor:
@@ -149,15 +121,15 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Retrieve liability GL data from SQL.db:
 		asset_GL_options = ["Select Asset GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.asset_GL_sql_script)
 
 			for item in cursor:
@@ -165,15 +137,15 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				asset_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Retrieve income GL data from SQL.db:
 		income_GL_options = ["Select Income GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.income_GL_sql_script)
 
 			for item in cursor:
@@ -181,13 +153,12 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				income_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=380)
-		self.title("New Invoice")
+		self.title("New Client Invoice")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -251,41 +222,40 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 		#Select client error messages:
 		if self.clicked.get() == "Select Client":
 
-			select_client_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select a client for new invoice.")
+			select_client_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select a client for new invoice.")
 
 		#Invoice issue date error messages:
 		elif self.client_invoice_issue_date_entry.get() == "":
 
-			invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Issue date cannot be blank.")
+			invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Issue date cannot be blank.")
 
 		#Invoice due date error messges:
 		elif self.client_invoice_due_date_entry.get() == "":
 
-			invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Due date cannot be blank.")
+			invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Due date cannot be blank.")
 
 		#Invoice number errorm messages:
 		elif self.client_invoice_number_entry.get() == "":
 
-			invoice_number_entry_error_message_1 = tk.messagebox.showinfo(title="Error",message="Invoice number cannot be blank.")
+			invoice_number_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Invoice number cannot be blank.")
 
 		#Invoice asset GL error messages:
 		elif self.asset_GL_text.get() == "Select Asset GL":
 
-			asset_GL_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select an Asset GL.")
+			asset_GL_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select an Asset GL.")
 
 		#Invoice income GL error messages:
 		elif self.income_GL_text.get() == "Select Income GL":
 
-			expense_GL_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select an income GL.")
+			expense_GL_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select an income GL.")
 
 		#Invoice amount error messages:
 		elif self.client_invoice_amount_entry.get() == "":
 
-			invoice_amount_entry_error_message_1 = tk.messagebox.showinfo(title="Error",message="Invoice amount cannot be blank.")
+			invoice_amount_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Invoice amount cannot be blank.")
 
 		else:
 
-			#Enter invoice data using NEW_INVOICE_ENTRY class (from above):
 			new_invoice_data = []
 
 			new_invoice_name = self.clicked.get()
@@ -311,13 +281,8 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 			new_invoice = AR_NEW_INVOICE_ENTRY(new_invoice_data)
 			new_invoice.enter_invoice()
 
-
-			#NEW_JOURNAL_ENTRY admin variables:
-
 			journal_entry_timestamp = datetime.datetime.now()
 
-
-			#Enter journal entry data using NEW_JOURNAL_ENTRY class (from above):
 			new_JE_data = []
 
 			new_journal_entry_timestamp = journal_entry_timestamp
@@ -364,9 +329,11 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(invoice_report_sql_script)
 
 				for item in cursor:
+
 					print(item)
 
 				connection.commit()
@@ -379,5 +346,7 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

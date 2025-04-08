@@ -114,7 +114,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def __init__(self,*args,**kwargs):
 
-		options = ["Select client"]
+		options = ["Select Client"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -192,7 +192,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.client_credit_memo_number_entry = ttk.Entry(self)
 		self.client_credit_memo_number_entry.place(x=200,y=140)
 
-		self.liability_GL_label = ttk.Label(self,text="Credit Memo liability GL:")
+		self.liability_GL_label = ttk.Label(self,text="Credit Memo Liability GL:")
 		self.liability_GL_label.place(x=20,y=180)
 		self.liability_GL_text = tk.StringVar()
 		self.liability_GL_text.set("Select Liability GL")
