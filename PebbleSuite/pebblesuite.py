@@ -9,16 +9,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
-
 
 #Python Standard Library modules.
 import sqlite3
@@ -89,15 +79,6 @@ from Reports_vendor_summary import *
 from Reports_client_summary import *
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	PEBBLESUITE MAIN WINDOW:
-[ ]
-[ ]
-[ ]
-"""
 
 
 class APP(tk.Tk):
@@ -116,29 +97,18 @@ class APP(tk.Tk):
 		root_menu = MENU_BAR(self)
 		self.config(menu=root_menu)
 
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	NOTES MENU TKINTER WIDGETS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=377,y=165,width=20,height=335)
 		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
 		self.listbox.place(x=20,y=165,width=357,height=335)
 		self.scrollbar.config(command=self.listbox.yview)
 
-		#Initialize SQL.db connection
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.retrieve_note_names)
+
 			connection.commit()
 
 			for item in cursor:
@@ -147,34 +117,10 @@ class APP(tk.Tk):
 
 			cursor.close()
 
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	TEXTBOX TKINTER WIDGETS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-
 		self.text_scrollbar = ttk.Scrollbar(self)
 		self.text_scrollbar.place(x=920,y=165,width=20,height=335)
 		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
 		self.textbox.place(x=430,y=165,width=490,height=335)
-
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	"NEW NOTE" SECTION TKINTER WIDGETS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
 
 		self.new_task_button = ttk.Button(self,text="Create New Task",command=self.new_task)
 		self.new_task_button.place(x=280,y=80)
@@ -197,18 +143,6 @@ class APP(tk.Tk):
 		self.note_names_list_label = ttk.Label(self,text="Task List:")
 		self.note_names_list_label.place(x=20,y=140)
 
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	BOTTOM ROW BUTTONS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
-
 		self.open_task_note_button = ttk.Button(self,text="Open Task",command=self.display_note)
 		self.open_task_note_button.place(x=20,y=510)
 
@@ -220,18 +154,6 @@ class APP(tk.Tk):
 
 		self.delete_task_note_button = ttk.Button(self,text="Delete Task",command=self.delete_task_note)
 		self.delete_task_note_button.place(x=240,y=510)
-
-
-		"""
-		[ ]
-		[ ]
-		[ ]
-		[ ]	NOTE EDITING ENTRY WIDGETS:
-		[ ]
-		[ ]
-		[ ]
-		"""
-
 
 		self.editing_task_name_label = ttk.Label(self,text="Current Task:")
 		self.editing_task_name_label.place(x=430,y=15)
@@ -249,20 +171,8 @@ class APP(tk.Tk):
 		self.editing_task_notes_label.place(x=430,y=140)
 
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	"NEW NOTE" BUTTON FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-
 	def new_task(self):
 
-		#Define SQL.db scripts:
 		new_task_sql_script = '''INSERT INTO tasks(
 					TASK_NAME,
 					TASK_DATE,
@@ -271,7 +181,6 @@ class APP(tk.Tk):
 
 		retrieve_note_names = '''SELECT TASK_NAME FROM tasks;'''
 
-		#Define function variables:
 		new_task_data = []
 		new_task_name = self.new_task_name_entry.get()
 		new_task_data.append(new_task_name)
@@ -296,33 +205,36 @@ class APP(tk.Tk):
 
 		else:
 
-			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
 
 				try:
 
 					cursor = connection.cursor()
+
 					cursor.execute(new_task_sql_script,new_task_data)
+
 					connection.commit()
+
 					cursor.close()
+
 					new_task_confirmation_message = tk.messagebox.showinfo(title="New Task",message="New task entered into database.")
 
 				except sqlite3.Error as error:
 
 					new_task_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
-			#Delete data in tkinter widgets:
 			self.listbox.delete(0,tk.END)
 			self.new_task_name_entry.delete(0,tk.END)
 			self.new_task_date_entry.delete(0,tk.END)
 
-			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
 
 				try:
 
 					cursor = connection.cursor()
+
 					cursor.execute(retrieve_note_names)
+
 					connection.commit()
 
 					for item in cursor:
@@ -331,37 +243,21 @@ class APP(tk.Tk):
 
 					cursor.close()
 
-				except sqlite3.Error as error:
+				except Exception as error:
 
 					new_task_error_message2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	"CLEAR NOTE ENTRIES" BUTTON FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-
 	def clear_note_entries(self):
 
-		self.new_task_name_entry.delete(0,tk.END)
-		self.new_task_date_entry.delete(0,tk.END)
+		try:
 
+			self.new_task_name_entry.delete(0,tk.END)
+			self.new_task_date_entry.delete(0,tk.END)
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	"OPEN NOTE" BUTTON FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
+		except Exception as error:
+
+			clear_note_entries_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 	def display_note(self):
@@ -410,111 +306,94 @@ class APP(tk.Tk):
 			display_note_error_message_1 = tk.messagebox.showinfo(title="Display Task",message=f"{error}")
 
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	"SAVE NOTE CHANGES" BUTTON FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-
 	def save_note_changes(self):
 
-		#Define SQL.db scripts:
 		update_note_sql_script = '''UPDATE tasks SET TASK_NOTE=? WHERE TASK_NAME=?;'''
 
-		#Define function variables:
 		update_data_list = []
+
 		set_task_name = self.editing_task_name_entry.get()
+
 		set_task_note = self.textbox.get(1.0,"end-1c")
 
-		#Define data formatting functions:
-		update_data_list.append(set_task_name)
-		update_data_list.append(set_task_note)
-		update_data_list.reverse()
+		try:
 
-		#SQL.db functionality:
-		with sqlite3.connect("SQL.db") as connection:
-			cursor = connection.cursor()
-			cursor.execute(update_note_sql_script,update_data_list)
-			connection.commit()
-			cursor.close()
+			update_data_list.append(set_task_name)
+			update_data_list.append(set_task_note)
+			update_data_list.reverse()
 
-		save_note_changes_confirmation_message = tk.messagebox.showinfo(title="Save Changes",message="Note updates saved successfully.")
+			with sqlite3.connect("SQL.db") as connection:
 
+				cursor = connection.cursor()
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	"CLOSE NOTE" BUTTON FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
+				cursor.execute(update_note_sql_script,update_data_list)
+
+				connection.commit()
+
+				cursor.close()
+
+			save_note_changes_confirmation_message = tk.messagebox.showinfo(title="Save Changes",message="Note updates saved successfully.")
+
+		except Exception as error:
+
+			save_note_changes_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 	def close_note(self):
 
-		self.editing_task_name_entry_text.set("")
-		self.editing_task_date_entry_text.set("")
-		self.textbox.delete(1.0,tk.END)
+		try:
 
+			self.editing_task_name_entry_text.set("")
+			self.editing_task_date_entry_text.set("")
+			self.textbox.delete(1.0,tk.END)
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	"DELETE NOTE BUTTON FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
+		except Exception as error:
+
+			close_note_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 	def delete_task_note(self):
 
-		#Define SQL database scripts:
 		query_note_sql_script = '''SELECT * FROM tasks WHERE TASK_NAME=?;'''
 		delete_note_sql_script = '''DELETE FROM tasks WHERE TASK_NAME=?;'''
 		query_all_notes_sql_script = '''SELECT TASK_NAME FROM tasks;'''
 
-		#Select item from listbox tkinter widget:
+
 		for item in self.listbox.curselection():
 
 			select_task = self.listbox.get(item)
 
-			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
 
 				try:
 
 					cursor = connection.cursor()
+
 					cursor.execute(query_note_sql_script,[select_task])
+
 					cursor.execute(delete_note_sql_script,[select_task])
+
 					connection.commit()
+
 					cursor.close()
+
 					delete_note_confirmation_message = tk.messagebox.showinfo(title="Delete Note",message="Note deleted")
 
-				except sqlite3.Error as error:
+				except Exception as error:
 
-					delete_note_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+					delete_note_error_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
-			#Clear note entry tkinter widgets:
 			self.listbox.delete(0,tk.END)
 			self.editing_task_name_entry.delete(0,tk.END)
 			self.editing_task_date_entry.delete(0,tk.END)
 			self.textbox.delete(1.0,tk.END)
 
-			#Initialize SQL.db connection:
 			with sqlite3.connect("SQL.db") as connection:
 
 				try:
 
 					cursor = connection.cursor()
+
 					cursor.execute(query_all_notes_sql_script)
 
 					for item in cursor:
@@ -525,9 +404,9 @@ class APP(tk.Tk):
 
 					cursor.close()
 
-				except sqlite3.Error as error:
+				except Exception as error:
 
-					delete_note_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+					delete_note_error_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 """
@@ -544,19 +423,11 @@ class APP(tk.Tk):
 if __name__ == "__main__":
 
 	try:
+
 		app = APP()
+
 		app.mainloop()
 
-	except sqlite3.Error as error:
+	except Exception as error:
+
 		print(error)
-
-
-"""
-[ ]
-[ ]
-[ ]
-[ ]	END OF FILE
-[ ]
-[ ]
-[ ]
-"""
