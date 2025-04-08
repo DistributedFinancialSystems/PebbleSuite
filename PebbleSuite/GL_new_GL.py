@@ -7,16 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON DEPENDENCIES
-[ ]
-[ ]
-[ ]
-"""
-
 
 import sqlite3
 import tkinter as tk
@@ -25,15 +15,6 @@ from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	NEW_GL_ENTRY CLASS
-[ ]
-[ ]
-[ ]
-"""
 
 
 class NEW_GL_ENTRY:
@@ -54,23 +35,18 @@ class NEW_GL_ENTRY:
 
 			try:
 				cursor = connection.cursor()
+
 				cursor.execute(new_GL_sql_script,self.new_GL_entry)
+
 				connection.commit()
+
 				cursor.close()
 
 			except sqlite3.Error as error:
+
 				print(f"NEW_GL_ENTRY ERROR: {error}")
 
 
-"""
-[ ]
-[ ]
-[ ]
-[ ]	NEW_GL_WINDOW CLASS
-[ ]
-[ ]
-[ ]
-"""
 
 
 class NEW_GL_WINDOW(tk.Toplevel):
@@ -167,15 +143,13 @@ class NEW_GL_WINDOW(tk.Toplevel):
 
 			try:
 
-				#NEW_GL_ENTRY class from above.
 				new_GL = NEW_GL_ENTRY(GL_data)
 				new_GL.enter_data()
 				new_GL_confirmation_message = tk.messagebox.showinfo(title="New General Ledger",message="New General Ledger created!")
-				new_GL_restart_message = tk.messagebox.showinfo(title="New General Ledger",message="Restart PebbleSuite to update General Ledger search lists.")
 
-			except sqlite3.Error as error:
+			except Exception as error:
 
-				new_GL_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"Error: {error}")
+				new_GL_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"{error}")
 
 
 	def print_GL_data(self):
@@ -185,21 +159,26 @@ class NEW_GL_WINDOW(tk.Toplevel):
 		try:
 
 			with sqlite3.connect("SQL.db") as connection:
+
 				cursor = connection.cursor()
+
 				cursor.execute(print_GL_sql_script)
 
 				for item in cursor:
+
 					print(item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			print(f"print_GL_data error: {error}")
+			print_GL_data_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"{error}")
 
 
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()
