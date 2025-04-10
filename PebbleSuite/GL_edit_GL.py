@@ -1,5 +1,4 @@
 #Python Standard Library dependencies
-
 import datetime
 from datetime import date
 import sqlite3
@@ -13,25 +12,21 @@ from tkinter.messagebox import showinfo
 
 class EDIT_GL_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	edit_selection_temporary_memory = []
 
-
 	general_ledger_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
 
 
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select General Ledger"]
 
-
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.general_ledger_sql_script)
 
 			for item in cursor:
@@ -39,10 +34,9 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=265)
 		self.title("Edit General Ledger")
@@ -56,23 +50,20 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 		self.general_ledger_name_label = ttk.Label(self,text="General Ledger Name:")
 		self.general_ledger_name_label.place(x=20,y=15)
 
-
-		#Search for general ledger names in SQL.db.
-		#Insert general ledger names into general ledger search listbox widget.
 		self.select_general_ledger_scrollbar = ttk.Scrollbar(self)
 		self.select_general_ledger_scrollbar.place(x=353,y=45,width=20,height=170)
 		self.select_general_ledger_listbox = tk.Listbox(self,yscrollcommand=self.select_general_ledger_scrollbar.set)
 		self.select_general_ledger_listbox.place(x=20,y=45,width=333,height=170)
 		self.select_general_ledger_scrollbar.config(command=self.select_general_ledger_listbox.yview)
 
-
 		search_general_ledger_name_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_general_ledger_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -80,7 +71,6 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 				self.select_general_ledger_listbox.insert(0," ".join(item))
 
 			cursor.close()
-
 
 		self.edit_general_ledger_button = ttk.Button(self,text="Edit General Ledger",command=self.edit_general_ledger)
 		self.edit_general_ledger_button.place(x=20,y=230)
@@ -112,25 +102,27 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 	def edit_general_ledger(self):
 
-		#Define SQL.db scripts:
 		query_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?'''
 
 
-		for item in self.select_general_ledger_listbox.curselection():
-
-			select_general_ledger = self.select_general_ledger_listbox.get(item)
-
 		try:
+
+			for item in self.select_general_ledger_listbox.curselection():
+
+				select_general_ledger = self.select_general_ledger_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				collect = []
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_general_ledger_sql_script,[select_general_ledger])
 
 				for item in cursor:
+
 					collect.append(item)
+
 					self.edit_selection_temporary_memory.append(item)
 
 				self.general_ledger_name_entry_text.set(f"{collect[0][0]}")
@@ -138,16 +130,16 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 				self.general_ledger_type_entry_text.set(f"{collect[0][2]}")
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			edit_general_ledger_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_general_ledger_error_message = tk.messagebox.showinfo(title="Edit General Ledger",message=f"{error}")
 
 
 	def submit_changes(self):
 
-		#Define SQL.db scripts:
 		retrieve_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
 		edit_general_ledger_name_sql_script = '''UPDATE general_ledgers SET GENERAL_LEDGER_NAME=? WHERE GENERAL_LEDGER_NAME=?;'''
 
@@ -157,63 +149,45 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 		retrieve_credit_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
 		edit_JE_credit_GL_name_sql_script = '''UPDATE journal_entries SET CREDIT_GENERAL_LEDGER_NAME=? WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
 
-
-		#Define function variables:
-		prev_general_ledger_name = self.edit_selection_temporary_memory[0][0]
-		new_general_ledger_name = self.general_ledger_name_entry_text.get()
-
-		#Edit general ledger name:
 		try:
+
+			prev_general_ledger_name = self.edit_selection_temporary_memory[0][0]
+
+			new_general_ledger_name = self.general_ledger_name_entry_text.get()
 
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(edit_general_ledger_name_sql_script,(new_general_ledger_name,prev_general_ledger_name))
-				connection.commit()
-				cursor.close()
-				edit_general_ledger_names_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger Name successfully changed")
 
-		except sqlite3.Error as error:
+				edit_general_ledger_names_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger Name successfully changed.")
 
-			edit_general_ledger_names_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-		#Edit debit general ledger name in journal entries:
-		try:
-
-			with sqlite3.connect("SQL.db") as connection:
-
-				cursor = connection.cursor()
 				cursor.execute(retrieve_debit_journal_entries_sql_script,[prev_general_ledger_name])
 				cursor.execute(edit_JE_debit_GL_name_sql_script,(new_general_ledger_name,prev_general_ledger_name))
-				connection.commit()
-				cursor.close()
+
 				edit_debit_journal_entry_names_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger debit journal entry names successfully changed.")
 
-		except sqlite3.Error as error:
-
-			edit_debit_journal_entry_names_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-		#Edit credit general ledger name in journal entries:
-		try:
-
-			with sqlite3.connect("SQL.db") as connection:
-
-				cursor = connection.cursor()
 				cursor.execute(retrieve_credit_journal_entries_sql_script,[prev_general_ledger_name])
 				cursor.execute(edit_JE_credit_GL_name_sql_script,(new_general_ledger_name,prev_general_ledger_name))
-				connection.commit()
-				cursor.close()
+
 				edit_credit_journal_entry_names_confirmation_message = tk.messagebox.showinfo("Edit General Ledger",message="General Ledger credit journal entry names successfully changed.")
 
-		except sqlite3.Error as error:
+				connection.commit()
 
-			edit_credit_journal_entry_names_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				cursor.close()
 
-		#Clear temporary memory variable:
-		self.edit_selection_temporary_memory.clear()
-		self.general_ledger_name_entry_text.set("")
-		self.general_ledger_number_entry_text.set("")
-		self.general_ledger_type_entry_text.set("")
+				self.edit_selection_temporary_memory.clear()
+
+				self.general_ledger_name_entry_text.set("")
+				self.general_ledger_number_entry_text.set("")
+				self.general_ledger_type_entry_text.set("")
+
+				edit_general_ledger_data_confirmation_message = tk.messagebox.showinfo(title="Edit General Ledger",message="General Ledger data successfully changed.")
+
+		except Exception as error:
+
+			edit_credit_journal_entry_names_error_message = tk.messagebox.showinfo(title="Edit General Ledger",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -226,11 +200,13 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 			self.general_ledger_number_entry_text.set("")
 			self.general_ledger_type_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Edit General Ledger",message=f"{error}")
 
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

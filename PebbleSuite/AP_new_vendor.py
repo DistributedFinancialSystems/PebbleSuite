@@ -8,13 +8,6 @@ from tkinter.messagebox import showinfo
 
 
 
-"""
-		NEW VENDOR SECTION.
-"""
-
-
-
-
 class NEW_VENDOR_ENTRY:
 
 
@@ -43,11 +36,15 @@ class NEW_VENDOR_ENTRY:
 
 			try:
 				cursor = connection.cursor()
+
 				cursor.execute(new_vendor_sql_script,self.new_vendor_entry)
+
 				connection.commit()
+
 				cursor.close()
 
 			except sqlite3.Error as error:
+
 				error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
 
@@ -57,8 +54,8 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 
 	vendor_1099_options = ["Select 1099 option","Select 1099 option","N/A","1099-MISC","1099-NEC"]
 
-
 	def __init__(self,*args,**kwargs):
+
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=520)
 		self.title("Add New Vendor")
@@ -190,15 +187,15 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 
 		if new_vendor_name in vendor_names:
 
-			duplicate_vendor_names_error_message = tk.messagebox.showinfo(title="New Vendor",message="Duplicate vendor name:  please use different name for new vendor.")
+			duplicate_vendor_names_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Duplicate vendor name:  please use different name for new vendor.")
 
 		elif new_vendor_name == "":
 
-			new_vendor_name_error_message = tk.messagebox.showinfo(title="Error",message="Vendor name cannot be blank.")
+			new_vendor_name_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Vendor name cannot be blank.")
 
 		elif new_vendor_1099 == "Select 1099 option":
 
-			new_vendor_1099_error_message = tk.messagebox.showinfo(title="Error",message="Select vendor 1099 form option.")
+			new_vendor_1099_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Select vendor 1099 form option.")
 
 		else:
 
@@ -210,11 +207,11 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 
 				vendor_names.clear()
 
-				create_new_vendor_confirmation_message = tk.messagebox.showinfo(title="New Vendor Entry",message="New Vendor Successfully Created!")
+				create_new_vendor_confirmation_message = tk.messagebox.showinfo(title="Add New Vendor",message="New Vendor Successfully Created!")
 
-			except sqlite3.Error as error:
+			except Exception as error:
 
-				create_new_vendor_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				create_new_vendor_error_message = tk.messagebox.showinfo(title="Add New Vendor",message=f"{error}")
 
 
 	def clear_vendor_data(self):
@@ -231,14 +228,13 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 			self.vendor_contact_phone_entry.delete(0,tk.END)
 			self.vendor_contact_email_entry.delete(0,tk.END)
 
-			#vendor_names.clear()
+		except Exception as error:
 
-		except ValueError as error:
-
-			clear_vendor_data_error_message = tk.messagebox.showinfo(f"{error}")
+			clear_vendor_data_error_message = tk.messagebox.showinfo(title="Add New Vendor",message=f"{error}")
 
 
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

@@ -10,8 +10,6 @@ from tkinter.messagebox import showinfo
 
 class DELETE_VENDOR_ENTRY:
 
-
-	#Define required class entries:
 	def __init__(self,vendor_name):
 
 		self.vendor_name = vendor_name
@@ -19,7 +17,6 @@ class DELETE_VENDOR_ENTRY:
 
 	def delete_data(self):
 
-		#Define SQL database scripts:
 		query_vendor_sql_script = '''SELECT * FROM vendors WHERE VENDOR_NAME=?;'''
 		delete_vendor_sql_script = '''DELETE FROM vendors WHERE VENDOR_NAME=?;'''
 		query_vendor_invoices_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NAME=?;'''
@@ -29,58 +26,39 @@ class DELETE_VENDOR_ENTRY:
 		query_vendor_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE JOURNAL_ENTRY_VENDOR_NAME=?;'''
 		delete_vendor_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE JOURNAL_ENTRY_VENDOR_NAME=?;'''
 
-
-		#Initialize SQL database connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			try:
 
 				cursor = connection.cursor()
+
 				cursor.execute(query_vendor_sql_script,[self.vendor_name])
 				cursor.execute(delete_vendor_sql_script,[self.vendor_name])
-				connection.commit()
-				cursor.close()
+
 				delete_vendor_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor contact data successfully deleted.")
 
-			except sqlite3.Error as error:
-
-				delete_vendor_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
-
-			try:
-				cursor = connection.cursor()
 				cursor.execute(query_vendor_invoices_sql_script,[self.vendor_name])
 				cursor.execute(delete_vendor_invoices_sql_script,[self.vendor_name])
-				connection.commit()
-				cursor.close()
-				delete_vendor_invoices_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor invoice data deleted")
 
-			except sqlite3.Error as error:
+				delete_vendor_invoices_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor invoice data deleted.")
 
-				delete_vendor_invoices_error_message = tk.messagebox.showinfo(title="Delete Vendor",message=f"{error}")
-
-			try:
-
-				cursor = connection.cursor()
 				cursor.execute(query_vendor_credit_memos_sql_script,[self.vendor_name])
 				cursor.execute(delete_vendor_credit_memos_sql_script,[self.vendor_name])
-				connection.commit()
-				cursor.close()
-				delete_vendor_credit_memos_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor credit memos deleted")
 
-			except sqlite3.Error as error:
+				delete_vendor_credit_memos_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor credit memos deleted.")
 
-				delete_vendor_credit_memos_error_message = tk.messagebox.showinfo(title="Delete Vendor",message=f"{error}")
-
-			try:
-
-				cursor = connection.cursor()
 				cursor.execute(query_vendor_journal_entries_sql_script,[self.vendor_name])
 				cursor.execute(delete_vendor_journal_entries_sql_script,[self.vendor_name])
-				connection.commit()
-				cursor.close()
-				delete_vendor_journal_entries_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor journal entries deleted")
 
-			except sqlite3.Error as error:
+				delete_vendor_journal_entries_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="Vendor journal entries deleted.")
+
+				connection.commit()
+
+				cursor.close()
+
+				delete_all_vendor_data_confirmation_message = tk.messagebox.showinfo(title="Delete Vendor",message="All vendor data successfully deleted.")
+
+			except Exception as error:
 
 				delete_vendor_journal_entries_error_message = tk.messagebox.showinfo(title="Delete Vendor",message=f"{error}")
 
@@ -89,12 +67,8 @@ class DELETE_VENDOR_ENTRY:
 
 class DELETE_VENDOR_WINDOW(tk.Toplevel):
 
-
-	#Define SQL database scripts:
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
-
-	#Define class variables:
 	alive = False
 
 
@@ -107,16 +81,17 @@ class DELETE_VENDOR_WINDOW(tk.Toplevel):
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
+
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Set up DELETE_VENDOR_WINDOW tkinter widgets
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=150)
 		self.title("Delete Vendor")
@@ -136,14 +111,11 @@ class DELETE_VENDOR_WINDOW(tk.Toplevel):
 
 	def delete_vendor(self):
 
-		#Define function variables:
 		vendor_data = self.clicked.get()
-
-		#Define delete_vendor function:
 
 		if vendor_data == "Select Vendor":
 
-			delete_vendor_error_message = tk.messagebox.showinfo(title="Error",message="Select a vendor to delete.")
+			delete_vendor_error_message = tk.messagebox.showinfo(title="Delete Vendor",message="Select a vendor to delete.")
 
 		else:
 
@@ -154,4 +126,5 @@ class DELETE_VENDOR_WINDOW(tk.Toplevel):
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()
