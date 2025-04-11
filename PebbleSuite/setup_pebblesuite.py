@@ -94,12 +94,25 @@ class database:
 						CREDIT_MEMO_STATUS TEXT,
 						CREDIT_MEMO_PAID_DATE TIMESTAMP);''')
 
+		customers_sql_script = ('''CREATE TABLE IF NOT EXISTS customers(
+					CUSTOMER_NAME TEXT,
+					ADDRESS_1 TEXT,
+					ADDRESS_2 TEXT,
+					CITY TEXT,
+					STATE TEXT,
+					POSTAL_CODE TEXT,
+					COUNTRY TEXT,
+					CONTACT_NAME TEXT,
+					CONTACT_PHONE TEXT,
+					CONTACT_EMAIL TEXT,
+					CUSTOMER_NOTES TEXT);''')
+
 		customer_sales_sql_script = ('''CREATE TABLE IF NOT EXISTS customer_sales(
 						SALE_DATE TIMESTAMP,
 						SALE_CUSTOMER_NAME TEXT,
 						SALE_INVENTORY_1_NAME TEXT,
-						SALE_INVENTORY_1_QUANTITY INTEGER
-						SALE_TOTAL_AMOUNT REAL
+						SALE_INVENTORY_1_QUANTITY INTEGER,
+						SALE_TOTAL_AMOUNT REAL,
 						SALE_RECEIPT_NUMBER INTEGER);''')
 
 		products_sql_script = ('''CREATE TABLE IF NOT EXISTS products(
@@ -144,7 +157,9 @@ class database:
 
 
 		with sqlite3.connect(f"{self.connection}") as connection:
+
 			cursor = connection.cursor()
+
 			cursor.execute(tasks_sql_script)
 			cursor.execute(vendors_sql_script)
 			cursor.execute(clients_sql_script)
@@ -152,12 +167,15 @@ class database:
 			cursor.execute(client_invoices_sql_script)
 			cursor.execute(vendor_credit_memos_sql_script)
 			cursor.execute(client_credit_memos_sql_script)
+			cursor.execute(customers_sql_script)
 			cursor.execute(customer_sales_sql_script)
 			cursor.execute(products_sql_script)
 			cursor.execute(inventory_sql_script)
 			cursor.execute(general_ledger_sql_script)
 			cursor.execute(journal_entry_sql_script)
+
 			connection.commit()
+
 			cursor.close()
 
 

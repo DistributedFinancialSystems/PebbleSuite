@@ -46,6 +46,9 @@ from AR_delete_credit_memo import *
 from AR_apply_credit_memo import *
 from AR_print_credit_memo import *
 
+#Customers Menu modules:
+from Customers_new_customer import *
+
 #Company Menu modules:
 from Company_commands import *
 from Export_database import *
@@ -125,7 +128,7 @@ class MENU_BAR(tk.Menu):
 
 		#Customer Sales Tkinter widgets
 		self.customer_sales_menu = tk.Menu(self)
-		self.customer_sales_menu.add_command(label="New Customer",command=self.new_sale)
+		self.customer_sales_menu.add_command(label="New Customer",command=self.new_customer)
 		self.customer_sales_menu.add_command(label="Edit Customer",command=self.new_sale)
 		self.customer_sales_menu.add_command(label="Delete Customer",command=self.new_sale)
 		self.customer_sales_menu.add_separator()
@@ -212,6 +215,17 @@ class MENU_BAR(tk.Menu):
 		self.tools_menu = tk.Menu(self)
 		self.tools_menu.add_command(label="Calculator",command=self.calculator)
 		self.add_cascade(label="Tools",menu=self.tools_menu)
+
+
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	ACCOUNTS PAYABLE MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
 
 
 	def new_AP(self):
@@ -377,6 +391,12 @@ class MENU_BAR(tk.Menu):
 	def new_sale(self):
 
 		showinfo(title="Customer Sales",message="This is the Customer Sales menu.")
+
+	def new_customer(self):
+
+		if not NEW_CUSTOMER_WINDOW.alive:
+
+			self.secondary_window = NEW_CUSTOMER_WINDOW()
 
 
 	"""

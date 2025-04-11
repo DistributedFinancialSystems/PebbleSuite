@@ -50,6 +50,9 @@ from AR_delete_credit_memo import *
 from AR_apply_credit_memo import *
 from AR_print_credit_memo import *
 
+#Customers Menu modules:
+from Customers_new_customer import *
+
 #Company Menu modules:
 from Company_commands import *
 from Export_database import *
@@ -220,7 +223,7 @@ class APP(tk.Tk):
 
 					new_task_confirmation_message = tk.messagebox.showinfo(title="New Task",message="New task entered into database.")
 
-				except sqlite3.Error as error:
+				except Exception as error:
 
 					new_task_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
 
