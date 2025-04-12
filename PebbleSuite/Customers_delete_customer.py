@@ -60,7 +60,7 @@ class DELETE_CUSTOMER_ENTRY:
 
 				cursor.close()
 
-				delete_customer_confirmation_message_1 = tk.messagebox.showinfo(title="Delete Customer",message="Customer contact data successfully deleted")
+				delete_customer_confirmation_message_1 = tk.messagebox.showinfo(title="Delete Customer",message="Customer contact data successfully deleted.")
 
 			except Exception as error:
 
