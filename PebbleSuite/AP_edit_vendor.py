@@ -120,23 +120,29 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 
 		search_vendor_invoice_name = self.clicked.get()
 
-		if search_vendor_invoice_name == "Select Vendor":
+		collect = []
 
-			search_vendor_data_error_message = tk.messagebox.showinfo(title="Edit Vendor",message="Select a vendor to edit.")
+		try:
 
-		else:
+			if search_vendor_invoice_name == "Select Vendor":
 
-			with sqlite3.connect("SQL.db") as connection:
+				search_vendor_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor",message="Select a vendor to edit.")
 
-				collect = []
+			else:
 
-				cursor = connection.cursor()
+				with sqlite3.connect("SQL.db") as connection:
 
-				cursor.execute(search_vendors_sql_script,[search_vendor_invoice_name])
+					cursor = connection.cursor()
 
-				for item in cursor:
+					cursor.execute(search_vendors_sql_script,[search_vendor_invoice_name])
 
-					collect.append(item)
+					for item in cursor:
+
+						collect.append(item)
+
+					connection.commit()
+
+					cursor.close()
 
 				self.vendor_address1_entry_text.set(f"{collect[0][1]}")
 				self.vendor_address2_entry_text.set(f"{collect[0][2]}")
@@ -149,9 +155,9 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 				self.vendor_contact_email_entry_text.set(f"{collect[0][9]}")
 				self.vendor_1099_entry_text.set(f"{collect[0][10]}")
 
-				connection.commit()
+		except Exception as error:
 
-				cursor.close()
+			search_vendor_error_message_2 = tk.messagebox.showinfo(title="Edit Vendor",message=f"{error}")
 
 
 	def change_vendor_data(self):
@@ -186,7 +192,7 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 
 			if search_vendor_invoice_name == "Select Vendor":
 
-				change_vendor_data_error_message = tk.messagebox.showinfo(title="Edit Vendor",message="Select a vendor to edit.")
+				edit_vendor_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor",message="Select a vendor to edit.")
 
 			else:
 
@@ -209,11 +215,11 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 
 					cursor.close()
 
-				edit_vendor_confirmation_message = tk.messagebox.showinfo(title="Edit Vendor",message="Vendor changes successful.")
+				edit_vendor_confirmation_message_1 = tk.messagebox.showinfo(title="Edit Vendor",message="Vendor detail successfully changed.")
 
 		except Exception as error:
 
-			edit_vendor_error_message_1 = tk.messagebox.showinfo(title="Edit Vendor",message=f"{error}")
+			edit_vendor_error_message_2 = tk.messagebox.showinfo(title="Edit Vendor",message=f"{error}")
 
 
 	def destroy(self):

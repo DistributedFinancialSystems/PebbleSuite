@@ -48,6 +48,9 @@ from AR_print_credit_memo import *
 
 #Customers Menu modules:
 from Customers_new_customer import *
+from Customers_edit_customer import *
+from Customers_delete_customer import *
+from Customers_customer_summary import *
 
 #Company Menu modules:
 from Company_commands import *
@@ -93,6 +96,7 @@ class MENU_BAR(tk.Menu):
 		self.AP_menu.add_command(label="New Vendor",command=self.new_vendor)
 		self.AP_menu.add_command(label="Edit Vendor",command=self.edit_vendor)
 		self.AP_menu.add_command(label="Delete Vendor",command=self.delete_vendor)
+		self.AP_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
 		self.AP_menu.add_separator()
 		self.AP_menu.add_command(label="New Invoice",command=self.new_vendor_invoice)
 		self.AP_menu.add_command(label="Edit Invoice",command=self.edit_vendor_invoice)
@@ -112,6 +116,8 @@ class MENU_BAR(tk.Menu):
 		self.AR_menu.add_command(label="New Client",command=self.new_client)
 		self.AR_menu.add_command(label="Edit Client",command=self.edit_client)
 		self.AR_menu.add_command(label="Delete Client",command=self.delete_client)
+		self.AR_menu.add_command(label="Client Summary",command=self.client_summary)
+
 		self.AR_menu.add_separator()
 		self.AR_menu.add_command(label="New Invoice",command=self.new_client_invoice)
 		self.AR_menu.add_command(label="Edit Invoice",command=self.edit_client_invoice)
@@ -129,8 +135,9 @@ class MENU_BAR(tk.Menu):
 		#Customer Sales Tkinter widgets
 		self.customer_sales_menu = tk.Menu(self)
 		self.customer_sales_menu.add_command(label="New Customer",command=self.new_customer)
-		self.customer_sales_menu.add_command(label="Edit Customer",command=self.new_sale)
-		self.customer_sales_menu.add_command(label="Delete Customer",command=self.new_sale)
+		self.customer_sales_menu.add_command(label="Edit Customer",command=self.edit_customer)
+		self.customer_sales_menu.add_command(label="Delete Customer",command=self.delete_customer)
+		self.customer_sales_menu.add_command(label="Customer Summary",command=self.customer_summary)
 		self.customer_sales_menu.add_separator()
 		self.customer_sales_menu.add_command(label="New Transaction",command=self.new_sale)
 		self.customer_sales_menu.add_command(label="Delete Transaction",command=self.new_sale)
@@ -198,10 +205,7 @@ class MENU_BAR(tk.Menu):
 		self.financial_reports_menu.add_command(label="Cash Flows",command=self.new_reports)
 		self.financial_reports_menu.add_command(label="Charts of Accounts",command=self.new_reports)
 		self.financial_reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
-		self.financial_reports_menu.add_command(label="Schedule C",command=self.new_reports)
 		self.financial_reports_menu.add_separator()
-		self.financial_reports_menu.add_command(label="Vendor Summary",command=self.vendor_summary)
-		self.financial_reports_menu.add_command(label="Client Summary",command=self.client_summary)
 		self.financial_reports_menu.add_command(label="1099 Forms",command=self.new_reports)
 		self.add_cascade(label="Reporting",menu=self.financial_reports_menu)
 
@@ -397,6 +401,24 @@ class MENU_BAR(tk.Menu):
 		if not NEW_CUSTOMER_WINDOW.alive:
 
 			self.secondary_window = NEW_CUSTOMER_WINDOW()
+
+	def edit_customer(self):
+
+		if not EDIT_CUSTOMER_WINDOW.alive:
+
+			self.secondary_window = EDIT_CUSTOMER_WINDOW()
+
+	def delete_customer(self):
+
+		if not DELETE_CUSTOMER_WINDOW.alive:
+
+			self.secondary_window = DELETE_CUSTOMER_WINDOW()
+
+	def customer_summary(self):
+
+		if not CUSTOMER_SUMMARY_WINDOW.alive:
+
+			self.secondary_window = CUSTOMER_SUMMARY_WINDOW()
 
 
 	"""

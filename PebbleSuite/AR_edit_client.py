@@ -10,20 +10,16 @@ from tkinter.messagebox import showinfo
 
 class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
-	#Define SQL database scripts:
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-	#Define class variables
 	alive = False
 
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		client_data = []
 
 		options = ["Select Client"]
 
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -38,7 +34,6 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Define EDIT_CLIENT tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=520)
 		self.title("Edit Client")
@@ -123,31 +118,33 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 	def search_client_data(self):
 
-		#Define SQL.db scripts:
 		search_clients_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
 
-		#Retrieve client name from data form:
 		search_client_name = self.clicked.get()
 
-		#Define search_client_data error message:
-		if search_client_name == "Select Client":
+		collect = []
 
-			search_client_data_error_message = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
+		try:
 
-		#Initialized SQL.db connection:
-		else:
+			if search_client_name == "Select Client":
 
-			with sqlite3.connect("SQL.db") as connection:
+				search_client_data_error_message = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
 
-				collect = []
+			else:
 
-				cursor = connection.cursor()
+				with sqlite3.connect("SQL.db") as connection:
 
-				cursor.execute(search_clients_sql_script,[search_client_name])
+					cursor = connection.cursor()
 
-				for item in cursor:
+					cursor.execute(search_clients_sql_script,[search_client_name])
 
-					collect.append(item)
+					for item in cursor:
+
+						collect.append(item)
+
+					connection.commit()
+
+					cursor.close()
 
 				self.client_address1_entry_text.set(f"{collect[0][1]}")
 				self.client_address2_entry_text.set(f"{collect[0][2]}")
@@ -160,14 +157,13 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 				self.client_contact_email_entry_text.set(f"{collect[0][9]}")
 				self.client_contact_notes_entry_text.set(f"{collect[0][10]}")
 
-				connection.commit()
+		except Exception as error:
 
-				cursor.close()
+			search_client_data_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message=f"{error}")
 
 
 	def change_client_data(self):
 
-		#Define SQL.db database scripts:
 		retrieve_clients_sql_script = '''SELECT * FROM clients;'''
 		edit_client_address1_sql_script = '''UPDATE clients SET CLIENT_ADDRESS1=? WHERE CLIENT_NAME=?;'''
 		edit_client_address2_sql_script = '''UPDATE clients SET CLIENT_ADDRESS2=? WHERE CLIENT_NAME=?;'''
@@ -180,7 +176,6 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 		edit_contact_email_sql_script = '''UPDATE clients SET CONTACT_EMAIL=? WHERE CLIENT_NAME=?;'''
 		edit_client_notes_sql_script = '''UPDATE clients SET CONTACT_NOTES=? WHERE CLIENT_NAME=?;'''
 
-		#Retrieve client data from entry form:
 		search_client_name = self.clicked.get()
 		new_address1 = self.client_address1_entry.get()
 		new_address2 = self.client_address2_entry.get()
@@ -193,33 +188,38 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 		new_contact_email = self.client_contact_email_entry.get()
 		new_client_notes = self.client_contact_notes_entry.get()
 
-		#Define change_client_data error message:
-		if search_client_name == "Select Client":
+		try:
 
-			change_client_data_error_message = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
+			if search_client_name == "Select Client":
 
-		#Initialize SQL.db connection:
-		else:
+				change_client_data_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
 
-			with sqlite3.connect("SQL.db") as connection:
+			else:
 
-				cursor = connection.cursor()
-				cursor.execute(edit_client_address1_sql_script,(new_address1,search_client_name))
-				cursor.execute(edit_client_address2_sql_script,(new_address2,search_client_name))
-				cursor.execute(edit_client_city_sql_script,(new_city,search_client_name))
-				cursor.execute(edit_client_state_sql_script,(new_state,search_client_name))
-				cursor.execute(edit_client_zip_sql_script,(new_zip,search_client_name))
-				cursor.execute(edit_client_country_sql_script,(new_country,search_client_name))
-				cursor.execute(edit_contact_name_sql_script,(new_contact_name,search_client_name))
-				cursor.execute(edit_contact_phone_sql_script,(new_contact_phone,search_client_name))
-				cursor.execute(edit_contact_email_sql_script,(new_contact_email,search_client_name))
-				cursor.execute(edit_client_notes_sql_script,(new_client_notes,search_client_name))
+				with sqlite3.connect("SQL.db") as connection:
 
-				connection.commit()
+					cursor = connection.cursor()
 
-				cursor.close()
+					cursor.execute(edit_client_address1_sql_script,(new_address1,search_client_name))
+					cursor.execute(edit_client_address2_sql_script,(new_address2,search_client_name))
+					cursor.execute(edit_client_city_sql_script,(new_city,search_client_name))
+					cursor.execute(edit_client_state_sql_script,(new_state,search_client_name))
+					cursor.execute(edit_client_zip_sql_script,(new_zip,search_client_name))
+					cursor.execute(edit_client_country_sql_script,(new_country,search_client_name))
+					cursor.execute(edit_contact_name_sql_script,(new_contact_name,search_client_name))
+					cursor.execute(edit_contact_phone_sql_script,(new_contact_phone,search_client_name))
+					cursor.execute(edit_contact_email_sql_script,(new_contact_email,search_client_name))
+					cursor.execute(edit_client_notes_sql_script,(new_client_notes,search_client_name))
 
-			edit_client_confirmation_message = tk.messagebox.showinfo(title="Edit Client",message="Changes successfully entered")
+					connection.commit()
+
+					cursor.close()
+
+				edit_client_confirmation_message_1 = tk.messagebox.showinfo(title="Edit Client",message="Client details successfully changed.")
+
+		except Exception as error:
+
+			edit_client_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message=f"{error}")
 
 
 	def destroy(self):

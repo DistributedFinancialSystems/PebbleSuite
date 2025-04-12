@@ -52,6 +52,9 @@ from AR_print_credit_memo import *
 
 #Customers Menu modules:
 from Customers_new_customer import *
+from Customers_edit_customer import *
+from Customers_delete_customer import *
+from Customers_customer_summary import *
 
 #Company Menu modules:
 from Company_commands import *
@@ -193,19 +196,19 @@ class APP(tk.Tk):
 
 		if new_task_name == "":
 
-			task_name_error_message_1 = tk.messagebox.showinfo(title="Error",message="Enter name for new note.")
+			task_name_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message="Enter name for new note.")
 
 		elif new_task_date.count(" ") > 0:
 
-			task_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Enter date for new note.")
+			task_date_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message="Enter date for new note.")
 
 		elif new_task_date.count("/") != 2:
 
-			task_date_error_message_2 = tk.messagebox.showinfo(title="Error",message="Enter date for new note.")
+			task_date_error_message_2 = tk.messagebox.showinfo(title="PebbleSuite",message="Enter date for new note.")
 
 		elif new_task_date == "MM/DD/YYYY":
 
-			task_date_error_message_3 = tk.messagebox.showinfo(title="Error",message="Enter date for new note.")
+			task_date_error_message_3 = tk.messagebox.showinfo(title="PebbleSuite",message="Enter date for new note.")
 
 		else:
 
@@ -221,11 +224,11 @@ class APP(tk.Tk):
 
 					cursor.close()
 
-					new_task_confirmation_message = tk.messagebox.showinfo(title="New Task",message="New task entered into database.")
+					new_task_confirmation_message = tk.messagebox.showinfo(title="PebbleSuite",message="New task successfully created.")
 
 				except Exception as error:
 
-					new_task_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+					new_task_error_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 			self.listbox.delete(0,tk.END)
 			self.new_task_name_entry.delete(0,tk.END)
@@ -249,7 +252,7 @@ class APP(tk.Tk):
 
 				except Exception as error:
 
-					new_task_error_message2 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+					new_task_error_message2 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 	def clear_note_entries(self):
@@ -307,7 +310,7 @@ class APP(tk.Tk):
 
 		except Exception as error:
 
-			display_note_error_message_1 = tk.messagebox.showinfo(title="Display Task",message=f"{error}")
+			display_note_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 	def save_note_changes(self):
@@ -336,7 +339,7 @@ class APP(tk.Tk):
 
 				cursor.close()
 
-			save_note_changes_confirmation_message = tk.messagebox.showinfo(title="Save Changes",message="Note updates saved successfully.")
+			save_note_changes_confirmation_message = tk.messagebox.showinfo(title="PebbleSuite",message="Task updates saved successfully.")
 
 		except Exception as error:
 
@@ -381,15 +384,15 @@ class APP(tk.Tk):
 
 					cursor.close()
 
-					delete_note_confirmation_message = tk.messagebox.showinfo(title="Delete Note",message="Note deleted")
+					delete_note_confirmation_message = tk.messagebox.showinfo(title="PebbleSuite",message="Task successfully deleted.")
 
 				except Exception as error:
 
 					delete_note_error_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 			self.listbox.delete(0,tk.END)
-			self.editing_task_name_entry.delete(0,tk.END)
-			self.editing_task_date_entry.delete(0,tk.END)
+			self.editing_task_name_entry_text.set("")
+			self.editing_task_date_entry_text.set("")
 			self.textbox.delete(1.0,tk.END)
 
 			with sqlite3.connect("SQL.db") as connection:
@@ -410,7 +413,7 @@ class APP(tk.Tk):
 
 				except Exception as error:
 
-					delete_note_error_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+					delete_note_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 """
