@@ -44,9 +44,10 @@ class NEW_CLIENT_ENTRY:
 
 				new_client_confirmation_message = tk.messagebox.showinfo(title="Add New Client",message="New client successfully created.")
 
-			except sqlite3.Error as error:
+			except Exception as error:
 
-				new_client_error_message = tk.messagebox.showinfo(title="Add New Client",message=f"Error: {error}")
+				new_client_error_message = tk.messagebox.showinfo(title="Add New Client",message=f"{error}")
+
 
 
 
@@ -188,8 +189,6 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 				new_client.enter_data()
 
 				client_names.clear()
-
-				new_client_confirmation_message = tk.messagebox.showinfo(title="Add New Client",message="New client successfully created.")
 
 			except Exception as error:
 

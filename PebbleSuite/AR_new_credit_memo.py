@@ -84,8 +84,9 @@ class NEW_JOURNAL_ENTRY:
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_CLIENT_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+						JOURNAL_ENTRY_NOTES,
+						RECONCILIATION_STATUS)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -253,6 +254,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			new_journal_entry_credit_amount = self.client_credit_memo_amount_entry.get()
 			new_journal_entry_name = self.clicked.get()
 			new_journal_entry_notes = self.client_credit_memo_notes_entry.get()
+			new_journal_entry_reconciliation_status = 0
 
 			#Select client error messages:
 			if self.clicked.get() == "Select Client":
@@ -322,6 +324,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				new_JE_data.append(new_journal_entry_credit_amount)
 				new_JE_data.append(new_journal_entry_name)
 				new_JE_data.append(new_journal_entry_notes)
+				new_JE_data.append(new_journal_entry_reconciliation_status)
 
 				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				journal_entry.journal_entry()
@@ -352,7 +355,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			print(error)
 

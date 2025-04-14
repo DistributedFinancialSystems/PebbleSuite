@@ -76,8 +76,9 @@ class NEW_JOURNAL_ENTRY:
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
 					JOURNAL_ENTRY_CLIENT_NAME,
-					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+					JOURNAL_ENTRY_NOTES,
+					RECONCILIATION_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -91,9 +92,9 @@ class NEW_JOURNAL_ENTRY:
 
 				cursor.close()
 
-			except sqlite3.Error as error:
+			except Exception as error:
 
-				journal_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+				journal_entry_error_message = tk.messagebox.showinfo(title="New Client Invoice",message=f"{error}")
 
 
 
@@ -256,69 +257,77 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 		else:
 
-			new_invoice_data = []
+			try:
 
-			new_invoice_name = self.clicked.get()
-			new_invoice_issue_date = self.client_invoice_issue_date_entry.get()
-			new_invoice_due_date = self.client_invoice_due_date_entry.get()
-			new_invoice_number = self.client_invoice_number_entry.get()
-			new_asset_GL = self.asset_GL_text.get()
-			new_income_GL = self.income_GL_text.get()
-			new_invoice_amount = self.client_invoice_amount_entry.get()
-			new_invoice_notes = self.client_invoice_notes_entry.get()
-			new_invoice_status = "Open"
+				new_invoice_data = []
 
-			new_invoice_data.append(new_invoice_name)
-			new_invoice_data.append(new_invoice_issue_date)
-			new_invoice_data.append(new_invoice_due_date)
-			new_invoice_data.append(new_invoice_number)
-			new_invoice_data.append(new_asset_GL)
-			new_invoice_data.append(new_income_GL)
-			new_invoice_data.append(new_invoice_amount)
-			new_invoice_data.append(new_invoice_notes)
-			new_invoice_data.append(new_invoice_status)
+				new_invoice_name = self.clicked.get()
+				new_invoice_issue_date = self.client_invoice_issue_date_entry.get()
+				new_invoice_due_date = self.client_invoice_due_date_entry.get()
+				new_invoice_number = self.client_invoice_number_entry.get()
+				new_asset_GL = self.asset_GL_text.get()
+				new_income_GL = self.income_GL_text.get()
+				new_invoice_amount = self.client_invoice_amount_entry.get()
+				new_invoice_notes = self.client_invoice_notes_entry.get()
+				new_invoice_status = "Open"
 
-			new_invoice = AR_NEW_INVOICE_ENTRY(new_invoice_data)
-			new_invoice.enter_invoice()
+				new_invoice_data.append(new_invoice_name)
+				new_invoice_data.append(new_invoice_issue_date)
+				new_invoice_data.append(new_invoice_due_date)
+				new_invoice_data.append(new_invoice_number)
+				new_invoice_data.append(new_asset_GL)
+				new_invoice_data.append(new_income_GL)
+				new_invoice_data.append(new_invoice_amount)
+				new_invoice_data.append(new_invoice_notes)
+				new_invoice_data.append(new_invoice_status)
 
-			journal_entry_timestamp = datetime.datetime.now()
+				new_invoice = AR_NEW_INVOICE_ENTRY(new_invoice_data)
+				new_invoice.enter_invoice()
 
-			new_JE_data = []
+				journal_entry_timestamp = datetime.datetime.now()
 
-			new_journal_entry_timestamp = journal_entry_timestamp
-			new_journal_entry_number = None
-			new_journal_entry_date = self.client_invoice_issue_date_entry.get()
-			new_invoice_number = self.client_invoice_number_entry.get()
-			new_debit_general_ledger_name = self.asset_GL_text.get()
-			new_debit_general_ledger_number = None
-			new_debit_general_ledger_type = None
-			new_credit_general_ledger_name = self.income_GL_text.get()
-			new_credit_general_ledger_number = None
-			new_credit_general_ledger_type = None
-			new_journal_entry_debit_amount = self.client_invoice_amount_entry.get()
-			new_journal_entry_credit_amount = self.client_invoice_amount_entry.get()
-			new_journal_entry_name = self.clicked.get()
-			new_journal_entry_notes = self.client_invoice_notes_entry.get()
+				new_JE_data = []
 
-			new_JE_data.append(new_journal_entry_timestamp)
-			new_JE_data.append(new_journal_entry_number)
-			new_JE_data.append(new_journal_entry_date)
-			new_JE_data.append(new_invoice_number)
-			new_JE_data.append(new_debit_general_ledger_name)
-			new_JE_data.append(new_debit_general_ledger_number)
-			new_JE_data.append(new_debit_general_ledger_type)
-			new_JE_data.append(new_credit_general_ledger_name)
-			new_JE_data.append(new_credit_general_ledger_number)
-			new_JE_data.append(new_credit_general_ledger_type)
-			new_JE_data.append(new_journal_entry_debit_amount)
-			new_JE_data.append(new_journal_entry_credit_amount)
-			new_JE_data.append(new_journal_entry_name)
-			new_JE_data.append(new_journal_entry_notes)
+				new_journal_entry_timestamp = journal_entry_timestamp
+				new_journal_entry_number = None
+				new_journal_entry_date = self.client_invoice_issue_date_entry.get()
+				new_invoice_number = self.client_invoice_number_entry.get()
+				new_debit_general_ledger_name = self.asset_GL_text.get()
+				new_debit_general_ledger_number = None
+				new_debit_general_ledger_type = None
+				new_credit_general_ledger_name = self.income_GL_text.get()
+				new_credit_general_ledger_number = None
+				new_credit_general_ledger_type = None
+				new_journal_entry_debit_amount = self.client_invoice_amount_entry.get()
+				new_journal_entry_credit_amount = self.client_invoice_amount_entry.get()
+				new_journal_entry_name = self.clicked.get()
+				new_journal_entry_notes = self.client_invoice_notes_entry.get()
+				new_journal_entry_reconciliation_status = 0
 
-			journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
-			journal_entry.journal_entry()
+				new_JE_data.append(new_journal_entry_timestamp)
+				new_JE_data.append(new_journal_entry_number)
+				new_JE_data.append(new_journal_entry_date)
+				new_JE_data.append(new_invoice_number)
+				new_JE_data.append(new_debit_general_ledger_name)
+				new_JE_data.append(new_debit_general_ledger_number)
+				new_JE_data.append(new_debit_general_ledger_type)
+				new_JE_data.append(new_credit_general_ledger_name)
+				new_JE_data.append(new_credit_general_ledger_number)
+				new_JE_data.append(new_credit_general_ledger_type)
+				new_JE_data.append(new_journal_entry_debit_amount)
+				new_JE_data.append(new_journal_entry_credit_amount)
+				new_JE_data.append(new_journal_entry_name)
+				new_JE_data.append(new_journal_entry_notes)
+				new_JE_data.append(new_journal_entry_reconciliation_status)
 
-			journal_entry_confirmation_message = tk.messagebox.showinfo(title="New Client Invoice",message="New client invoice created")
+				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
+				journal_entry.journal_entry()
+
+				journal_entry_confirmation_message = tk.messagebox.showinfo(title="New Client Invoice",message="New client invoice created")
+
+			except Exception as error:
+
+				journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message=f"{error}")
 
 
 	def invoice_report(self):
@@ -340,7 +349,7 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			print(error)
 

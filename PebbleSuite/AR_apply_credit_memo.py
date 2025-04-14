@@ -87,8 +87,9 @@ class PAY_CREDIT_MEMO_JOURNAL_ENTRY:
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_CLIENT_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+						JOURNAL_ENTRY_NOTES,
+						RECONCILIATION_STATUS)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -368,6 +369,8 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		reference_credit_GL_amount = self.credit_memo_amount_entry_text.get()
 		reference_JE_client_name = self.credit_memo_name_entry_text.get()
 		reference_JE_notes = self.credit_memo_notes_entry_text.get()
+		reference_JE_reconciliation_status = 0
+
 
 		try:
 
@@ -416,6 +419,7 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				pay_credit_memo_journal_entry_data.append(reference_credit_GL_amount)
 				pay_credit_memo_journal_entry_data.append(reference_JE_client_name)
 				pay_credit_memo_journal_entry_data.append(reference_JE_notes)
+				pay_credit_memo_journal_entry_data.append(reference_JE_reconciliation_status)
 
 				new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
 				new_credit_memo_payment_journal_entry.pay_credit_memo()

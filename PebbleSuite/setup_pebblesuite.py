@@ -153,7 +153,8 @@ class database:
 						JOURNAL_ENTRY_CREDIT_AMOUNT REAL,
 						JOURNAL_ENTRY_VENDOR_NAME TEXT,
 						JOURNAL_ENTRY_CLIENT_NAME TEXT,
-						JOURNAL_ENTRY_NOTES TEXT);''')
+						JOURNAL_ENTRY_NOTES TEXT,
+						RECONCILIATION_STATUS INTEGER);''')
 
 
 		with sqlite3.connect(f"{self.connection}") as connection:
