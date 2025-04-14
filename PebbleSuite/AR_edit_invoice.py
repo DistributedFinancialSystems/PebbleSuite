@@ -1,5 +1,3 @@
-#Python Standard Library dependencies
-
 import datetime
 from datetime import date
 import sqlite3
@@ -136,9 +134,9 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
-
 		try:
+
+			search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
 
 			for item in self.select_client_listbox.curselection():
 
@@ -176,9 +174,9 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def edit_invoice(self):
 
-		query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?'''
-
 		try:
+
+			query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?'''
 
 			for item in self.listbox.curselection():
 
@@ -215,28 +213,28 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def submit_changes(self):
 
-		retrieve_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_issue_date_sql_script = '''UPDATE client_invoices SET INVOICE_ISSUE_DATE=? WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_due_date_sql_script = '''UPDATE client_invoices SET INVOICE_DUE_DATE=? WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_amount_sql_script = '''UPDATE client_invoices SET INVOICE_AMOUNT=? WHERE INVOICE_NUMBER=?;'''
-		edit_invoice_notes_sql_script = '''UPDATE client_invoices SET INVOICE_NOTES=? WHERE INVOICE_NUMBER=?;'''
-
-		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?;'''
-		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE CLIENT_INVOICE_NUMBER=?;'''
-		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
-		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
-		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_INVOICE_NUMBER=?'''
-
-		reference_invoice_number = self.invoice_number_entry_text.get()
-		new_invoice_issue_date = self.invoice_issue_date_entry_text.get()
-		new_invoice_due_date = self.invoice_due_date_entry_text.get()
-		new_invoice_number = self.invoice_number_entry_text.get()
-		new_invoice_asset_GL = self.invoice_asset_GL_entry_text.get()
-		new_invoice_income_GL = self.invoice_income_GL_entry_text.get()
-		new_invoice_amount = self.invoice_amount_entry_text.get()
-		new_invoice_notes = self.invoice_notes_entry_text.get()
-
 		try:
+
+			retrieve_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?;'''
+			edit_invoice_issue_date_sql_script = '''UPDATE client_invoices SET INVOICE_ISSUE_DATE=? WHERE INVOICE_NUMBER=?;'''
+			edit_invoice_due_date_sql_script = '''UPDATE client_invoices SET INVOICE_DUE_DATE=? WHERE INVOICE_NUMBER=?;'''
+			edit_invoice_amount_sql_script = '''UPDATE client_invoices SET INVOICE_AMOUNT=? WHERE INVOICE_NUMBER=?;'''
+			edit_invoice_notes_sql_script = '''UPDATE client_invoices SET INVOICE_NOTES=? WHERE INVOICE_NUMBER=?;'''
+
+			retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?;'''
+			edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE CLIENT_INVOICE_NUMBER=?;'''
+			edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
+			edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_INVOICE_NUMBER=?'''
+			edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_INVOICE_NUMBER=?'''
+
+			reference_invoice_number = self.invoice_number_entry_text.get()
+			new_invoice_issue_date = self.invoice_issue_date_entry_text.get()
+			new_invoice_due_date = self.invoice_due_date_entry_text.get()
+			new_invoice_number = self.invoice_number_entry_text.get()
+			new_invoice_asset_GL = self.invoice_asset_GL_entry_text.get()
+			new_invoice_income_GL = self.invoice_income_GL_entry_text.get()
+			new_invoice_amount = self.invoice_amount_entry_text.get()
+			new_invoice_notes = self.invoice_notes_entry_text.get()
 
 			if new_invoice_issue_date == "":
 

@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AR_new_credit_memo.py
-[ ]
-[ ]
-[ ]
-"""
-
 import datetime
 from datetime import date
 import sqlite3
@@ -27,9 +17,7 @@ class NEW_CLIENT_CREDIT_MEMO_ENTRY:
 
 	def enter_credit_memo(self):
 
-		try:
-
-			new_credit_memo_sql_script = '''INSERT INTO client_credit_memos(
+		new_credit_memo_sql_script = '''INSERT INTO client_credit_memos(
 						CREDIT_MEMO_NAME,
 						CREDIT_MEMO_ISSUE_DATE,
 						CREDIT_MEMO_DUE_DATE,
@@ -41,19 +29,15 @@ class NEW_CLIENT_CREDIT_MEMO_ENTRY:
 						CREDIT_MEMO_STATUS)
 						VALUES(?,?,?,?,?,?,?,?,?);'''
 
-			with sqlite3.connect("SQL.db") as connection:
+		with sqlite3.connect("SQL.db") as connection:
 
-				cursor = connection.cursor()
+			cursor = connection.cursor()
 
-				cursor.execute(new_credit_memo_sql_script,self.new_credit_memo_entry)
+			cursor.execute(new_credit_memo_sql_script,self.new_credit_memo_entry)
 
-				connection.commit()
+			connection.commit()
 
-				cursor.close()
-
-		except Exception as error:
-
-			new_client_credit_memo_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Credit Memo",message=f"{error}")
+			cursor.close()
 
 
 
@@ -68,39 +52,33 @@ class NEW_JOURNAL_ENTRY:
 
 	def journal_entry(self):
 
-		try:
+		new_JE_sql_script = '''INSERT INTO journal_entries(
+					JOURNAL_ENTRY_TIMESTAMP,
+					JOURNAL_ENTRY_NUMBER,
+					JOURNAL_ENTRY_DATE,
+					CLIENT_CREDIT_MEMO_NUMBER,
+					DEBIT_GENERAL_LEDGER_NAME,
+					DEBIT_GENERAL_LEDGER_NUMBER,
+					DEBIT_GENERAL_LEDGER_TYPE,
+					CREDIT_GENERAL_LEDGER_NAME,
+					CREDIT_GENERAL_LEDGER_NUMBER,
+					CREDIT_GENERAL_LEDGER_TYPE,
+					JOURNAL_ENTRY_DEBIT_AMOUNT,
+					JOURNAL_ENTRY_CREDIT_AMOUNT,
+					JOURNAL_ENTRY_CLIENT_NAME,
+					JOURNAL_ENTRY_NOTES,
+					RECONCILIATION_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
-			new_JE_sql_script = '''INSERT INTO journal_entries(
-						JOURNAL_ENTRY_TIMESTAMP,
-						JOURNAL_ENTRY_NUMBER,
-						JOURNAL_ENTRY_DATE,
-						CLIENT_CREDIT_MEMO_NUMBER,
-						DEBIT_GENERAL_LEDGER_NAME,
-						DEBIT_GENERAL_LEDGER_NUMBER,
-						DEBIT_GENERAL_LEDGER_TYPE,
-						CREDIT_GENERAL_LEDGER_NAME,
-						CREDIT_GENERAL_LEDGER_NUMBER,
-						CREDIT_GENERAL_LEDGER_TYPE,
-						JOURNAL_ENTRY_DEBIT_AMOUNT,
-						JOURNAL_ENTRY_CREDIT_AMOUNT,
-						JOURNAL_ENTRY_CLIENT_NAME,
-						JOURNAL_ENTRY_NOTES,
-						RECONCILIATION_STATUS)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(new_JE_sql_script,self.new_journal_entry)
 
-				cursor.execute(new_JE_sql_script,self.new_journal_entry)
+			connection.commit()
 
-				connection.commit()
-
-				cursor.close()
-
-		except Exception as error:
-
-			journal_entry_error_message = tk.messagebox.showinfo(title="New Client Credit Memo",message=f"{error}")
+			cursor.close()
 
 
 
@@ -338,9 +316,10 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def credit_memo_report(self):
 
-		credit_memo_report_sql_script = '''SELECT * FROM client_credit_memos;'''
-
 		try:
+
+			credit_memo_report_sql_script = '''SELECT * FROM client_credit_memos;'''
+
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()

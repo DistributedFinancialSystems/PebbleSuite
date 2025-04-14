@@ -82,19 +82,13 @@ class NEW_JOURNAL_ENTRY:
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			try:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(new_JE_sql_script,self.new_journal_entry)
 
-				cursor.execute(new_JE_sql_script,self.new_journal_entry)
+			connection.commit()
 
-				connection.commit()
-
-				cursor.close()
-
-			except Exception as error:
-
-				journal_entry_error_message = tk.messagebox.showinfo(title="New Client Invoice",message=f"{error}")
+			cursor.close()
 
 
 
@@ -220,44 +214,44 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 	def create_new_invoice(self):
 
-		#Select client error messages:
-		if self.clicked.get() == "Select Client":
+		try:
 
-			select_client_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select a client for new invoice.")
+			#Select client error messages:
+			if self.clicked.get() == "Select Client":
 
-		#Invoice issue date error messages:
-		elif self.client_invoice_issue_date_entry.get() == "":
+				select_client_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select a client for new invoice.")
 
-			invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Issue date cannot be blank.")
+			#Invoice issue date error messages:
+			elif self.client_invoice_issue_date_entry.get() == "":
 
-		#Invoice due date error messges:
-		elif self.client_invoice_due_date_entry.get() == "":
+				invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Issue date cannot be blank.")
 
-			invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Due date cannot be blank.")
+			#Invoice due date error messges:
+			elif self.client_invoice_due_date_entry.get() == "":
 
-		#Invoice number errorm messages:
-		elif self.client_invoice_number_entry.get() == "":
+				invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Due date cannot be blank.")
 
-			invoice_number_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Invoice number cannot be blank.")
+			#Invoice number errorm messages:
+			elif self.client_invoice_number_entry.get() == "":
 
-		#Invoice asset GL error messages:
-		elif self.asset_GL_text.get() == "Select Asset GL":
+				invoice_number_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Invoice number cannot be blank.")
 
-			asset_GL_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select an Asset GL.")
+			#Invoice asset GL error messages:
+			elif self.asset_GL_text.get() == "Select Asset GL":
 
-		#Invoice income GL error messages:
-		elif self.income_GL_text.get() == "Select Income GL":
+				asset_GL_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select an Asset GL.")
 
-			expense_GL_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select an income GL.")
+			#Invoice income GL error messages:
+			elif self.income_GL_text.get() == "Select Income GL":
 
-		#Invoice amount error messages:
-		elif self.client_invoice_amount_entry.get() == "":
+				expense_GL_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Select an income GL.")
 
-			invoice_amount_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Invoice amount cannot be blank.")
+			#Invoice amount error messages:
+			elif self.client_invoice_amount_entry.get() == "":
 
-		else:
+				invoice_amount_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message="Invoice amount cannot be blank.")
 
-			try:
+			else:
 
 				new_invoice_data = []
 
@@ -325,9 +319,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				journal_entry_confirmation_message = tk.messagebox.showinfo(title="New Client Invoice",message="New client invoice created")
 
-			except Exception as error:
+		except Exception as error:
 
-				journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message=f"{error}")
+			journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Client Invoice",message=f"{error}")
 
 
 	def invoice_report(self):

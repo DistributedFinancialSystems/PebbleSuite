@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -35,36 +34,31 @@ class DELETE_CUSTOMER_ENTRY:
 
 		with sqlite3.connect("SQL.db") as connection:
 
-			try:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(query_customer_sql_script,[self.delete_customer_entry])
+			cursor.execute(delete_customer_sql_script,[self.delete_customer_entry])
 
-				cursor.execute(query_customer_sql_script,[self.delete_customer_entry])
-				cursor.execute(delete_customer_sql_script,[self.delete_customer_entry])
+			"""
 
-				"""
+			cursor.execute(query_customer_invoices_sql_script,[self.delete_customer_entry])
+			cursor.execute(delete_customer_invoices_sql_script,[self.delete_customer_entry])
 
-				cursor.execute(query_customer_invoices_sql_script,[self.delete_customer_entry])
-				cursor.execute(delete_customer_invoices_sql_script,[self.delete_customer_entry])
+			delete_customer_invoices_confirmation_message = tk.messagebox.showinfo(title="Delete Customer",message="Customer invoice data successfully deleted")
 
-				delete_customer_invoices_confirmation_message = tk.messagebox.showinfo(title="Delete Customer",message="Customer invoice data successfully deleted")
+			cursor.execute(query_customer_credit_memos_sql_script,[self.delete_customer_entry])
+			cursor.execute(delete_customer_credit_memos_sql_script,[self.delete_customer_entry])
 
-				cursor.execute(query_customer_credit_memos_sql_script,[self.delete_customer_entry])
-				cursor.execute(delete_customer_credit_memos_sql_script,[self.delete_customer_entry])
+			delete_customer_credit_memos_confirmation_messages = tk.messagebox.showinfo(title="Delete Customer",message="Customer credit memo data successfully deleted")
 
-				delete_customer_credit_memos_confirmation_messages = tk.messagebox.showinfo(title="Delete Customer",message="Customer credit memo data successfully deleted")
+			"""
 
-				"""
+			connection.commit()
 
-				connection.commit()
+			cursor.close()
 
-				cursor.close()
+			delete_customer_confirmation_message_1 = tk.messagebox.showinfo(title="Delete Customer",message="Customer contact data successfully deleted.")
 
-				delete_customer_confirmation_message_1 = tk.messagebox.showinfo(title="Delete Customer",message="Customer contact data successfully deleted.")
-
-			except Exception as error:
-
-				delete_customer_error_message_1 = tk.messagebox.showinfo(title="Delete Customer",message=f"{error}")
 
 
 
@@ -114,9 +108,9 @@ class DELETE_CUSTOMER_WINDOW(tk.Toplevel):
 
 	def delete_customer(self):
 
-		customer_data = self.clicked.get()
-
 		try:
+
+			customer_data = self.clicked.get()
 
 			if customer_data == "Select Customer":
 

@@ -27,23 +27,17 @@ class ADD_INVENTORY:
 						PRODUCT_UNIT_WHOLESALE_PRICE)
 						VALUES(?,?,?,?,?,?,?);'''
 
-		try:
+		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(new_inventory_sql_script,self.new_inventory_entry)
 
-				cursor.execute(new_inventory_sql_script,self.new_inventory_entry)
+			connection.commit()
 
-				connection.commit()
+			cursor.close()
 
-				cursor.close()
-
-				add_inventory_confirmation_message = tk.messagebox.showinfo(title="Add Inventory",message=f"New product inventory added.")
-
-		except sqlite3.Error as error:
-
-			add_inventory_error_message = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
+			add_inventory_confirmation_message = tk.messagebox.showinfo(title="Add Inventory",message=f"New product inventory added.")
 
 
 
@@ -69,30 +63,25 @@ class INVENTORY_JOURNAL_ENTRY:
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_VENDOR_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+						JOURNAL_ENTRY_NOTES,
+						RECONCILIATION_STATUS)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
-		try:
+		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(journal_entry_sql_script,self.inventory_journal_entry)
 
-				cursor.execute(journal_entry_sql_script,self.inventory_journal_entry)
+			connection.commit()
 
-				connection.commit()
+			cursor.close()
 
-				cursor.close()
-
-		except sqlite3.Error as error:
-
-			journal_entry_error_message = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
 
 class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
@@ -110,7 +99,6 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 		offset_GL_options = ["Select Offset Account"]
 
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -288,8 +276,6 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 				select_product = self.select_vendor_listbox.get(item)
 
-			try:
-
 				with sqlite3.connect("SQL.db") as connection:
 
 					cursor = connection.cursor()
@@ -304,13 +290,9 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 					cursor.close()
 
-			except sqlite3.Error as error:
+		except Exception as error:
 
-				search_products_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
-
-		except:
-
-			search_producs_error_message_2 = tk.messagebox.showinfo(title="Add Inventory",message="Select vendor name from list.")
+			search_products_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
 	def clear_products(self):
@@ -319,14 +301,13 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 			self.listbox.delete(0,tk.END)
 
-		except:
+		except Exception as error:
 
-			clear_products_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message="Unable to clear product list.")
+			clear_products_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
 	def select_product(self):
 
-		#Define SQL.db scripts:
 		query_product_sql_script = '''SELECT * FROM products WHERE PRODUCT_NAME=?;'''
 
 		try:
@@ -335,41 +316,34 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 				select_product = self.listbox.get(item)
 
-			try:
+			with sqlite3.connect("SQL.db") as connection:
 
-				with sqlite3.connect("SQL.db") as connection:
+				collect = []
 
-					collect = []
+				cursor = connection.cursor()
 
-					cursor = connection.cursor()
+				cursor.execute(query_product_sql_script,[select_product])
 
-					cursor.execute(query_product_sql_script,[select_product])
+				for item in cursor:
 
-					for item in cursor:
+					collect.append(item)
 
-						collect.append(item)
+				self.vendor_name_entry_text.set(f"{collect[0][2]}")
 
-					self.vendor_name_entry_text.set(f"{collect[0][2]}")
-					self.product_name_entry_text.set(f"{collect[0][0]}")
+				self.product_name_entry_text.set(f"{collect[0][0]}")
 
-					connection.commit()
+				connection.commit()
 
-					cursor.close()
+				cursor.close()
 
-			except sqlite3.Error as error:
+		except Exception as error:
 
-				edit_product_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
-
-		except:
-
-			edit_product_error_message_2 = tk.messagebox.showinfo(title="Add Inventory",message="Select product from list.")
+			edit_product_error_message_1 = tk.messagebox.showinfo(title="Add Inventory",message=f"{error}")
 
 
 	def submit_changes(self):
 
 		try:
-
-			#Collect inventory sql entry data:
 
 			product_data = []
 
@@ -380,8 +354,6 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 			product_expiration_date = self.product_exp_date_entry_text.get()
 			product_unit_quantity = self.product_unit_quantity_entry_text.get()
 			product_unit_price = self.product_unit_price_entry_text.get()
-
-			#Collect journal entry data for new inventory:
 
 			journal_entry_data = []
 
@@ -399,6 +371,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 			journal_entry_credit_amount = self.product_total_price_entry_text.get()
 			journal_entry_vendor_name = self.vendor_name_entry_text.get()
 			journal_entry_notes = None
+			journal_entry_reconciliation_status = 0
 
 			#Error handling:
 
@@ -469,6 +442,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 				journal_entry_data.append(journal_entry_credit_amount)
 				journal_entry_data.append(journal_entry_vendor_name)
 				journal_entry_data.append(journal_entry_notes)
+				journal_entry_data.append(journal_entry_reconciliation_status)
 
 				journal_entry_sql_entry = INVENTORY_JOURNAL_ENTRY(journal_entry_data)
 				journal_entry_sql_entry.enter_data()
@@ -478,7 +452,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			add_inventory_error_message = tk.messagebox.showinfo(title="Add Vendor Inventory",message=f"{error}")
+			add_inventory_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -495,7 +469,7 @@ class NEW_INVENTORY_WINDOW(tk.Toplevel):
 
 		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Add Vendor Inventory",message=f"{error}")
+			cancel_changes_error_message_1 = tk.messagebox.showinfo(title="Add Vendor Inventory",message=f"{error}")
 
 
 	def destroy(self):

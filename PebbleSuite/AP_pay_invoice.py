@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -41,8 +32,11 @@ class PAY_INVOICE_UPDATE_STATUS:
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(invoice_payment_status_sql_script,self.pay_invoice_status)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -93,8 +87,9 @@ class PAY_INVOICE_JOURNAL_ENTRY:
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_VENDOR_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+						JOURNAL_ENTRY_NOTES,
+						RECONCILIATION_STATUS)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -111,26 +106,22 @@ class PAY_INVOICE_JOURNAL_ENTRY:
 
 class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME from general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Vendor"]
 
 		payment_GL_options = ["Select Bank Account"]
 
-
-		#Retrieve vendor names from SQL.db, add them into options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
@@ -138,12 +129,13 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-		#Retrieve asset general ledger names from SQL.db, add them into payment_GL_options list:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.asset_GL_sql_script)
 
 			for item in cursor:
@@ -151,10 +143,9 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				payment_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=775)
 		self.title("Pay Vendor Invoice")
@@ -168,23 +159,20 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_name_label = ttk.Label(self,text="Vendor Name")
 		self.invoice_name_label.place(x=20,y=15)
 
-
-		#Search for vendor names in SQL.db.
-		#Insert vendor names into vendor search listbox widget.
 		self.select_vendor_scrollbar = ttk.Scrollbar(self)
 		self.select_vendor_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_vendor_listbox = tk.Listbox(self,yscrollcommand=self.select_vendor_scrollbar.set)
 		self.select_vendor_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_vendor_scrollbar.config(command=self.select_vendor_listbox.yview)
 
-
 		search_vendor_name_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_vendor_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -193,8 +181,6 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#Invoice selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=405)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -322,10 +308,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	def select_invoice(self):
 
-		#Define SQL.db scripts:
 		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
-
-		#select_vendor = self.select_vendor_listbox.get(item)
 
 		try:
 
@@ -389,6 +372,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 			reference_credit_GL_amount = self.invoice_amount_entry_text.get()
 			reference_JE_vendor_name = self.invoice_name_entry_text.get()
 			reference_JE_notes = self.invoice_notes_entry_text.get()
+			reference_JE_reconciliation_status = 0
 
 			if reference_vendor_name == "":
 
@@ -431,6 +415,7 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 				pay_invoice_journal_entry_data.append(reference_credit_GL_amount)
 				pay_invoice_journal_entry_data.append(reference_JE_vendor_name)
 				pay_invoice_journal_entry_data.append(reference_JE_notes)
+				pay_invoice_journal_entry_data.append(reference_JE_reconciliation_status)
 
 				new_invoice_payment_journal_entry = PAY_INVOICE_JOURNAL_ENTRY(pay_invoice_journal_entry_data)
 				new_invoice_payment_journal_entry.pay_invoice()
@@ -463,4 +448,5 @@ class AP_PAY_INVOICE_WINDOW(tk.Toplevel):
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

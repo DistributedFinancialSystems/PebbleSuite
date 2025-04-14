@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -64,29 +55,11 @@ class NEW_INVOICE_ENTRY:
 
 class NEW_JOURNAL_ENTRY:
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	INITIALIZE CLASS VARIABLES:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def __init__(self,new_journal_entry):
 
 		self.new_journal_entry = new_journal_entry
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	JOURNAL_ENTRY FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def journal_entry(self):
 
@@ -104,24 +77,19 @@ class NEW_JOURNAL_ENTRY:
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
 					JOURNAL_ENTRY_VENDOR_NAME,
-					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+					JOURNAL_ENTRY_NOTES,
+					RECONCILIATION_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			try:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(new_JE_sql_script,self.new_journal_entry)
 
-				cursor.execute(new_JE_sql_script,self.new_journal_entry)
+			connection.commit()
 
-				connection.commit()
-
-				cursor.close()
-
-			except sqlite3.Error as error:
-
-				journal_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			cursor.close()
 
 
 
@@ -184,7 +152,6 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=380)
 		self.title("New Invoice")
@@ -248,114 +215,116 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 	def create_new_invoice(self):
 
-		#Select Vendor error messages:
-		if self.clicked.get() == "Select Vendor":
+		try:
 
-			select_vendor_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select a vendor for new invoice.")
+			#Select Vendor error messages:
+			if self.clicked.get() == "Select Vendor":
 
-		#Invoice issue date error messages:
-		elif self.vendor_invoice_issue_date_entry.get() == "":
+				select_vendor_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Select a vendor for new invoice.")
 
-			invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Issue date cannot be blank.")
+			#Invoice issue date error messages:
+			elif self.vendor_invoice_issue_date_entry.get() == "":
 
-		#Invoice due date error messges:
-		elif self.vendor_invoice_due_date_entry.get() == "":
+				invoice_issue_date_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Issue date cannot be blank.")
 
-			invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Due date cannot be blank.")
+			#Invoice due date error messges:
+			elif self.vendor_invoice_due_date_entry.get() == "":
 
-		#Invoice number errorm messages:
-		elif self.vendor_invoice_number_entry.get() == "":
+				invoice_due_date_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Due date cannot be blank.")
 
-			invoice_number_entry_error_message_1 = tk.messagebox.showinfo(title="Error",message="Invoice number cannot be blank.")
+			#Invoice number errorm messages:
+			elif self.vendor_invoice_number_entry.get() == "":
 
-		#Invoice liability GL error messages:
-		elif self.liability_GL_text.get() == "Select Liability GL":
+				invoice_number_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Invoice number cannot be blank.")
 
-			liability_GL_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select a liability GL.")
+			#Invoice liability GL error messages:
+			elif self.liability_GL_text.get() == "Select Liability GL":
 
-		#Invoice expense GL error messages:
-		elif self.expense_GL_text.get() == "Select Expense GL":
+				liability_GL_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Select a liability GL.")
 
-			expense_GL_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select an expense GL.")
+			#Invoice expense GL error messages:
+			elif self.expense_GL_text.get() == "Select Expense GL":
 
-		#Invoice amount error messages:
-		elif self.vendor_invoice_amount_entry.get() == "":
+				expense_GL_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Select an expense GL.")
 
-			invoice_amount_entry_error_message_1 = tk.messagebox.showinfo(title="Error",message="Invoice amount cannot be blank.")
+			#Invoice amount error messages:
+			elif self.vendor_invoice_amount_entry.get() == "":
 
-		else:
+				invoice_amount_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Invoice amount cannot be blank.")
 
-			#Enter invoice data using NEW_INVOICE_ENTRY class (from above):
-			new_invoice_data = []
+			else:
 
-			new_invoice_name = self.clicked.get()
-			new_invoice_issue_date = self.vendor_invoice_issue_date_entry.get()
-			new_invoice_due_date = self.vendor_invoice_due_date_entry.get()
-			new_invoice_number = self.vendor_invoice_number_entry.get()
-			new_liability_GL = self.liability_GL_text.get()
-			new_expense_GL = self.expense_GL_text.get()
-			new_invoice_amount = self.vendor_invoice_amount_entry.get()
-			new_invoice_notes = self.vendor_invoice_notes_entry.get()
-			new_invoice_status = "Open"
-			new_invoice_paid_date = None
+				new_invoice_data = []
 
-			new_invoice_data.append(new_invoice_name)
-			new_invoice_data.append(new_invoice_issue_date)
-			new_invoice_data.append(new_invoice_due_date)
-			new_invoice_data.append(new_invoice_number)
-			new_invoice_data.append(new_liability_GL)
-			new_invoice_data.append(new_expense_GL)
-			new_invoice_data.append(new_invoice_amount)
-			new_invoice_data.append(new_invoice_notes)
-			new_invoice_data.append(new_invoice_status)
-			new_invoice_data.append(new_invoice_paid_date)
+				new_invoice_name = self.clicked.get()
+				new_invoice_issue_date = self.vendor_invoice_issue_date_entry.get()
+				new_invoice_due_date = self.vendor_invoice_due_date_entry.get()
+				new_invoice_number = self.vendor_invoice_number_entry.get()
+				new_liability_GL = self.liability_GL_text.get()
+				new_expense_GL = self.expense_GL_text.get()
+				new_invoice_amount = self.vendor_invoice_amount_entry.get()
+				new_invoice_notes = self.vendor_invoice_notes_entry.get()
+				new_invoice_status = "Open"
+				new_invoice_paid_date = None
 
-			new_invoice = NEW_INVOICE_ENTRY(new_invoice_data)
-			new_invoice.enter_invoice()
+				new_invoice_data.append(new_invoice_name)
+				new_invoice_data.append(new_invoice_issue_date)
+				new_invoice_data.append(new_invoice_due_date)
+				new_invoice_data.append(new_invoice_number)
+				new_invoice_data.append(new_liability_GL)
+				new_invoice_data.append(new_expense_GL)
+				new_invoice_data.append(new_invoice_amount)
+				new_invoice_data.append(new_invoice_notes)
+				new_invoice_data.append(new_invoice_status)
+				new_invoice_data.append(new_invoice_paid_date)
 
+				new_invoice = NEW_INVOICE_ENTRY(new_invoice_data)
+				new_invoice.enter_invoice()
 
-			#NEW_JOURNAL_ENTRY admin variables:
+				journal_entry_timestamp = datetime.datetime.now()
 
-			journal_entry_timestamp = datetime.datetime.now()
+				new_JE_data = []
 
+				new_journal_entry_timestamp = journal_entry_timestamp
+				new_journal_entry_number = None
+				new_journal_entry_date = self.vendor_invoice_issue_date_entry.get()
+				new_invoice_number = self.vendor_invoice_number_entry.get()
+				new_debit_general_ledger_name = self.expense_GL_text.get()
+				new_debit_general_ledger_number = None
+				new_debit_general_ledger_type = None
+				new_credit_general_ledger_name = self.liability_GL_text.get()
+				new_credit_general_ledger_number = None
+				new_credit_general_ledger_type = None
+				new_journal_entry_debit_amount = self.vendor_invoice_amount_entry.get()
+				new_journal_entry_credit_amount = self.vendor_invoice_amount_entry.get()
+				new_journal_entry_name = self.clicked.get()
+				new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
+				new_journal_entry_reconciliation_status = 0
 
-			#Enter debit data using NEW_JOURNAL_ENTRY class (from above):
-			new_JE_data = []
+				new_JE_data.append(new_journal_entry_timestamp)
+				new_JE_data.append(new_journal_entry_number)
+				new_JE_data.append(new_journal_entry_date)
+				new_JE_data.append(new_invoice_number)
+				new_JE_data.append(new_debit_general_ledger_name)
+				new_JE_data.append(new_debit_general_ledger_number)
+				new_JE_data.append(new_debit_general_ledger_type)
+				new_JE_data.append(new_credit_general_ledger_name)
+				new_JE_data.append(new_credit_general_ledger_number)
+				new_JE_data.append(new_credit_general_ledger_type)
+				new_JE_data.append(new_journal_entry_debit_amount)
+				new_JE_data.append(new_journal_entry_credit_amount)
+				new_JE_data.append(new_journal_entry_name)
+				new_JE_data.append(new_journal_entry_notes)
+				new_JE_data.append(new_journal_entry_reconciliation_status)
 
-			new_journal_entry_timestamp = journal_entry_timestamp
-			new_journal_entry_number = None
-			new_journal_entry_date = self.vendor_invoice_issue_date_entry.get()
-			new_invoice_number = self.vendor_invoice_number_entry.get()
-			new_debit_general_ledger_name = self.expense_GL_text.get()
-			new_debit_general_ledger_number = None
-			new_debit_general_ledger_type = None
-			new_credit_general_ledger_name = self.liability_GL_text.get()
-			new_credit_general_ledger_number = None
-			new_credit_general_ledger_type = None
-			new_journal_entry_debit_amount = self.vendor_invoice_amount_entry.get()
-			new_journal_entry_credit_amount = self.vendor_invoice_amount_entry.get()
-			new_journal_entry_name = self.clicked.get()
-			new_journal_entry_notes = self.vendor_invoice_notes_entry.get()
+				JE_entry = NEW_JOURNAL_ENTRY(new_JE_data)
+				JE_entry.journal_entry()
 
-			new_JE_data.append(new_journal_entry_timestamp)
-			new_JE_data.append(new_journal_entry_number)
-			new_JE_data.append(new_journal_entry_date)
-			new_JE_data.append(new_invoice_number)
-			new_JE_data.append(new_debit_general_ledger_name)
-			new_JE_data.append(new_debit_general_ledger_number)
-			new_JE_data.append(new_debit_general_ledger_type)
-			new_JE_data.append(new_credit_general_ledger_name)
-			new_JE_data.append(new_credit_general_ledger_number)
-			new_JE_data.append(new_credit_general_ledger_type)
-			new_JE_data.append(new_journal_entry_debit_amount)
-			new_JE_data.append(new_journal_entry_credit_amount)
-			new_JE_data.append(new_journal_entry_name)
-			new_JE_data.append(new_journal_entry_notes)
+				confirmation_message = tk.messagebox.showinfo(title="New Vendor Invoice",message="New Invoice Created.")
 
-			JE_entry = NEW_JOURNAL_ENTRY(new_JE_data)
-			JE_entry.journal_entry()
+		except Exception as error:
 
-			confirmation_message = tk.messagebox.showinfo(title="New Invoice",message="New Invoice Created.")
+			journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message=f"{error}")
 
 
 	def invoice_report(self):
@@ -377,7 +346,7 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			print(error)
 

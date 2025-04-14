@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -51,8 +42,11 @@ class NEW_VENDOR_CREDIT_MEMO_ENTRY:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(new_credit_memo_sql_script,self.new_credit_memo_entry)
+
 			connection.commit()
+
 			cursor.close()
 
 
@@ -60,28 +54,11 @@ class NEW_VENDOR_CREDIT_MEMO_ENTRY:
 
 class NEW_JOURNAL_ENTRY:
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	INITIALIZE CLASS VARIABLES:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def __init__(self,new_journal_entry):
+
 		self.new_journal_entry = new_journal_entry
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	DEBIT_ENTRY FUNCTION:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def journal_entry(self):
 
@@ -99,57 +76,39 @@ class NEW_JOURNAL_ENTRY:
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
 					JOURNAL_ENTRY_VENDOR_NAME,
-					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+					JOURNAL_ENTRY_NOTES,
+					RECONCILIATION_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			try:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
-				cursor.execute(new_JE_sql_script,self.new_journal_entry)
-				connection.commit()
-				cursor.close()
+			cursor.execute(new_JE_sql_script,self.new_journal_entry)
 
-			except sqlite3.Error as error:
+			connection.commit()
 
-				journal_entry_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			cursor.close()
 
 
 
-
-"""
-[ ]
-[ ]
-[ ]
-[ ]	NEW_CREDIT_MEMO_WINDOW
-[ ]
-[ ]
-[ ]
-"""
 
 class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
-	#Define SQL.db scripts:
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
 	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income - Other Income";'''
 
-
-	#Define class variables:
 	alive = False
 
-
-	#Define __init__ tkinter widgets:
 	def __init__(self,*args,**kwargs):
 
-
-		#Retrieve Vendor data from SQL.db:
 		options = ["Select Vendor"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
@@ -157,15 +116,15 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Retrieve asset GL data from SQL.db:
 		asset_GL_options = ["Select Bank Account"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.asset_GL_sql_script)
 
 			for item in cursor:
@@ -173,15 +132,15 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				asset_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Retrieve income GL data from SQL.db:
 		income_GL_options = ["Select Income GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.income_GL_sql_script)
 
 			for item in cursor:
@@ -189,10 +148,9 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				income_GL_options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=380)
 		self.title("New Credit Memo")
@@ -253,134 +211,119 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_report_button = ttk.Button(self,text="Print Credit Memos",command=self.credit_memo_report)
 		self.credit_memo_report_button.place(x=20,y=340)
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	create_new_credit_memo function:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def create_new_credit_memo(self):
 
-		#Select Vendor error messages:
-		if self.clicked.get() == "Select Vendor":
+		try:
 
-			select_vendor_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select a vendor for new credit memo.")
+			#Select Vendor error messages:
+			if self.clicked.get() == "Select Vendor":
 
-		#credit_memo issue date error messages:
-		elif self.vendor_credit_memo_issue_date_entry.get() == "":
+				select_vendor_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="Select a vendor for new credit memo.")
 
-			credit_memo_issue_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Issue date cannot be blank.")
+			#credit_memo issue date error messages:
+			elif self.vendor_credit_memo_issue_date_entry.get() == "":
 
-		#credit_memo due date error messges:
-		elif self.vendor_credit_memo_due_date_entry.get() == "":
+				credit_memo_issue_date_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="Issue date cannot be blank.")
 
-			credit_memo_due_date_error_message_1 = tk.messagebox.showinfo(title="Error",message="Due date cannot be blank.")
+			#credit_memo due date error messges:
+			elif self.vendor_credit_memo_due_date_entry.get() == "":
 
-		#credit_memo number errorm messages:
-		elif self.vendor_credit_memo_number_entry.get() == "":
+				credit_memo_due_date_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="Due date cannot be blank.")
 
-			credit_memo_number_entry_error_message_1 = tk.messagebox.showinfo(title="Error",message="credit_memo number cannot be blank.")
+			#credit_memo number errorm messages:
+			elif self.vendor_credit_memo_number_entry.get() == "":
 
-		#credit_memo asset GL error messages:
-		elif self.asset_GL_text.get() == "Select Asset GL":
+				credit_memo_number_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="credit_memo number cannot be blank.")
 
-			asset_GL_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select a asset GL.")
+			#credit_memo asset GL error messages:
+			elif self.asset_GL_text.get() == "Select Asset GL":
 
-		#credit_memo income GL error messages:
-		elif self.income_GL_text.get() == "Select Income GL":
+				asset_GL_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="Select a asset GL.")
 
-			income_GL_error_message_1 = tk.messagebox.showinfo(title="Error",message="Select an income GL.")
+			#credit_memo income GL error messages:
+			elif self.income_GL_text.get() == "Select Income GL":
 
-		#credit_memo amount error messages:
-		elif self.vendor_credit_memo_amount_entry.get() == "":
+				income_GL_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="Select an income GL.")
 
-			credit_memo_amount_entry_error_message_1 = tk.messagebox.showinfo(title="Error",message="credit_memo amount cannot be blank.")
+			#credit_memo amount error messages:
+			elif self.vendor_credit_memo_amount_entry.get() == "":
 
-		else:
+				credit_memo_amount_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="credit_memo amount cannot be blank.")
 
-			#Enter credit_memo data using NEW_credit_memo_ENTRY class (from above):
-			new_credit_memo_data = []
+			else:
 
-			new_credit_memo_name = self.clicked.get()
-			new_credit_memo_issue_date = self.vendor_credit_memo_issue_date_entry.get()
-			new_credit_memo_due_date = self.vendor_credit_memo_due_date_entry.get()
-			new_credit_memo_number = self.vendor_credit_memo_number_entry.get()
-			new_asset_GL = self.asset_GL_text.get()
-			new_income_GL = self.income_GL_text.get()
-			new_credit_memo_amount = self.vendor_credit_memo_amount_entry.get()
-			new_credit_memo_notes = self.vendor_credit_memo_notes_entry.get()
-			new_credit_memo_status = "Open"
+				new_credit_memo_data = []
 
-			new_credit_memo_data.append(new_credit_memo_name)
-			new_credit_memo_data.append(new_credit_memo_issue_date)
-			new_credit_memo_data.append(new_credit_memo_due_date)
-			new_credit_memo_data.append(new_credit_memo_number)
-			new_credit_memo_data.append(new_asset_GL)
-			new_credit_memo_data.append(new_income_GL)
-			new_credit_memo_data.append(new_credit_memo_amount)
-			new_credit_memo_data.append(new_credit_memo_notes)
-			new_credit_memo_data.append(new_credit_memo_status)
+				new_credit_memo_name = self.clicked.get()
+				new_credit_memo_issue_date = self.vendor_credit_memo_issue_date_entry.get()
+				new_credit_memo_due_date = self.vendor_credit_memo_due_date_entry.get()
+				new_credit_memo_number = self.vendor_credit_memo_number_entry.get()
+				new_asset_GL = self.asset_GL_text.get()
+				new_income_GL = self.income_GL_text.get()
+				new_credit_memo_amount = self.vendor_credit_memo_amount_entry.get()
+				new_credit_memo_notes = self.vendor_credit_memo_notes_entry.get()
+				new_credit_memo_status = "Open"
 
-			new_credit_memo = NEW_VENDOR_CREDIT_MEMO_ENTRY(new_credit_memo_data)
-			new_credit_memo.enter_credit_memo()
+				new_credit_memo_data.append(new_credit_memo_name)
+				new_credit_memo_data.append(new_credit_memo_issue_date)
+				new_credit_memo_data.append(new_credit_memo_due_date)
+				new_credit_memo_data.append(new_credit_memo_number)
+				new_credit_memo_data.append(new_asset_GL)
+				new_credit_memo_data.append(new_income_GL)
+				new_credit_memo_data.append(new_credit_memo_amount)
+				new_credit_memo_data.append(new_credit_memo_notes)
+				new_credit_memo_data.append(new_credit_memo_status)
 
-
-			#NEW_JOURNAL_ENTRY admin variables:
-
-			journal_entry_timestamp = datetime.datetime.now()
+				new_credit_memo = NEW_VENDOR_CREDIT_MEMO_ENTRY(new_credit_memo_data)
+				new_credit_memo.enter_credit_memo()
 
 
-			#Enter debit data using NEW_JOURNAL_ENTRY class (from above):
-			new_JE_data = []
+				journal_entry_timestamp = datetime.datetime.now()
 
-			new_journal_entry_timestamp = journal_entry_timestamp
-			new_journal_entry_number = None
-			new_journal_entry_date = self.vendor_credit_memo_issue_date_entry.get()
-			new_credit_memo_number = self.vendor_credit_memo_number_entry.get()
-			new_debit_general_ledger_name = self.asset_GL_text.get()
-			new_debit_general_ledger_number = None
-			new_debit_general_ledger_type = None
-			new_credit_general_ledger_name = self.income_GL_text.get()
-			new_credit_general_ledger_number = None
-			new_credit_general_ledger_type = None
-			new_journal_entry_debit_amount = self.vendor_credit_memo_amount_entry.get()
-			new_journal_entry_credit_amount = self.vendor_credit_memo_amount_entry.get()
-			new_journal_entry_name = self.clicked.get()
-			new_journal_entry_notes = self.vendor_credit_memo_notes_entry.get()
+				new_JE_data = []
 
-			new_JE_data.append(new_journal_entry_timestamp)
-			new_JE_data.append(new_journal_entry_number)
-			new_JE_data.append(new_journal_entry_date)
-			new_JE_data.append(new_credit_memo_number)
-			new_JE_data.append(new_debit_general_ledger_name)
-			new_JE_data.append(new_debit_general_ledger_number)
-			new_JE_data.append(new_debit_general_ledger_type)
-			new_JE_data.append(new_credit_general_ledger_name)
-			new_JE_data.append(new_credit_general_ledger_number)
-			new_JE_data.append(new_credit_general_ledger_type)
-			new_JE_data.append(new_journal_entry_debit_amount)
-			new_JE_data.append(new_journal_entry_credit_amount)
-			new_JE_data.append(new_journal_entry_name)
-			new_JE_data.append(new_journal_entry_notes)
+				new_journal_entry_timestamp = journal_entry_timestamp
+				new_journal_entry_number = None
+				new_journal_entry_date = self.vendor_credit_memo_issue_date_entry.get()
+				new_credit_memo_number = self.vendor_credit_memo_number_entry.get()
+				new_debit_general_ledger_name = self.asset_GL_text.get()
+				new_debit_general_ledger_number = None
+				new_debit_general_ledger_type = None
+				new_credit_general_ledger_name = self.income_GL_text.get()
+				new_credit_general_ledger_number = None
+				new_credit_general_ledger_type = None
+				new_journal_entry_debit_amount = self.vendor_credit_memo_amount_entry.get()
+				new_journal_entry_credit_amount = self.vendor_credit_memo_amount_entry.get()
+				new_journal_entry_name = self.clicked.get()
+				new_journal_entry_notes = self.vendor_credit_memo_notes_entry.get()
+				new_journal_entry_reconciliation_status = 0
 
-			journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
-			journal_entry.journal_entry()
+				new_JE_data.append(new_journal_entry_timestamp)
+				new_JE_data.append(new_journal_entry_number)
+				new_JE_data.append(new_journal_entry_date)
+				new_JE_data.append(new_credit_memo_number)
+				new_JE_data.append(new_debit_general_ledger_name)
+				new_JE_data.append(new_debit_general_ledger_number)
+				new_JE_data.append(new_debit_general_ledger_type)
+				new_JE_data.append(new_credit_general_ledger_name)
+				new_JE_data.append(new_credit_general_ledger_number)
+				new_JE_data.append(new_credit_general_ledger_type)
+				new_JE_data.append(new_journal_entry_debit_amount)
+				new_JE_data.append(new_journal_entry_credit_amount)
+				new_JE_data.append(new_journal_entry_name)
+				new_JE_data.append(new_journal_entry_notes)
+				new_JE_data.append(new_journal_entry_reconciliation_status)
 
-			confirmation_message = tk.messagebox.showinfo(title="New Credit Memo",message="New Credit Memo Created.")
+				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
+				journal_entry.journal_entry()
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	credit_memo_report function:
-	[ ]
-	[ ]
-	[ ]
-	"""
+				confirmation_message = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="New Credit Memo Created.")
+
+		except Exception as error:
+
+			journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message=f"Create New Credit Memo:  {error}")
+
 
 	def credit_memo_report(self):
 
@@ -390,29 +333,24 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(credit_memo_report_sql_script)
 
 				for item in cursor:
+
 					print(item)
 
 				connection.commit()
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
 			print(error)
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	destroy function:
-	[ ]
-	[ ]
-	[ ]
-	"""
 
 	def destroy(self):
+
 		self.__class__.alive = False
+
 		return super().destroy()

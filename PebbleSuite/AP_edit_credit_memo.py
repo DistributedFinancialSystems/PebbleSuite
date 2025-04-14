@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -30,23 +21,18 @@ from tkinter.messagebox import showinfo
 
 class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
-
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
-
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Vendor"]
 
-
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
@@ -54,10 +40,9 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=550)
 		self.title("Edit Vendor Credit Memo")
@@ -71,23 +56,20 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_name_label = ttk.Label(self,text="Vendor Name")
 		self.credit_memo_name_label.place(x=20,y=15)
 
-
-		#Search for vendor names in SQL.db.
-		#Insert vendor names into vendor search listbox widget.
 		self.select_vendor_scrollbar = ttk.Scrollbar(self)
 		self.select_vendor_scrollbar.place(x=353,y=45,width=20,height=200)
 		self.select_vendor_listbox = tk.Listbox(self,yscrollcommand=self.select_vendor_scrollbar.set)
 		self.select_vendor_listbox.place(x=20,y=45,width=333,height=200)
 		self.select_vendor_scrollbar.config(command=self.select_vendor_listbox.yview)
 
-
 		search_vendor_name_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(search_vendor_name_sql_script)
+
 			connection.commit()
 
 			for item in cursor:
@@ -96,8 +78,6 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-
-		#credit_memo selection listbox widget:
 		self.scrollbar = ttk.Scrollbar(self)
 		self.scrollbar.place(x=353,y=300,width=20,height=200)
 		self.listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
@@ -204,7 +184,6 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def edit_credit_memo(self):
 
-		#Define SQL.db scripts:
 		query_credit_memo_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 
 		try:
@@ -338,4 +317,5 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

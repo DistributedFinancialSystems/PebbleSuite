@@ -1,5 +1,3 @@
-#Python Standard Library dependencies
-
 import datetime
 from datetime import date
 import sqlite3
@@ -35,7 +33,6 @@ class AR_DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=550)
 		self.title("Delete Client Invoice")
@@ -89,9 +86,9 @@ class AR_DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=?'''
-
 		try:
+
+			search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=?'''
 
 			for item in self.select_client_listbox.curselection():
 
@@ -129,12 +126,12 @@ class AR_DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 	def delete_invoice(self):
 
-		query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?'''
-		delete_invoice_sql_script = '''DELETE FROM client_invoices WHERE INVOICE_NUMBER=?'''
-		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?'''
-		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?'''
-
 		try:
+
+			query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?'''
+			delete_invoice_sql_script = '''DELETE FROM client_invoices WHERE INVOICE_NUMBER=?'''
+			query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?'''
+			delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE CLIENT_INVOICE_NUMBER=?'''
 
 			for item in self.listbox.curselection():
 

@@ -118,13 +118,13 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 	def search_client_data(self):
 
-		search_clients_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
-
-		search_client_name = self.clicked.get()
-
-		collect = []
-
 		try:
+
+			search_clients_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
+
+			search_client_name = self.clicked.get()
+
+			collect = []
 
 			if search_client_name == "Select Client":
 
@@ -164,31 +164,31 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 	def change_client_data(self):
 
-		retrieve_clients_sql_script = '''SELECT * FROM clients;'''
-		edit_client_address1_sql_script = '''UPDATE clients SET CLIENT_ADDRESS1=? WHERE CLIENT_NAME=?;'''
-		edit_client_address2_sql_script = '''UPDATE clients SET CLIENT_ADDRESS2=? WHERE CLIENT_NAME=?;'''
-		edit_client_city_sql_script = '''UPDATE clients SET CLIENT_CITY=? WHERE CLIENT_NAME=?;'''
-		edit_client_state_sql_script = '''UPDATE clients SET CLIENT_STATE=? WHERE CLIENT_NAME=?;'''
-		edit_client_zip_sql_script = '''UPDATE clients SET CLIENT_ZIP=? WHERE CLIENT_NAME=?;'''
-		edit_client_country_sql_script = '''UPDATE clients SET CLIENT_COUNTRY=? WHERE CLIENT_NAME=?;'''
-		edit_contact_name_sql_script = '''UPDATE clients SET CONTACT_NAME=? WHERE CLIENT_NAME=?;'''
-		edit_contact_phone_sql_script = '''UPDATE clients SET CONTACT_PHONE=? WHERE CLIENT_NAME=?;'''
-		edit_contact_email_sql_script = '''UPDATE clients SET CONTACT_EMAIL=? WHERE CLIENT_NAME=?;'''
-		edit_client_notes_sql_script = '''UPDATE clients SET CONTACT_NOTES=? WHERE CLIENT_NAME=?;'''
-
-		search_client_name = self.clicked.get()
-		new_address1 = self.client_address1_entry.get()
-		new_address2 = self.client_address2_entry.get()
-		new_city = self.client_city_entry.get()
-		new_state = self.client_state_entry.get()
-		new_zip = self.client_zip_postal_code_entry.get()
-		new_country = self.client_country_entry.get()
-		new_contact_name = self.client_contact_name_entry.get()
-		new_contact_phone = self.client_contact_phone_entry.get()
-		new_contact_email = self.client_contact_email_entry.get()
-		new_client_notes = self.client_contact_notes_entry.get()
-
 		try:
+
+			retrieve_clients_sql_script = '''SELECT * FROM clients;'''
+			edit_client_address1_sql_script = '''UPDATE clients SET CLIENT_ADDRESS1=? WHERE CLIENT_NAME=?;'''
+			edit_client_address2_sql_script = '''UPDATE clients SET CLIENT_ADDRESS2=? WHERE CLIENT_NAME=?;'''
+			edit_client_city_sql_script = '''UPDATE clients SET CLIENT_CITY=? WHERE CLIENT_NAME=?;'''
+			edit_client_state_sql_script = '''UPDATE clients SET CLIENT_STATE=? WHERE CLIENT_NAME=?;'''
+			edit_client_zip_sql_script = '''UPDATE clients SET CLIENT_ZIP=? WHERE CLIENT_NAME=?;'''
+			edit_client_country_sql_script = '''UPDATE clients SET CLIENT_COUNTRY=? WHERE CLIENT_NAME=?;'''
+			edit_contact_name_sql_script = '''UPDATE clients SET CONTACT_NAME=? WHERE CLIENT_NAME=?;'''
+			edit_contact_phone_sql_script = '''UPDATE clients SET CONTACT_PHONE=? WHERE CLIENT_NAME=?;'''
+			edit_contact_email_sql_script = '''UPDATE clients SET CONTACT_EMAIL=? WHERE CLIENT_NAME=?;'''
+			edit_client_notes_sql_script = '''UPDATE clients SET CONTACT_NOTES=? WHERE CLIENT_NAME=?;'''
+
+			search_client_name = self.clicked.get()
+			new_address1 = self.client_address1_entry.get()
+			new_address2 = self.client_address2_entry.get()
+			new_city = self.client_city_entry.get()
+			new_state = self.client_state_entry.get()
+			new_zip = self.client_zip_postal_code_entry.get()
+			new_country = self.client_country_entry.get()
+			new_contact_name = self.client_contact_name_entry.get()
+			new_contact_phone = self.client_contact_phone_entry.get()
+			new_contact_email = self.client_contact_email_entry.get()
+			new_client_notes = self.client_contact_notes_entry.get()
 
 			if search_client_name == "Select Client":
 

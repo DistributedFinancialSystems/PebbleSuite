@@ -34,25 +34,20 @@ class NEW_VENDOR_ENTRY:
 
 		with sqlite3.connect("SQL.db") as connection:
 
-			try:
-				cursor = connection.cursor()
+			cursor = connection.cursor()
 
-				cursor.execute(new_vendor_sql_script,self.new_vendor_entry)
+			cursor.execute(new_vendor_sql_script,self.new_vendor_entry)
 
-				connection.commit()
+			connection.commit()
 
-				cursor.close()
-
-			except sqlite3.Error as error:
-
-				error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			cursor.close()
 
 
 class NEW_VENDOR_WINDOW(tk.Toplevel):
 
 	alive = False
 
-	vendor_1099_options = ["Select 1099 option","Select 1099 option","N/A","1099-MISC","1099-NEC"]
+	vendor_1099_options = ["Select 1099 option","N/A","1099-MISC","1099-NEC"]
 
 	def __init__(self,*args,**kwargs):
 
@@ -117,7 +112,7 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 		self.vendor_1099_label.place(x=20,y=420)
 		self.vendor_1099_entry_text = tk.StringVar()
 		self.vendor_1099_entry_text.set(f"{self.vendor_1099_options[0]}")
-		self.vendor_1099_option_menu = ttk.OptionMenu(self,self.vendor_1099_entry_text,*self.vendor_1099_options)
+		self.vendor_1099_option_menu = ttk.OptionMenu(self,self.vendor_1099_entry_text,self.vendor_1099_options[0],*self.vendor_1099_options)
 		self.vendor_1099_option_menu.place(x=200,y=420)
 
 		self.get_vendor_data_entries_button = ttk.Button(self,text="Create New Vendor",command=self.create_new_vendor)
@@ -129,77 +124,74 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 
 	def create_new_vendor(self):
 
-		new_vendor_data = []
+		try:
 
-		new_vendor_name = self.vendor_name_entry.get()
-		new_vendor_data.append(new_vendor_name)
+			new_vendor_data = []
 
-		new_vendor_address1 = self.vendor_address1_entry.get()
-		new_vendor_data.append(new_vendor_address1)
+			new_vendor_name = self.vendor_name_entry.get()
+			new_vendor_data.append(new_vendor_name)
 
-		new_vendor_address2 = self.vendor_address2_entry.get()
-		new_vendor_data.append(new_vendor_address2)
+			new_vendor_address1 = self.vendor_address1_entry.get()
+			new_vendor_data.append(new_vendor_address1)
 
-		new_vendor_city = self.vendor_city_entry.get()
-		new_vendor_data.append(new_vendor_city)
+			new_vendor_address2 = self.vendor_address2_entry.get()
+			new_vendor_data.append(new_vendor_address2)
 
-		new_vendor_state = self.vendor_state_entry.get()
-		new_vendor_data.append(new_vendor_state)
+			new_vendor_city = self.vendor_city_entry.get()
+			new_vendor_data.append(new_vendor_city)
 
-		new_vendor_zip = self.vendor_zip_postal_code_entry.get()
-		new_vendor_data.append(new_vendor_zip)
+			new_vendor_state = self.vendor_state_entry.get()
+			new_vendor_data.append(new_vendor_state)
 
-		new_vendor_country = self.vendor_country_entry.get()
-		new_vendor_data.append(new_vendor_country)
+			new_vendor_zip = self.vendor_zip_postal_code_entry.get()
+			new_vendor_data.append(new_vendor_zip)
 
-		new_vendor_contact_name = self.vendor_contact_name_entry.get()
-		new_vendor_data.append(new_vendor_contact_name)
+			new_vendor_country = self.vendor_country_entry.get()
+			new_vendor_data.append(new_vendor_country)
 
-		new_vendor_contact_phone = self.vendor_contact_phone_entry.get()
-		new_vendor_data.append(new_vendor_contact_phone)
+			new_vendor_contact_name = self.vendor_contact_name_entry.get()
+			new_vendor_data.append(new_vendor_contact_name)
 
-		new_vendor_contact_email = self.vendor_contact_email_entry.get()
-		new_vendor_data.append(new_vendor_contact_email)
+			new_vendor_contact_phone = self.vendor_contact_phone_entry.get()
+			new_vendor_data.append(new_vendor_contact_phone)
 
-		new_vendor_1099 = self.vendor_1099_entry_text.get()
-		new_vendor_data.append(new_vendor_1099)
+			new_vendor_contact_email = self.vendor_contact_email_entry.get()
+			new_vendor_data.append(new_vendor_contact_email)
 
-		#Verify vendor names in SQL.db:
+			new_vendor_1099 = self.vendor_1099_entry_text.get()
+			new_vendor_data.append(new_vendor_1099)
 
-		vendor_names = []
+			vendor_names = []
 
-		verify_vendor_names_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
+			verify_vendor_names_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
-		with sqlite3.connect("SQL.db") as connection:
+			with sqlite3.connect("SQL.db") as connection:
 
-			cursor = connection.cursor()
+				cursor = connection.cursor()
 
-			cursor.execute(verify_vendor_names_sql_script)
+				cursor.execute(verify_vendor_names_sql_script)
 
-			for item in cursor:
+				for item in cursor:
 
-				vendor_names.append(*item)
+					vendor_names.append(*item)
 
-			connection.commit()
+				connection.commit()
 
-			cursor.close()
+				cursor.close()
 
+			if new_vendor_name in vendor_names:
 
-		if new_vendor_name in vendor_names:
+				duplicate_vendor_names_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Duplicate vendor name:  please use different name for new vendor.")
 
-			duplicate_vendor_names_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Duplicate vendor name:  please use different name for new vendor.")
+			elif new_vendor_name == "":
 
-		elif new_vendor_name == "":
+				new_vendor_name_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Vendor name cannot be blank.")
 
-			new_vendor_name_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Vendor name cannot be blank.")
+			elif new_vendor_1099 == "Select 1099 option":
 
-		elif new_vendor_1099 == "Select 1099 option":
+				new_vendor_1099_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Select vendor 1099 form option.")
 
-			new_vendor_1099_error_message = tk.messagebox.showinfo(title="Add New Vendor",message="Select vendor 1099 form option.")
-
-		else:
-
-			try:
+			else:
 
 				new_vendor = NEW_VENDOR_ENTRY(new_vendor_data)
 
@@ -209,7 +201,7 @@ class NEW_VENDOR_WINDOW(tk.Toplevel):
 
 				create_new_vendor_confirmation_message = tk.messagebox.showinfo(title="Add New Vendor",message="New Vendor Successfully Created!")
 
-			except Exception as error:
+		except Exception as error:
 
 				create_new_vendor_error_message = tk.messagebox.showinfo(title="Add New Vendor",message=f"{error}")
 

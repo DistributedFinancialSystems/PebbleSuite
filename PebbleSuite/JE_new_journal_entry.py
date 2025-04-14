@@ -31,23 +31,19 @@ class NEW_JOURNAL_ENTRY:
 					CREDIT_GENERAL_LEDGER_TYPE,
 					JOURNAL_ENTRY_DEBIT_AMOUNT,
 					JOURNAL_ENTRY_CREDIT_AMOUNT,
-					JOURNAL_ENTRY_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?,?);'''
+					JOURNAL_ENTRY_NOTES,
+					RECONCILIATION_STATUS)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
-			try:
-				cursor = connection.cursor()
+			cursor = connection.cursor()
 
-				cursor.execute(new_JE_sql_script,self.new_journal_entry)
+			cursor.execute(new_JE_sql_script,self.new_journal_entry)
 
-				connection.commit()
+			connection.commit()
 
-				cursor.close()
-
-			except Exception as error:
-
-				new_journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Journal Entry",message=f"{error}")
+			cursor.close()
 
 
 
@@ -160,6 +156,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			new_GL_credit = self.credit_GL_amount_entry.get()
 
 			new_JE_notes = self.JE_notes_entry.get()
+			new_JE_reconciliation_status = 0
 
 			if new_debit_GL_name == "Select General Ledger":
 
@@ -187,6 +184,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 				JE_data.append(new_GL_debit)
 				JE_data.append(new_GL_credit)
 				JE_data.append(new_JE_notes)
+				JE_data.append(new_JE_reconciliation_status)
 
 				new_journal_entry = NEW_JOURNAL_ENTRY(JE_data)
 				new_journal_entry.journal_entry()

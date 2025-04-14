@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -32,19 +31,13 @@ class NEW_CUSTOMER_ENTRY:
 
 		with sqlite3.connect("SQL.db") as connection:
 
-			try:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(new_customer_sql_script,self.new_customer_entry)
 
-				cursor.execute(new_customer_sql_script,self.new_customer_entry)
+			connection.commit()
 
-				connection.commit()
-
-				cursor.close()
-
-			except Exception as error:
-
-				new_customer_error_message_1 = tk.messagebox.showinfo(title="Add New Customer",message=f"{error}")
+			cursor.close()
 
 
 
@@ -125,61 +118,61 @@ class NEW_CUSTOMER_WINDOW(tk.Toplevel):
 
 	def create_new_customer(self):
 
-		new_customer_data = []
+		try:
 
-		new_customer_name = self.customer_name_entry.get()
-		new_customer_address1 = self.customer_address1_entry.get()
-		new_customer_address2 = self.customer_address2_entry.get()
-		new_customer_city = self.customer_city_entry.get()
-		new_customer_state = self.customer_state_entry.get()
-		new_customer_zip = self.customer_zip_postal_code_entry.get()
-		new_customer_country = self.customer_country_entry.get()
-		new_customer_contact_name = self.customer_contact_name_entry.get()
-		new_customer_contact_phone = self.customer_contact_phone_entry.get()
-		new_customer_contact_email = self.customer_contact_email_entry.get()
-		new_customer_contact_notes = self.customer_contact_notes_entry.get()
+			new_customer_data = []
 
-		customer_names = []
+			new_customer_name = self.customer_name_entry.get()
+			new_customer_address1 = self.customer_address1_entry.get()
+			new_customer_address2 = self.customer_address2_entry.get()
+			new_customer_city = self.customer_city_entry.get()
+			new_customer_state = self.customer_state_entry.get()
+			new_customer_zip = self.customer_zip_postal_code_entry.get()
+			new_customer_country = self.customer_country_entry.get()
+			new_customer_contact_name = self.customer_contact_name_entry.get()
+			new_customer_contact_phone = self.customer_contact_phone_entry.get()
+			new_customer_contact_email = self.customer_contact_email_entry.get()
+			new_customer_contact_notes = self.customer_contact_notes_entry.get()
 
-		verify_customer_names_sql_script = '''SELECT CUSTOMER_NAME FROM customers;'''
+			customer_names = []
 
-		with sqlite3.connect("SQL.db") as connection:
+			verify_customer_names_sql_script = '''SELECT CUSTOMER_NAME FROM customers;'''
 
-			cursor = connection.cursor()
+			with sqlite3.connect("SQL.db") as connection:
 
-			cursor.execute(verify_customer_names_sql_script)
+				cursor = connection.cursor()
 
-			for item in cursor:
+				cursor.execute(verify_customer_names_sql_script)
 
-				customer_names.append(*item)
+				for item in cursor:
 
-			connection.commit()
+					customer_names.append(*item)
 
-			cursor.close()
+				connection.commit()
 
-		if new_customer_name in customer_names:
+				cursor.close()
 
-			duplicate_customer_name_error_message_1 = tk.messagebox.showinfo(title="Add New Customer",message="Duplicate customer name:  please use a different name for new customer.")
+			if new_customer_name in customer_names:
 
-		elif new_customer_name == "":
+				duplicate_customer_name_error_message_1 = tk.messagebox.showinfo(title="Add New Customer",message="Duplicate customer name:  please use a different name for new customer.")
 
-			new_customer_name_error_message_1 = tk.messagebox.showinfo(title="Add New Customer",message="Customer name cannot be blank.")
+			elif new_customer_name == "":
 
-		else:
+				new_customer_name_error_message_1 = tk.messagebox.showinfo(title="Add New Customer",message="Customer name cannot be blank.")
 
-			new_customer_data.append(new_customer_name)
-			new_customer_data.append(new_customer_address1)
-			new_customer_data.append(new_customer_address2)
-			new_customer_data.append(new_customer_city)
-			new_customer_data.append(new_customer_state)
-			new_customer_data.append(new_customer_zip)
-			new_customer_data.append(new_customer_country)
-			new_customer_data.append(new_customer_contact_name)
-			new_customer_data.append(new_customer_contact_phone)
-			new_customer_data.append(new_customer_contact_email)
-			new_customer_data.append(new_customer_contact_notes)
+			else:
 
-			try:
+				new_customer_data.append(new_customer_name)
+				new_customer_data.append(new_customer_address1)
+				new_customer_data.append(new_customer_address2)
+				new_customer_data.append(new_customer_city)
+				new_customer_data.append(new_customer_state)
+				new_customer_data.append(new_customer_zip)
+				new_customer_data.append(new_customer_country)
+				new_customer_data.append(new_customer_contact_name)
+				new_customer_data.append(new_customer_contact_phone)
+				new_customer_data.append(new_customer_contact_email)
+				new_customer_data.append(new_customer_contact_notes)
 
 				new_customer = NEW_CUSTOMER_ENTRY(new_customer_data)
 
@@ -189,9 +182,9 @@ class NEW_CUSTOMER_WINDOW(tk.Toplevel):
 
 				new_customer_confirmation_message = tk.messagebox.showinfo(title="Add New Customer",message="New customer successfully created.")
 
-			except Exception as error:
+		except Exception as error:
 
-				error_message = tk.messagebox.showinfo(title="Add New Customer",message=f"{error}")
+			error_message = tk.messagebox.showinfo(title="Add New Customer",message=f"{error}")
 
 
 	def clear_customer_data(self):

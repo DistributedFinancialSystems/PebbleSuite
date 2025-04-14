@@ -87,8 +87,9 @@ class PAY_CREDIT_MEMO_JOURNAL_ENTRY:
 						JOURNAL_ENTRY_DEBIT_AMOUNT,
 						JOURNAL_ENTRY_CREDIT_AMOUNT,
 						JOURNAL_ENTRY_VENDOR_NAME,
-						JOURNAL_ENTRY_NOTES)
-						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+						JOURNAL_ENTRY_NOTES,
+						RECONCILIATION_STATUS)
+						VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db",detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as connection:
 
@@ -145,7 +146,6 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=775)
 		self.title("Apply Vendor Credit Memo")
@@ -279,6 +279,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_vendor_sql_script,(select_vendor,credit_memo_status))
 
 				for item in cursor:
@@ -286,6 +287,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
 		except Exception as error:
@@ -370,6 +372,7 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			reference_credit_GL_amount = self.credit_memo_amount_entry_text.get()
 			reference_JE_vendor_name = self.credit_memo_name_entry_text.get()
 			reference_JE_notes = self.credit_memo_notes_entry_text.get()
+			reference_JE_reconciliation_status = 0
 
 			#Error handling:
 
@@ -414,14 +417,15 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				pay_credit_memo_journal_entry_data.append(reference_credit_GL_amount)
 				pay_credit_memo_journal_entry_data.append(reference_JE_vendor_name)
 				pay_credit_memo_journal_entry_data.append(reference_JE_notes)
+				pay_credit_memo_journal_entry_data.append(reference_JE_reconciliation_status)
 
 				new_credit_memo_payment_journal_entry = PAY_CREDIT_MEMO_JOURNAL_ENTRY(pay_credit_memo_journal_entry_data)
 				new_credit_memo_payment_journal_entry.pay_credit_memo()
-				pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Pay Vendor Credit Memo",message="Credit Memo payment successfully recorded.")
+				pay_credit_memo_confirmation_message = tk.messagebox.showinfo("Apply Vendor Credit Memo",message="Credit Memo payment successfully recorded.")
 
 		except Exception as error:
 
-			pay_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			pay_credit_memo_error_message_3 = tk.messagebox.showinfo(title="Apply Vendor Credit Memo",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -445,4 +449,5 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

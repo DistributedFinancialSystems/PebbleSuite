@@ -7,15 +7,6 @@
 [ ]
 [ ]
 """
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON MODULES:
-[ ]
-[ ]
-[ ]
-"""
 
 import datetime
 from datetime import date
@@ -30,20 +21,18 @@ from tkinter.messagebox import showinfo
 
 class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Vendor"]
 
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
+
 			cursor.execute(self.vendor_sql_script)
 
 			for item in cursor:
@@ -51,9 +40,9 @@ class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				options.append(" ".join(item))
 
 			connection.commit()
+
 			cursor.close()
 
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=550)
 		self.title("Delete Vendor Credit Memo")
@@ -118,6 +107,7 @@ class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()
+
 				cursor.execute(search_vendor_sql_script,[select_vendor])
 
 				for item in cursor:
@@ -125,6 +115,7 @@ class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 					self.listbox.insert(0,item)
 
 				connection.commit()
+
 				cursor.close()
 
 		except Exception as error:
@@ -145,7 +136,6 @@ class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def delete_credit_memo(self):
 
-		#Define SQL.db scripts:
 		query_credit_memo_sql_script = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 		delete_credit_memo_sql_script = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE VENDOR_CREDIT_MEMO_NUMBER=?'''
@@ -180,4 +170,5 @@ class DELETE_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()

@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AR_pay_invoice.py
-[ ]
-[ ]
-[ ]
-"""
-
 import datetime
 from datetime import date
 import sqlite3
@@ -272,11 +262,11 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
-
-		invoice_status = "Open"
-
 		try:
+
+			search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS=?;'''
+
+			invoice_status = "Open"
 
 			for item in self.select_client_listbox.curselection():
 
@@ -314,9 +304,9 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	def select_invoice(self):
 
-		query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?;'''
-
 		try:
+
+			query_invoice_sql_script = '''SELECT * FROM client_invoices WHERE INVOICE_NUMBER=?;'''
 
 			for item in self.listbox.curselection():
 
@@ -354,31 +344,31 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 	def submit_payment(self):
 
-		pay_invoice_update_status_data = []
-		pay_invoice_update_payment_data = []
-		pay_invoice_journal_entry_data = []
-
-		reference_client_name = self.invoice_name_entry_text.get()
-		reference_invoice_number = self.invoice_number_entry_text.get()
-		reference_invoice_paid_date = self.pay_invoice_date_entry_text.get()
-
-		reference_JE_timestamp = datetime.datetime.now()
-		reference_JE_number = None
-		reference_JE_entry_date = self.pay_invoice_date_entry_text.get()
-		reference_client_invoice_number = self.invoice_number_entry_text.get()
-		reference_debit_GL_name = self.pay_invoice_payment_account_text.get()
-		reference_debit_GL_number = None
-		reference_debit_GL_type = None
-		reference_credit_GL_name = self.invoice_asset_GL_entry_text.get()
-		reference_credit_GL_number = None
-		reference_credit_GL_type = None
-		reference_debit_GL_amount = self.invoice_amount_entry_text.get()
-		reference_credit_GL_amount = self.invoice_amount_entry_text.get()
-		reference_JE_client_name = self.invoice_name_entry_text.get()
-		reference_JE_notes = self.invoice_notes_entry_text.get()
-		reference_JE_reconciliation_status = 0
-
 		try:
+
+			pay_invoice_update_status_data = []
+			pay_invoice_update_payment_data = []
+			pay_invoice_journal_entry_data = []
+
+			reference_client_name = self.invoice_name_entry_text.get()
+			reference_invoice_number = self.invoice_number_entry_text.get()
+			reference_invoice_paid_date = self.pay_invoice_date_entry_text.get()
+
+			reference_JE_timestamp = datetime.datetime.now()
+			reference_JE_number = None
+			reference_JE_entry_date = self.pay_invoice_date_entry_text.get()
+			reference_client_invoice_number = self.invoice_number_entry_text.get()
+			reference_debit_GL_name = self.pay_invoice_payment_account_text.get()
+			reference_debit_GL_number = None
+			reference_debit_GL_type = None
+			reference_credit_GL_name = self.invoice_asset_GL_entry_text.get()
+			reference_credit_GL_number = None
+			reference_credit_GL_type = None
+			reference_debit_GL_amount = self.invoice_amount_entry_text.get()
+			reference_credit_GL_amount = self.invoice_amount_entry_text.get()
+			reference_JE_client_name = self.invoice_name_entry_text.get()
+			reference_JE_notes = self.invoice_notes_entry_text.get()
+			reference_JE_reconciliation_status = 0
 
 			if reference_client_name == "":
 

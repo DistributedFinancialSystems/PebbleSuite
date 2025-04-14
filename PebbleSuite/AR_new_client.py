@@ -32,21 +32,15 @@ class NEW_CLIENT_ENTRY:
 
 		with sqlite3.connect("SQL.db") as connection:
 
-			try:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(new_client_sql_script,self.new_client_entry)
 
-				cursor.execute(new_client_sql_script,self.new_client_entry)
+			connection.commit()
 
-				connection.commit()
+			cursor.close()
 
-				cursor.close()
-
-				new_client_confirmation_message = tk.messagebox.showinfo(title="Add New Client",message="New client successfully created.")
-
-			except Exception as error:
-
-				new_client_error_message = tk.messagebox.showinfo(title="Add New Client",message=f"{error}")
+			new_client_confirmation_message = tk.messagebox.showinfo(title="Add New Client",message="New client successfully created.")
 
 
 
@@ -128,61 +122,61 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 
 	def create_new_client(self):
 
-		new_client_data = []
+		try:
 
-		new_client_name = self.client_name_entry.get()
-		new_client_address1 = self.client_address1_entry.get()
-		new_client_address2 = self.client_address2_entry.get()
-		new_client_city = self.client_city_entry.get()
-		new_client_state = self.client_state_entry.get()
-		new_client_zip = self.client_zip_postal_code_entry.get()
-		new_client_country = self.client_country_entry.get()
-		new_client_contact_name = self.client_contact_name_entry.get()
-		new_client_contact_phone = self.client_contact_phone_entry.get()
-		new_client_contact_email = self.client_contact_email_entry.get()
-		new_client_contact_notes = self.client_contact_notes_entry.get()
+			new_client_data = []
 
-		client_names = []
+			new_client_name = self.client_name_entry.get()
+			new_client_address1 = self.client_address1_entry.get()
+			new_client_address2 = self.client_address2_entry.get()
+			new_client_city = self.client_city_entry.get()
+			new_client_state = self.client_state_entry.get()
+			new_client_zip = self.client_zip_postal_code_entry.get()
+			new_client_country = self.client_country_entry.get()
+			new_client_contact_name = self.client_contact_name_entry.get()
+			new_client_contact_phone = self.client_contact_phone_entry.get()
+			new_client_contact_email = self.client_contact_email_entry.get()
+			new_client_contact_notes = self.client_contact_notes_entry.get()
 
-		verify_client_names_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
+			client_names = []
 
-		with sqlite3.connect("SQL.db") as connection:
+			verify_client_names_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
-			cursor = connection.cursor()
+			with sqlite3.connect("SQL.db") as connection:
 
-			cursor.execute(verify_client_names_sql_script)
+				cursor = connection.cursor()
 
-			for item in cursor:
+				cursor.execute(verify_client_names_sql_script)
 
-				client_names.append(*item)
+				for item in cursor:
 
-			connection.commit()
+					client_names.append(*item)
 
-			cursor.close()
+				connection.commit()
 
-		if new_client_name in client_names:
+				cursor.close()
 
-			duplicate_client_name_error_message = tk.messagebox.showinfo(title="Add New Client",message="Duplicate client name:  please use a different name for new client.")
+			if new_client_name in client_names:
 
-		elif new_client_name == "":
+				duplicate_client_name_error_message = tk.messagebox.showinfo(title="Add New Client",message="Duplicate client name:  please use a different name for new client.")
 
-			new_client_name_error_message = tk.messagebox.showinfo(title="Add New Client",message="Client name cannot be blank.")
+			elif new_client_name == "":
 
-		else:
+				new_client_name_error_message = tk.messagebox.showinfo(title="Add New Client",message="Client name cannot be blank.")
 
-			new_client_data.append(new_client_name)
-			new_client_data.append(new_client_address1)
-			new_client_data.append(new_client_address2)
-			new_client_data.append(new_client_city)
-			new_client_data.append(new_client_state)
-			new_client_data.append(new_client_zip)
-			new_client_data.append(new_client_country)
-			new_client_data.append(new_client_contact_name)
-			new_client_data.append(new_client_contact_phone)
-			new_client_data.append(new_client_contact_email)
-			new_client_data.append(new_client_contact_notes)
+			else:
 
-			try:
+				new_client_data.append(new_client_name)
+				new_client_data.append(new_client_address1)
+				new_client_data.append(new_client_address2)
+				new_client_data.append(new_client_city)
+				new_client_data.append(new_client_state)
+				new_client_data.append(new_client_zip)
+				new_client_data.append(new_client_country)
+				new_client_data.append(new_client_contact_name)
+				new_client_data.append(new_client_contact_phone)
+				new_client_data.append(new_client_contact_email)
+				new_client_data.append(new_client_contact_notes)
 
 				new_client = NEW_CLIENT_ENTRY(new_client_data)
 
@@ -190,9 +184,9 @@ class NEW_CLIENT_WINDOW(tk.Toplevel):
 
 				client_names.clear()
 
-			except Exception as error:
+		except Exception as error:
 
-				error_message = tk.messagebox.showinfo(title="Add New Client",message=f"{error}")
+			error_message = tk.messagebox.showinfo(title="Add New Client",message=f"{error}")
 
 
 	def clear_client_data(self):

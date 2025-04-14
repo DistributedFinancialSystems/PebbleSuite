@@ -1,14 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AR_edit_credit_memo.py
-[ ]
-[ ]
-[ ]
-"""
-
-
 import datetime
 from datetime import date
 import sqlite3
@@ -145,9 +134,9 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def search_credit_memos(self):
 
-		search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS="Open";'''
-
 		try:
+
+			search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS="Open";'''
 
 			for item in self.select_client_listbox.curselection():
 
@@ -185,9 +174,9 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def edit_credit_memo(self):
 
-		query_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
-
 		try:
+
+			query_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
 
 			for item in self.listbox.curselection():
 
@@ -224,25 +213,25 @@ class AR_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def submit_changes(self):
 
-		retrieve_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?;'''
-		edit_credit_memo_issue_date_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_ISSUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
-		edit_credit_memo_due_date_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_DUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
-		edit_credit_memo_amount_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_AMOUNT=? WHERE CREDIT_MEMO_NUMBER=?;'''
-		edit_credit_memo_notes_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_NOTES=? WHERE CREDIT_MEMO_NUMBER=?;'''
-
-		retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_CREDIT_MEMO_NUMBER=?;'''
-		edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?;'''
-		edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
-		edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
-		edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
-
-		reference_credit_memo_number = self.credit_memo_number_entry_text.get()
-		new_credit_memo_issue_date = self.credit_memo_issue_date_entry_text.get()
-		new_credit_memo_due_date = self.credit_memo_due_date_entry_text.get()
-		new_credit_memo_amount = self.credit_memo_amount_entry_text.get()
-		new_credit_memo_notes = self.credit_memo_notes_entry_text.get()
-
 		try:
+
+			retrieve_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?;'''
+			edit_credit_memo_issue_date_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_ISSUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
+			edit_credit_memo_due_date_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_DUE_DATE=? WHERE CREDIT_MEMO_NUMBER=?;'''
+			edit_credit_memo_amount_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_AMOUNT=? WHERE CREDIT_MEMO_NUMBER=?;'''
+			edit_credit_memo_notes_sql_script = '''UPDATE client_credit_memos SET CREDIT_MEMO_NOTES=? WHERE CREDIT_MEMO_NUMBER=?;'''
+
+			retrieve_journal_entry_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_CREDIT_MEMO_NUMBER=?;'''
+			edit_JE_date_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DATE=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?;'''
+			edit_JE_debit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_DEBIT_AMOUNT=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
+			edit_JE_credit_amount_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_CREDIT_AMOUNT=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
+			edit_JE_notes_sql_script = '''UPDATE journal_entries SET JOURNAL_ENTRY_NOTES=? WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
+
+			reference_credit_memo_number = self.credit_memo_number_entry_text.get()
+			new_credit_memo_issue_date = self.credit_memo_issue_date_entry_text.get()
+			new_credit_memo_due_date = self.credit_memo_due_date_entry_text.get()
+			new_credit_memo_amount = self.credit_memo_amount_entry_text.get()
+			new_credit_memo_notes = self.credit_memo_notes_entry_text.get()
 
 			if new_credit_memo_issue_date == "":
 

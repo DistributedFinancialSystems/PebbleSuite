@@ -1,14 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AP_delete_credit_memo.py
-[ ]
-[ ]
-[ ]
-"""
-
-
 import datetime
 from datetime import date
 import sqlite3
@@ -97,9 +86,9 @@ class DELETE_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def search_credit_memos(self):
 
-		search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=?'''
-
 		try:
+
+			search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=?'''
 
 			for item in self.select_client_listbox.curselection():
 
@@ -137,13 +126,12 @@ class DELETE_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def delete_credit_memo(self):
 
-		#Define SQL.db scripts:
-		query_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
-		delete_credit_memo_sql_script = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
-		query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
-		delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
-
 		try:
+
+			query_credit_memo_sql_script = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
+			delete_credit_memo_sql_script = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_NUMBER=?'''
+			query_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
+			delete_journal_entries_sql_script = '''DELETE FROM journal_entries WHERE CLIENT_CREDIT_MEMO_NUMBER=?'''
 
 			for item in self.listbox.curselection():
 

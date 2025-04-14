@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -118,13 +117,13 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
 	def search_customer_data(self):
 
-		search_customers_sql_script = '''SELECT * FROM customers WHERE CUSTOMER_NAME=?'''
-
-		search_customer_name = self.clicked.get()
-
-		collect = []
-
 		try:
+
+			search_customers_sql_script = '''SELECT * FROM customers WHERE CUSTOMER_NAME=?'''
+
+			search_customer_name = self.clicked.get()
+
+			collect = []
 
 			if search_customer_name == "Select Customer":
 
@@ -164,31 +163,31 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
 	def change_customer_data(self):
 
-		retrieve_customers_sql_script = '''SELECT * FROM customers;'''
-		edit_customer_address1_sql_script = '''UPDATE customers SET ADDRESS_1=? WHERE CUSTOMER_NAME=?;'''
-		edit_customer_address2_sql_script = '''UPDATE customers SET ADDRESS_2=? WHERE CUSTOMER_NAME=?;'''
-		edit_customer_city_sql_script = '''UPDATE customers SET CITY=? WHERE CUSTOMER_NAME=?;'''
-		edit_customer_state_sql_script = '''UPDATE customers SET STATE=? WHERE CUSTOMER_NAME=?;'''
-		edit_customer_zip_sql_script = '''UPDATE customers SET POSTAL_CODE=? WHERE CUSTOMER_NAME=?;'''
-		edit_customer_country_sql_script = '''UPDATE customers SET COUNTRY=? WHERE CUSTOMER_NAME=?;'''
-		edit_contact_name_sql_script = '''UPDATE customers SET CONTACT_NAME=? WHERE CUSTOMER_NAME=?;'''
-		edit_contact_phone_sql_script = '''UPDATE customers SET CONTACT_PHONE=? WHERE CUSTOMER_NAME=?;'''
-		edit_contact_email_sql_script = '''UPDATE customers SET CONTACT_EMAIL=? WHERE CUSTOMER_NAME=?;'''
-		edit_customer_notes_sql_script = '''UPDATE customers SET CUSTOMER_NOTES=? WHERE CUSTOMER_NAME=?;'''
-
-		search_customer_name = self.clicked.get()
-		new_address1 = self.customer_address1_entry.get()
-		new_address2 = self.customer_address2_entry.get()
-		new_city = self.customer_city_entry.get()
-		new_state = self.customer_state_entry.get()
-		new_zip = self.customer_zip_postal_code_entry.get()
-		new_country = self.customer_country_entry.get()
-		new_contact_name = self.customer_contact_name_entry.get()
-		new_contact_phone = self.customer_contact_phone_entry.get()
-		new_contact_email = self.customer_contact_email_entry.get()
-		new_customer_notes = self.customer_contact_notes_entry.get()
-
 		try:
+
+			retrieve_customers_sql_script = '''SELECT * FROM customers;'''
+			edit_customer_address1_sql_script = '''UPDATE customers SET ADDRESS_1=? WHERE CUSTOMER_NAME=?;'''
+			edit_customer_address2_sql_script = '''UPDATE customers SET ADDRESS_2=? WHERE CUSTOMER_NAME=?;'''
+			edit_customer_city_sql_script = '''UPDATE customers SET CITY=? WHERE CUSTOMER_NAME=?;'''
+			edit_customer_state_sql_script = '''UPDATE customers SET STATE=? WHERE CUSTOMER_NAME=?;'''
+			edit_customer_zip_sql_script = '''UPDATE customers SET POSTAL_CODE=? WHERE CUSTOMER_NAME=?;'''
+			edit_customer_country_sql_script = '''UPDATE customers SET COUNTRY=? WHERE CUSTOMER_NAME=?;'''
+			edit_contact_name_sql_script = '''UPDATE customers SET CONTACT_NAME=? WHERE CUSTOMER_NAME=?;'''
+			edit_contact_phone_sql_script = '''UPDATE customers SET CONTACT_PHONE=? WHERE CUSTOMER_NAME=?;'''
+			edit_contact_email_sql_script = '''UPDATE customers SET CONTACT_EMAIL=? WHERE CUSTOMER_NAME=?;'''
+			edit_customer_notes_sql_script = '''UPDATE customers SET CUSTOMER_NOTES=? WHERE CUSTOMER_NAME=?;'''
+
+			search_customer_name = self.clicked.get()
+			new_address1 = self.customer_address1_entry.get()
+			new_address2 = self.customer_address2_entry.get()
+			new_city = self.customer_city_entry.get()
+			new_state = self.customer_state_entry.get()
+			new_zip = self.customer_zip_postal_code_entry.get()
+			new_country = self.customer_country_entry.get()
+			new_contact_name = self.customer_contact_name_entry.get()
+			new_contact_phone = self.customer_contact_phone_entry.get()
+			new_contact_email = self.customer_contact_email_entry.get()
+			new_customer_notes = self.customer_contact_notes_entry.get()
 
 			if search_customer_name == "Select Customer":
 

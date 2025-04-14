@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -30,9 +29,9 @@ class CUSTOMER_SUMMARY_WINDOW(tk.Toplevel):
 
 	def print_customers(self):
 
-		print_customers_sql_script = '''SELECT * FROM customers;'''
-
 		try:
+
+			print_customers_sql_script = '''SELECT * FROM customers;'''
 
 			with sqlite3.connect("SQL.db") as connection:
 
