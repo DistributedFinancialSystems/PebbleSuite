@@ -7,10 +7,10 @@ from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 
 
-journal_entry_queue = 0
 
 
 class NEW_JOURNAL_ENTRY:
+
 
 	def __init__(self,new_journal_entry):
 
@@ -48,11 +48,54 @@ class NEW_JOURNAL_ENTRY:
 
 
 
+class UPDATE_JOURNAL_ENTRY_CHRONOLOGY:
+
+
+	def __init__(self,journal_entry_chronology):
+
+		self.journal_entry_chronology = journal_entry_chronology
+
+
+	def update_JE_chronology(self):
+
+		update_JE_chronology = '''UPDATE journal_entry_chronology SET JOURNAL_ENTRY_CHRONOLOGY=?'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(update_JE_chronology,self.journal_entry_chronology)
+
+			connection.commit()
+
+			cursor.close()
+
+
+
+
 class NEW_JE_WINDOW(tk.Toplevel):
 
 	alive = False
 
 	try:
+
+		journal_entry_chronology = []
+
+		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(journal_entry_chronology_sql_script)
+
+			for item in cursor:
+
+				journal_entry_chronology.append(item)
+
+			connection.commit()
+
+			cursor.close()
 
 		GL_data = []
 
@@ -92,7 +135,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			self.JE_number_label = ttk.Label(self,text="Journal Entry Number")
 			self.JE_number_label.place(x=220,y=20)
 			self.JE_number_entry_text = tk.StringVar()
-			self.JE_number_entry_text.set(journal_entry_queue)
+			self.JE_number_entry_text.set(self.journal_entry_chronology)
 			self.JE_number_entry = ttk.Entry(self,textvariable=self.JE_number_entry_text,state=tk.DISABLED)
 			self.JE_number_entry.place(x=220,y=45)
 
@@ -160,15 +203,15 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 			if new_debit_GL_name == "Select General Ledger":
 
-				select_debit_GL_error_message = tk.messagebox.showinfo(title="Error",message="Please select a general ledger.")
+				select_debit_GL_error_message = tk.messagebox.showinfo(title="New Journal Entry",message="Please select a general ledger.")
 
 			elif new_credit_GL_name == "Select General Ledger":
 
-				select_credit_GL_error_message = tk.messagebox.showinfo(title="Error",message="Please select a general ledger.")
+				select_credit_GL_error_message = tk.messagebox.showinfo(title="New Journal Entry",message="Please select a general ledger.")
 
 			elif new_GL_debit != new_GL_credit:
 
-				matching_values_error_message = tk.messagebox.showinfo(title="Error",message="Journal entry values must be equal.")
+				matching_values_error_message = tk.messagebox.showinfo(title="New Journal Entry",message="Journal entry values must be equal.")
 
 			else:
 

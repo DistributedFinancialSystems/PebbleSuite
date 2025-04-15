@@ -96,8 +96,8 @@ class NEW_JOURNAL_ENTRY:
 class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
-	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Bank Account";'''
-	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income - Other Income";'''
+	asset_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Asset - Vendor Credit Memos";'''
+	income_GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers WHERE GENERAL_LEDGER_TYPE="Income - Vendor Credit Memos";'''
 
 	alive = False
 
@@ -119,7 +119,7 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		asset_GL_options = ["Select Bank Account"]
+		asset_GL_options = ["Select Asset GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -153,7 +153,7 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=380)
-		self.title("New Credit Memo")
+		self.title("New Vendor Credit Memo")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -176,7 +176,7 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.vendor_credit_memo_due_date_entry = ttk.Entry(self)
 		self.vendor_credit_memo_due_date_entry.place(x=200,y=100)
 
-		self.vendor_credit_memo_number_label = ttk.Label(self,text="Credit Memo Number")
+		self.vendor_credit_memo_number_label = ttk.Label(self,text="Credit Memo Number:")
 		self.vendor_credit_memo_number_label.place(x=20,y=140)
 		self.vendor_credit_memo_number_entry = ttk.Entry(self)
 		self.vendor_credit_memo_number_entry.place(x=200,y=140)
@@ -195,17 +195,17 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.income_GL_option_menu = ttk.OptionMenu(self,self.income_GL_text,income_GL_options[0],*income_GL_options)
 		self.income_GL_option_menu.place(x=200,y=220)
 
-		self.vendor_credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount")
+		self.vendor_credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount:")
 		self.vendor_credit_memo_amount_label.place(x=20,y=260)
 		self.vendor_credit_memo_amount_entry = ttk.Entry(self)
 		self.vendor_credit_memo_amount_entry.place(x=200,y=260)
 
-		self.vendor_credit_memo_notes_label = ttk.Label(self,text="Credit Memo Notes")
+		self.vendor_credit_memo_notes_label = ttk.Label(self,text="Credit Memo Notes:")
 		self.vendor_credit_memo_notes_label.place(x=20,y=300)
 		self.vendor_credit_memo_notes_entry = ttk.Entry(self)
 		self.vendor_credit_memo_notes_entry.place(x=200,y=300)
 
-		self.enter_credit_memo_button = ttk.Button(self,text="Enter Credit Memos",command=self.create_new_credit_memo)
+		self.enter_credit_memo_button = ttk.Button(self,text="Enter Credit Memo",command=self.create_new_credit_memo)
 		self.enter_credit_memo_button.place(x=200,y=340)
 
 		self.credit_memo_report_button = ttk.Button(self,text="Print Credit Memos",command=self.credit_memo_report)

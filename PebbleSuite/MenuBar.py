@@ -1,14 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	MENUBAR.PY
-[ ]
-[ ]
-[ ]
-"""
-
-
 #Python Standard Library modules.
 import sqlite3
 import tkinter as tk
@@ -138,10 +127,6 @@ class MENU_BAR(tk.Menu):
 		self.customer_sales_menu.add_command(label="Edit Customer",command=self.edit_customer)
 		self.customer_sales_menu.add_command(label="Delete Customer",command=self.delete_customer)
 		self.customer_sales_menu.add_command(label="Customer Summary",command=self.customer_summary)
-		self.customer_sales_menu.add_separator()
-		self.customer_sales_menu.add_command(label="New Transaction",command=self.new_sale)
-		self.customer_sales_menu.add_command(label="Delete Transaction",command=self.new_sale)
-		self.customer_sales_menu.add_command(label="Print Receipt",command=self.new_sale)
 		self.add_cascade(label="Customers",menu=self.customer_sales_menu)
 
 		#GL Menu Tkinter widgets
@@ -193,8 +178,10 @@ class MENU_BAR(tk.Menu):
 
 		#Month-End Menu Tkinter widgets:
 		self.month_end_menu = tk.Menu(self)
-		self.month_end_menu.add_command(label="Reconcile",command=self.new_ME)
+		self.month_end_menu.add_command(label="Amortizations",command=self.new_ME)
 		self.month_end_menu.add_command(label="Close Books",command=self.new_ME)
+		self.month_end_menu.add_command(label="Fixed Assets",command=self.new_ME)
+		self.month_end_menu.add_command(label="Reconcile",command=self.new_ME)
 		self.add_cascade(label="Monthly Close",menu=self.month_end_menu)
 
 		#Financial Reports Menu Tkinter widgets
@@ -209,16 +196,21 @@ class MENU_BAR(tk.Menu):
 		self.financial_reports_menu.add_command(label="1099 Forms",command=self.new_reports)
 		self.add_cascade(label="Reporting",menu=self.financial_reports_menu)
 
+		#Sales Menu Tkinter widgets:
+		self.sales_menu = tk.Menu(self)
+		self.sales_menu.add_command(label="New Transaction",command=self.new_sales)
+		self.sales_menu.add_command(label="Delete Transaction",command=self.new_sales)
+		self.sales_menu.add_command(label="Print Receipt",command=self.new_sales)
+		self.sales_menu.add_command(label="Void Transaction",command=self.new_sales)
+		self.add_cascade(label="Sales",menu=self.sales_menu)
+
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
-		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
+		self.settings_menu.add_command(label="Company",command=self.new_settings)
 		self.settings_menu.add_command(label="Database Settings",command=self.new_settings)
+		self.settings_menu.add_command(label="Passwords",command=self.new_settings)
+		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
 		self.add_cascade(label="Settings",menu=self.settings_menu)
-
-		#Financial Tools Menu Tkinter widgets:
-		self.tools_menu = tk.Menu(self)
-		self.tools_menu.add_command(label="Calculator",command=self.calculator)
-		self.add_cascade(label="Tools",menu=self.tools_menu)
 
 
 	"""
@@ -572,6 +564,20 @@ class MENU_BAR(tk.Menu):
 	[ ]
 	[ ]
 	[ ]
+	[ ]	SALES MENU FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
+	def new_sales(self):
+
+		showinfo(title="Sales Menu",message="This is the sales menu.")
+
+	"""
+	[ ]
+	[ ]
+	[ ]
 	[ ]	SETTINGS MENU FUNCTIONS:
 	[ ]
 	[ ]
@@ -582,45 +588,3 @@ class MENU_BAR(tk.Menu):
 
 		showinfo(title="Settings Menu",message="This is the Settings menu!")
 
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	TAXATION MENU FUNCTIONS:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-
-	def new_taxes(self):
-
-		showinfo(title="Taxes Menu",message="This is the Taxes menu!")
-
-
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	TOOLS MENU FUNCTIONS:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-
-	def calculator(self):
-
-		calculator = tk.messagebox.showinfo(title="Tools",message="Calculator")
-
-
-"""
-[ ]
-[ ]
-[ ]
-[ ]	END OF FILE
-[ ]
-[ ]
-[ ]
-"""

@@ -8,12 +8,16 @@ database_name = "SQL.db"
 
 class database:
 
+
 	def __init__(self,connection):
 
 		self.connection = connection
 
 
 	def create_pebblesuite_tables(self):
+
+		journal_entry_chronology = ('''CREATE TABLE IF NOT EXISTS journal_entry_chronology(
+						JOURNAL_ENTRY_CHRONOLOGY INTEGER);''')
 
 		tasks_sql_script = ('''CREATE TABLE IF NOT EXISTS tasks(
 					TASK_DATE TEXT,
@@ -137,7 +141,7 @@ class database:
 
 		journal_entry_sql_script = ('''CREATE TABLE IF NOT EXISTS journal_entries(
 						JOURNAL_ENTRY_TIMESTAMP TIMESTAMP,
-						JOURNAL_ENTRY_NUMBER TEXT,
+						JOURNAL_ENTRY_NUMBER INTEGER,
 						JOURNAL_ENTRY_DATE TIMESTAMP,
 						VENDOR_INVOICE_NUMBER INTEGER,
 						VENDOR_CREDIT_MEMO_NUMBER INTEGER,
@@ -161,6 +165,7 @@ class database:
 
 			cursor = connection.cursor()
 
+			cursor.execute(journal_entry_chronology)
 			cursor.execute(tasks_sql_script)
 			cursor.execute(vendors_sql_script)
 			cursor.execute(clients_sql_script)
@@ -183,6 +188,19 @@ class database:
 
 
 if __name__ == "__main__":
+
 	connect_database = database(database_name)
 	connect_database.create_pebblesuite_tables()
+
+	journal_entry_script = '''INSERT INTO journal_entry_chronology(
+				JOURNAL_ENTRY_CHRONOLOGY)
+				VALUES(1);'''
+
+	with sqlite3.connect("SQL.db") as connection:
+
+		cursor = connection.cursor()
+		cursor.execute(journal_entry_script)
+		connection.commit()
+		cursor.close()
+
 	print("PebbleSuite database tables created!")

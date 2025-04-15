@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AP_edit_invoice.py
-[ ]
-[ ]
-[ ]
-"""
-
 import datetime
 from datetime import date
 import sqlite3

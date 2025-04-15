@@ -40,22 +40,25 @@ class NEW_GL_WINDOW(tk.Toplevel):
 
 	GL_types = 	[
 			"Select GL Type",
-			"Select GL Type",
 			"Asset - Bank Account",
 			"Asset - Inventory",
 			"Asset - Accounts Receivable",
-			"Asset - Fixed Asset",
+			"Asset - Fixed Assets",
+			"Asset - Vendor Credit Memos",
 			"Asset - Other",
 			"Liability - Accounts Payable",
 			"Liability - Notes Payable",
 			"Liability - Long-Term Debt",
+			"Liability - Client Credit Memos",
 			"Liability - Other",
 			"Equity - Owner's Equity",
 			"Equity - Other Investment",
 			"Income - Sales Income",
+			"Income - Vendor Credit Memos",
 			"Income - Other Income",
 			"Expense - Direct Expense",
-			"Expense - Indirect Expense"
+			"Expense - Indirect Expense",
+			"Expense - Client Credit Memos",
 			]
 
 	def __init__(self,*args,**kwargs):
@@ -81,7 +84,7 @@ class NEW_GL_WINDOW(tk.Toplevel):
 		self.GL_type_label.place(x=20,y=100)
 		self.clicked = tk.StringVar()
 		self.clicked.set(f"{self.GL_types[0]}")
-		self.GL_option_menu = ttk.OptionMenu(self,self.clicked,*self.GL_types)
+		self.GL_option_menu = ttk.OptionMenu(self,self.clicked,self.GL_types[0],*self.GL_types)
 		self.GL_option_menu.place(x=200,y=100)
 
 		self.new_GL_button = ttk.Button(self,text="New General Ledger",command=self.create_new_GL)
