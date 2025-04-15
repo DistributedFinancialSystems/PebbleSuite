@@ -1,5 +1,3 @@
-#Python Standard Library dependencies
-
 import datetime
 from datetime import date
 import sqlite3
@@ -13,19 +11,16 @@ from tkinter.messagebox import showinfo
 
 class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	edit_selection_temporary_memory = []
 
 	product_sql_script = '''SELECT PRODUCT_NAME FROM products;'''
 
-	#Define class functions
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Product"]
 
-		#Initialize SQL.db connection:
 		with sqlite3.connect("SQL.db") as connection:
 
 			cursor = connection.cursor()
@@ -40,7 +35,6 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Define class tkinter widgets:
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=340)
 		self.title("Edit Product")
@@ -54,8 +48,6 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 		self.product_name_label = ttk.Label(self,text="Product Name:")
 		self.product_name_label.place(x=20,y=15)
 
-		#Search for Product names in SQL.db.
-		#Insert Product names into Product search listbox widget.
 		self.select_product_scrollbar = ttk.Scrollbar(self)
 		self.select_product_scrollbar.place(x=353,y=45,width=20,height=240)
 		self.select_product_listbox = tk.Listbox(self,yscrollcommand=self.select_product_scrollbar.set)
@@ -64,25 +56,19 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 
 		search_product_name_sql_script = '''SELECT PRODUCT_NAME FROM products;'''
 
-		try:
+		with sqlite3.connect("SQL.db") as connection:
 
-			with sqlite3.connect("SQL.db") as connection:
+			cursor = connection.cursor()
 
-				cursor = connection.cursor()
+			cursor.execute(search_product_name_sql_script)
 
-				cursor.execute(search_product_name_sql_script)
+			connection.commit()
 
-				connection.commit()
+			for item in cursor:
 
-				for item in cursor:
+				self.select_product_listbox.insert(0," ".join(item))
 
-					self.select_product_listbox.insert(0," ".join(item))
-
-				cursor.close()
-
-		except sqlite3.Error as error:
-
-			select_products_error_message = tk.messagebox.showinfo(title="Edit Product",message="Unable to retrieve product data.")
+			cursor.close()
 
 		self.edit_product_button = ttk.Button(self,text="Edit Product",command=self.edit_product)
 		self.edit_product_button.place(x=20,y=300)
@@ -120,15 +106,13 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 
 	def edit_product(self):
 
-		#Define SQL.db scripts:
-		query_product_sql_script = '''SELECT * FROM products WHERE PRODUCT_NAME=?'''
-
-
-		for item in self.select_product_listbox.curselection():
-
-			select_product = self.select_product_listbox.get(item)
-
 		try:
+
+			query_product_sql_script = '''SELECT * FROM products WHERE PRODUCT_NAME=?'''
+
+			for item in self.select_product_listbox.curselection():
+
+				select_product = self.select_product_listbox.get(item)
 
 			with sqlite3.connect("SQL.db") as connection:
 
@@ -153,32 +137,28 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			edit_product_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			edit_product_error_message = tk.messagebox.showinfo(title="Edit Product",message=f"{error}")
 
 
 	def submit_changes(self):
 
-		#Define SQL.db scripts:
-		retrieve_product_sql_script = '''SELECT * FROM products WHERE PRODUCT_NAME=?;'''
-		edit_product_number_sql_script = '''UPDATE products SET PRODUCT_NUMBER=? WHERE PRODUCT_NUMBER=? AND PRODUCT_NAME=? AND PRODUCT_VENDOR_NAME=?;'''
-		edit_product_price_sql_script = '''UPDATE products SET PRODUCT_SALES_PRICE=? WHERE PRODUCT_SALES_PRICE=? AND PRODUCT_NAME=? AND PRODUCT_VENDOR_NAME=?;'''
-
-
-		#Define function variables:
-		product_name = self.edit_selection_temporary_memory[0][0]
-
-		prev_product_number = self.edit_selection_temporary_memory[0][1]
-		new_product_number = self.product_number_entry_text.get()
-
-		vendor_name = self.edit_selection_temporary_memory[0][2]
-
-		prev_product_sales_price = self.edit_selection_temporary_memory[0][3]
-		new_product_sales_price = self.product_sales_price_entry_text.get()
-
-		#Edit Product name:
 		try:
+
+			retrieve_product_sql_script = '''SELECT * FROM products WHERE PRODUCT_NAME=?;'''
+			edit_product_number_sql_script = '''UPDATE products SET PRODUCT_NUMBER=? WHERE PRODUCT_NUMBER=? AND PRODUCT_NAME=? AND PRODUCT_VENDOR_NAME=?;'''
+			edit_product_price_sql_script = '''UPDATE products SET PRODUCT_SALES_PRICE=? WHERE PRODUCT_SALES_PRICE=? AND PRODUCT_NAME=? AND PRODUCT_VENDOR_NAME=?;'''
+
+			product_name = self.edit_selection_temporary_memory[0][0]
+
+			prev_product_number = self.edit_selection_temporary_memory[0][1]
+			new_product_number = self.product_number_entry_text.get()
+
+			vendor_name = self.edit_selection_temporary_memory[0][2]
+
+			prev_product_sales_price = self.edit_selection_temporary_memory[0][3]
+			new_product_sales_price = self.product_sales_price_entry_text.get()
 
 			with sqlite3.connect("SQL.db") as connection:
 
@@ -193,17 +173,16 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 
 				edit_product_names_confirmation_message = tk.messagebox.showinfo("Edit Product",message="Product details successfully changed.")
 
-		except sqlite3.Error as error:
+			self.edit_selection_temporary_memory.clear()
 
-			edit_product_names_error_message = tk.messagebox.showinfo(title="Error",message=f"{error}")
+			self.product_name_entry_text.set("")
+			self.product_number_entry_text.set("")
+			self.product_vendor_name_entry_text.set("")
+			self.product_sales_price_entry_text.set("")
 
-		#Clear temporary memory variable:
-		self.edit_selection_temporary_memory.clear()
+		except Exception as error:
 
-		self.product_name_entry_text.set("")
-		self.product_number_entry_text.set("")
-		self.product_vendor_name_entry_text.set("")
-		self.product_sales_price_entry_text.set("")
+			submit_changes_error_message_1 = tk.messagebox.showinfo(title="Edit Product",message=f"{error}")
 
 
 	def cancel_changes(self):
@@ -217,9 +196,9 @@ class EDIT_PRODUCT_WINDOW(tk.Toplevel):
 			self.product_vendor_name_entry_text.set("")
 			self.product_sales_price_entry_text.set("")
 
-		except:
+		except Exception as error:
 
-			cancel_changes_error_message = tk.messagebox.showinfo(title="Error",message="Unable to clear data entries.")
+			cancel_changes_error_message = tk.messagebox.showinfo(title="Edit Product",message=f"{error}")
 
 
 	def destroy(self):

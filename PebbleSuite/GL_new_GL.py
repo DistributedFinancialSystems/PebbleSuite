@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	GL_new_GL.py
-[ ]
-[ ]
-[ ]
-"""
-
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -33,18 +23,13 @@ class NEW_GL_ENTRY:
 
 		with sqlite3.connect("SQL.db") as connection:
 
-			try:
-				cursor = connection.cursor()
+			cursor = connection.cursor()
 
-				cursor.execute(new_GL_sql_script,self.new_GL_entry)
+			cursor.execute(new_GL_sql_script,self.new_GL_entry)
 
-				connection.commit()
+			connection.commit()
 
-				cursor.close()
-
-			except sqlite3.Error as error:
-
-				print(f"NEW_GL_ENTRY ERROR: {error}")
+			cursor.close()
 
 
 
@@ -108,55 +93,55 @@ class NEW_GL_WINDOW(tk.Toplevel):
 
 	def create_new_GL(self):
 
-		GL_data = []
+		try:
 
-		new_GL_name = self.GL_name_entry.get()
-		GL_data.append(new_GL_name)
-		new_GL_number = self.GL_number_entry.get()
-		GL_data.append(new_GL_number)
-		new_GL_type = self.clicked.get()
-		GL_data.append(new_GL_type)
+			GL_data = []
 
-		GL_names = []
+			new_GL_name = self.GL_name_entry.get()
+			GL_data.append(new_GL_name)
+			new_GL_number = self.GL_number_entry.get()
+			GL_data.append(new_GL_number)
+			new_GL_type = self.clicked.get()
+			GL_data.append(new_GL_type)
 
-		verify_GL_names_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
+			GL_names = []
 
-		with sqlite3.connect("SQL.db") as connection:
+			verify_GL_names_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
 
-			cursor = connection.cursor()
+			with sqlite3.connect("SQL.db") as connection:
 
-			cursor.execute(verify_GL_names_sql_script)
+				cursor = connection.cursor()
 
-			for item in cursor:
+				cursor.execute(verify_GL_names_sql_script)
 
-				GL_names.append(*item)
+				for item in cursor:
 
-			connection.commit()
+					GL_names.append(*item)
 
-			cursor.close()
+				connection.commit()
 
-		if new_GL_name in GL_names:
+				cursor.close()
 
-			duplicate_GL_name_error_message = tk.messagebox.showinfo(title="New General Ledger",message="Duplicate GL name:  please use a different name for new GL.")
+			if new_GL_name in GL_names:
 
-		else:
+				duplicate_GL_name_error_message = tk.messagebox.showinfo(title="New General Ledger",message="Duplicate GL name:  please use a different name for new GL.")
 
-			try:
+			else:
 
 				new_GL = NEW_GL_ENTRY(GL_data)
 				new_GL.enter_data()
 				new_GL_confirmation_message = tk.messagebox.showinfo(title="New General Ledger",message="New General Ledger created!")
 
-			except Exception as error:
+		except Exception as error:
 
-				new_GL_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"{error}")
+			new_GL_error_message = tk.messagebox.showinfo(title="New General Ledger",message=f"{error}")
 
 
 	def print_GL_data(self):
 
-		print_GL_sql_script = '''SELECT * FROM general_ledgers'''
-
 		try:
+
+			print_GL_sql_script = '''SELECT * FROM general_ledgers'''
 
 			with sqlite3.connect("SQL.db") as connection:
 

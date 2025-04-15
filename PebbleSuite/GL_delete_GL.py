@@ -1,27 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	GL_delete_GL.py:
-[ ]
-[ ]
-[ ]
-"""
-
-
-"""
-[ ]
-[ ]
-[ ]
-[ ]	IMPORT PYTHON LIBRARIES:
-[ ]
-[ ]
-[ ]
-"""
-
-
-#Python Standard Library dependencies
-
 import datetime
 from datetime import date
 import sqlite3
@@ -35,7 +11,6 @@ from tkinter.messagebox import showinfo
 
 class DELETE_GL_WINDOW(tk.Toplevel):
 
-	#Define class variables
 	alive = False
 
 	delete_selection_temporary_memory = []
@@ -45,7 +20,6 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select General Ledger"]
-
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -60,7 +34,6 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 			connection.commit()
 
 			cursor.close()
-
 
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=270)
@@ -129,9 +102,9 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 
 	def delete_general_ledger(self):
 
-		query_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?'''
-
 		try:
+
+			query_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?'''
 
 			for item in self.select_general_ledger_listbox.curselection():
 
@@ -166,42 +139,40 @@ class DELETE_GL_WINDOW(tk.Toplevel):
 
 	def submit_changes(self):
 
-		#general_ledgers SQL scripts:
-		retrieve_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
-		delete_general_ledger_name_sql_script = '''DELETE FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
-
-		#journal_entries SQL scripts:
-		retrieve_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE GENERAL_LEDGER_NAME=?;'''
-		delete_JE_debit_GL_name_sql_script = '''DELETE FROM journal_entries WHERE DEBIT_GENERAL_LEDGER_NAME=?;'''
-		delete_JE_credit_GL_name_sql_script = '''DELETE FROM journal_entries WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
-
-		#vendor_invoices SQL scripts:
-		retrieve_vendor_invoices_sql_script_1 = '''SELECT * FROM vendor_invoices WHERE INVOICE_LIABILITY_ACCOUNT=?;'''
-		retrieve_vendor_invoices_sql_script_2 = '''SELECT * FROM vendor_invoices WHERE INVOICE_EXPENSE_ACCOUNT=?;'''
-		delete_vendor_invoices_sql_script_1 = '''DELETE FROM vendor_invoices WHERE INVOICE_LIABILITY_ACCOUNT=?;'''
-		delete_vendor_invoices_sql_script_2 = '''DELETE FROM vendor_invoices WHERE INVOICE_EXPENSE_ACCOUNT=?;'''
-
-		#client_invoices SQL scripts:
-		retrieve_client_invoices_sql_script_1 = '''SELECT * FROM client_invoices WHERE INVOICE_ASSET_ACCOUNT=?;'''
-		retrieve_client_invoices_sql_script_2 = '''SELECT * FROM client_invoices WHERE INVOICE_INCOME_ACCOUNT=?;'''
-		delete_client_invoices_sql_script_1 = '''DELETE FROM client_invoices WHERE INVOICE_ASSET_ACCOUNT=?;'''
-		delete_client_invoices_sql_script_2 = '''DELETE FROM client_invoices WHERE INVOICE_INCOME_ACCOUNT=?;'''
-
-		#vendor_credit_memos SQL scripts:
-
-		retrieve_vendor_credit_memos_sql_script_1 = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_ASSET_ACCOUNT=?;'''
-		retrieve_vendor_credit_memos_sql_script_2 = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_INCOME_ACCOUNT=?;'''
-		delete_vendor_credit_memos_sql_script_1 = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_ASSET_ACCOUNT=?;'''
-		delete_vendor_credit_memos_sql_script_2 = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_INCOME_ACCOUNT=?;'''
-
-		#client_credit_memos SQL scripts:
-
-		retrieve_client_credit_memos_sql_script_1 = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_LIABILITY_ACCOUNT=?;'''
-		retrieve_client_credit_memos_sql_script_2 = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_EXPENSE_ACCOUNT=?;'''
-		delete_client_credit_memos_sql_script_1 = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_LIABILITY_ACCOUNT=?;'''
-		delete_client_credit_memos_sql_script_2 = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_EXPENSE_ACCOUNT=?;'''
-
 		try:
+
+			#general_ledgers SQL scripts:
+			retrieve_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
+			delete_general_ledger_name_sql_script = '''DELETE FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
+
+			#journal_entries SQL scripts:
+			retrieve_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE GENERAL_LEDGER_NAME=?;'''
+			delete_JE_debit_GL_name_sql_script = '''DELETE FROM journal_entries WHERE DEBIT_GENERAL_LEDGER_NAME=?;'''
+			delete_JE_credit_GL_name_sql_script = '''DELETE FROM journal_entries WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
+
+			#vendor_invoices SQL scripts:
+			retrieve_vendor_invoices_sql_script_1 = '''SELECT * FROM vendor_invoices WHERE INVOICE_LIABILITY_ACCOUNT=?;'''
+			retrieve_vendor_invoices_sql_script_2 = '''SELECT * FROM vendor_invoices WHERE INVOICE_EXPENSE_ACCOUNT=?;'''
+			delete_vendor_invoices_sql_script_1 = '''DELETE FROM vendor_invoices WHERE INVOICE_LIABILITY_ACCOUNT=?;'''
+			delete_vendor_invoices_sql_script_2 = '''DELETE FROM vendor_invoices WHERE INVOICE_EXPENSE_ACCOUNT=?;'''
+
+			#client_invoices SQL scripts:
+			retrieve_client_invoices_sql_script_1 = '''SELECT * FROM client_invoices WHERE INVOICE_ASSET_ACCOUNT=?;'''
+			retrieve_client_invoices_sql_script_2 = '''SELECT * FROM client_invoices WHERE INVOICE_INCOME_ACCOUNT=?;'''
+			delete_client_invoices_sql_script_1 = '''DELETE FROM client_invoices WHERE INVOICE_ASSET_ACCOUNT=?;'''
+			delete_client_invoices_sql_script_2 = '''DELETE FROM client_invoices WHERE INVOICE_INCOME_ACCOUNT=?;'''
+
+			#vendor_credit_memos SQL scripts:
+			retrieve_vendor_credit_memos_sql_script_1 = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_ASSET_ACCOUNT=?;'''
+			retrieve_vendor_credit_memos_sql_script_2 = '''SELECT * FROM vendor_credit_memos WHERE CREDIT_MEMO_INCOME_ACCOUNT=?;'''
+			delete_vendor_credit_memos_sql_script_1 = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_ASSET_ACCOUNT=?;'''
+			delete_vendor_credit_memos_sql_script_2 = '''DELETE FROM vendor_credit_memos WHERE CREDIT_MEMO_INCOME_ACCOUNT=?;'''
+
+			#client_credit_memos SQL scripts:
+			retrieve_client_credit_memos_sql_script_1 = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_LIABILITY_ACCOUNT=?;'''
+			retrieve_client_credit_memos_sql_script_2 = '''SELECT * FROM client_credit_memos WHERE CREDIT_MEMO_EXPENSE_ACCOUNT=?;'''
+			delete_client_credit_memos_sql_script_1 = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_LIABILITY_ACCOUNT=?;'''
+			delete_client_credit_memos_sql_script_2 = '''DELETE FROM client_credit_memos WHERE CREDIT_MEMO_EXPENSE_ACCOUNT=?;'''
 
 			prev_general_ledger_name = self.delete_selection_temporary_memory[0][0]
 			prev_general_ledger_number = self.delete_selection_temporary_memory[0][1]

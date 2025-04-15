@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import datetime
 from datetime import date
 import sqlite3
@@ -102,10 +101,9 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 	def edit_general_ledger(self):
 
-		query_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?'''
-
-
 		try:
+
+			query_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?'''
 
 			for item in self.select_general_ledger_listbox.curselection():
 
@@ -140,16 +138,16 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 	def submit_changes(self):
 
-		retrieve_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
-		edit_general_ledger_name_sql_script = '''UPDATE general_ledgers SET GENERAL_LEDGER_NAME=? WHERE GENERAL_LEDGER_NAME=?;'''
-
-		retrieve_debit_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE DEBIT_GENERAL_LEDGER_NAME=?;'''
-		edit_JE_debit_GL_name_sql_script = '''UPDATE journal_entries SET DEBIT_GENERAL_LEDGER_NAME=? WHERE DEBIT_GENERAL_LEDGER_NAME=?'''
-
-		retrieve_credit_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
-		edit_JE_credit_GL_name_sql_script = '''UPDATE journal_entries SET CREDIT_GENERAL_LEDGER_NAME=? WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
-
 		try:
+
+			retrieve_general_ledger_sql_script = '''SELECT * FROM general_ledgers WHERE GENERAL_LEDGER_NAME=?;'''
+			edit_general_ledger_name_sql_script = '''UPDATE general_ledgers SET GENERAL_LEDGER_NAME=? WHERE GENERAL_LEDGER_NAME=?;'''
+
+			retrieve_debit_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE DEBIT_GENERAL_LEDGER_NAME=?;'''
+			edit_JE_debit_GL_name_sql_script = '''UPDATE journal_entries SET DEBIT_GENERAL_LEDGER_NAME=? WHERE DEBIT_GENERAL_LEDGER_NAME=?'''
+
+			retrieve_credit_journal_entries_sql_script = '''SELECT * FROM journal_entries WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
+			edit_JE_credit_GL_name_sql_script = '''UPDATE journal_entries SET CREDIT_GENERAL_LEDGER_NAME=? WHERE CREDIT_GENERAL_LEDGER_NAME=?;'''
 
 			prev_general_ledger_name = self.edit_selection_temporary_memory[0][0]
 
