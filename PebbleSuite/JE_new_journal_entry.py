@@ -135,7 +135,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			self.JE_number_label = ttk.Label(self,text="Journal Entry Number")
 			self.JE_number_label.place(x=220,y=20)
 			self.JE_number_entry_text = tk.StringVar()
-			self.JE_number_entry_text.set(self.journal_entry_chronology)
+			self.JE_number_entry_text.set(self.journal_entry_chronology[0])
 			self.JE_number_entry = ttk.Entry(self,textvariable=self.JE_number_entry_text,state=tk.DISABLED)
 			self.JE_number_entry.place(x=220,y=45)
 
@@ -201,6 +201,12 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			new_JE_notes = self.JE_notes_entry.get()
 			new_JE_reconciliation_status = 0
 
+			next_JE_number = []
+
+			int_format_JE_number = int(new_JE_number)
+
+			int_next_JE_number = int_format_JE_number + 1
+
 			if new_debit_GL_name == "Select General Ledger":
 
 				select_debit_GL_error_message = tk.messagebox.showinfo(title="New Journal Entry",message="Please select a general ledger.")
@@ -231,6 +237,11 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 				new_journal_entry = NEW_JOURNAL_ENTRY(JE_data)
 				new_journal_entry.journal_entry()
+
+				next_JE_number.append(int_next_JE_number)
+
+				next_journal_entry_number = UPDATE_JOURNAL_ENTRY_CHRONOLOGY(next_JE_number)
+				next_journal_entry_number.update_JE_chronology()
 
 				new_JE_confirmation_message = tk.messagebox.showinfo(title="New Journal Entry",message="New journal entry successfully entered.")
 
