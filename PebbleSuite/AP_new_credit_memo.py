@@ -116,8 +116,9 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def __init__(self,*args,**kwargs):
 
-		#Journal Entry Chronology:
-
+		#______________________________________________
+		#Retrieve journal entry chronology from SQL.db:
+		#______________________________________________
 		journal_entry_chronology = []
 
 		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
@@ -136,8 +137,9 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Journal Entry Chronology:
-
+		#__________________________________
+		#Retrieve vendor names from SQL.db:
+		#__________________________________
 		options = ["Select Vendor"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -154,6 +156,9 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#___________________________________________
+		#Retrieve asset general ledgers from SQL.db:
+		#___________________________________________
 		asset_GL_options = ["Select Asset GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -170,6 +175,9 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#____________________________________________
+		#Retrieve income general ledgers from SQL.db:
+		#____________________________________________
 		income_GL_options = ["Select Income GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -186,6 +194,9 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#___________________________
+		#Initialize Tkinter widgets:
+		#___________________________
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=420)
 		self.title("New Vendor Credit Memo")
@@ -210,17 +221,20 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		self.vendor_credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date:")
 		self.vendor_credit_memo_issue_date_label.place(x=20,y=100)
-		self.vendor_credit_memo_issue_date_entry = ttk.Entry(self)
+		self.vendor_credit_memo_issue_date_entry_text = tk.StringVar()
+		self.vendor_credit_memo_issue_date_entry = ttk.Entry(self,textvariable=self.vendor_credit_memo_issue_date_entry_text)
 		self.vendor_credit_memo_issue_date_entry.place(x=200,y=100)
 
 		self.vendor_credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date:")
 		self.vendor_credit_memo_due_date_label.place(x=20,y=140)
-		self.vendor_credit_memo_due_date_entry = ttk.Entry(self)
+		self.vendor_credit_memo_due_date_entry_text = tk.StringVar()
+		self.vendor_credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.vendor_credit_memo_due_date_entry_text)
 		self.vendor_credit_memo_due_date_entry.place(x=200,y=140)
 
 		self.vendor_credit_memo_number_label = ttk.Label(self,text="Credit Memo Number:")
 		self.vendor_credit_memo_number_label.place(x=20,y=180)
-		self.vendor_credit_memo_number_entry = ttk.Entry(self)
+		self.vendor_credit_memo_number_entry_text = tk.StringVar()
+		self.vendor_credit_memo_number_entry = ttk.Entry(self,textvariable=self.vendor_credit_memo_number_entry_text)
 		self.vendor_credit_memo_number_entry.place(x=200,y=180)
 
 		self.asset_GL_label = ttk.Label(self,text="Credit Memo Asset GL:")
@@ -239,12 +253,14 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		self.vendor_credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount:")
 		self.vendor_credit_memo_amount_label.place(x=20,y=300)
-		self.vendor_credit_memo_amount_entry = ttk.Entry(self)
+		self.vendor_credit_memo_amount_entry_text = tk.StringVar()
+		self.vendor_credit_memo_amount_entry = ttk.Entry(self,textvariable=self.vendor_credit_memo_amount_entry_text)
 		self.vendor_credit_memo_amount_entry.place(x=200,y=300)
 
 		self.vendor_credit_memo_notes_label = ttk.Label(self,text="Credit Memo Notes:")
 		self.vendor_credit_memo_notes_label.place(x=20,y=340)
-		self.vendor_credit_memo_notes_entry = ttk.Entry(self)
+		self.vendor_credit_memo_notes_entry_text = tk.StringVar()
+		self.vendor_credit_memo_notes_entry = ttk.Entry(self,textvariable=self.vendor_credit_memo_notes_entry_text)
 		self.vendor_credit_memo_notes_entry.place(x=200,y=340)
 
 		self.enter_credit_memo_button = ttk.Button(self,text="Enter Credit Memo",command=self.create_new_credit_memo)
@@ -324,9 +340,10 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			else:
 
+				#______________________________________________
+				#Collect credit memo data from Tkinter widgets:
+				#______________________________________________
 				new_credit_memo_data = []
-
-				new_JE_data = []
 
 				new_credit_memo_data.append(new_credit_memo_name)
 				new_credit_memo_data.append(new_credit_memo_issue_date)
@@ -340,6 +357,11 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				new_credit_memo = NEW_VENDOR_CREDIT_MEMO_ENTRY(new_credit_memo_data)
 				new_credit_memo.enter_credit_memo()
+
+				#________________________________________________
+				#Collect journal entry data from Tkinter widgets:
+				#________________________________________________
+				new_JE_data = []
 
 				new_JE_data.append(new_journal_entry_timestamp)
 				new_JE_data.append(new_journal_entry_number)
@@ -359,6 +381,10 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				journal_entry.journal_entry()
+
+				#_______________________________________________________
+				#Update journal entry chronology for next journal entry:
+				#_______________________________________________________
 
 				next_JE_number = []
 

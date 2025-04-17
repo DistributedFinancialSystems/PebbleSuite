@@ -246,6 +246,10 @@ class NEW_JE_WINDOW(tk.Toplevel):
 				next_journal_entry_number = UPDATE_JOURNAL_ENTRY_CHRONOLOGY(next_JE_number)
 				next_journal_entry_number.update_JE_chronology()
 
+				#Clear data from Tkinter entry widgets:
+
+				#Put code here.
+
 				new_JE_confirmation_message = tk.messagebox.showinfo(title="New Journal Entry",message="New journal entry successfully entered.")
 
 		except Exception as error:

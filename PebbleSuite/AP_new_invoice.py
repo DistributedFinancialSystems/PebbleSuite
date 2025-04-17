@@ -118,8 +118,9 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 	def __init__(self,*args,**kwargs):
 
-		#Journal Entry Chronology code:
-
+		#___________________________________________________
+		#Retrieve journal entry chronology data from SQL.db:
+		#___________________________________________________
 		journal_entry_chronology = []
 
 		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
@@ -138,8 +139,9 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Journal Entry Chronology code:
-
+		#__________________________________
+		#Retrieve vendor names from SQL.db:
+		#__________________________________
 		options = ["Select Vendor"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -156,6 +158,9 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#____________________________________
+		#Retrieve liability GL's from SQL.db:
+		#____________________________________
 		liability_GL_options = ["Select Liability GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -172,6 +177,9 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#__________________________________
+		#Retrieve expense GL's from SQL.db:
+		#__________________________________
 		expense_GL_options = ["Select Expense GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -188,6 +196,9 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#_______________________
+		#Define Tkinter widgets:
+		#_______________________
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=420)
 		self.title("New Vendor Invoice")
@@ -212,17 +223,20 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 		self.vendor_invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
 		self.vendor_invoice_issue_date_label.place(x=20,y=100)
-		self.vendor_invoice_issue_date_entry = ttk.Entry(self)
+		self.vendor_invoice_issue_date_entry_text = tk.StringVar()
+		self.vendor_invoice_issue_date_entry = ttk.Entry(self,textvariable=self.vendor_invoice_issue_date_entry_text)
 		self.vendor_invoice_issue_date_entry.place(x=200,y=100)
 
 		self.vendor_invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
 		self.vendor_invoice_due_date_label.place(x=20,y=140)
-		self.vendor_invoice_due_date_entry = ttk.Entry(self)
+		self.vendor_invoice_due_date_entry_text = tk.StringVar()
+		self.vendor_invoice_due_date_entry = ttk.Entry(self,textvariable=self.vendor_invoice_due_date_entry_text)
 		self.vendor_invoice_due_date_entry.place(x=200,y=140)
 
 		self.vendor_invoice_number_label = ttk.Label(self,text="Invoice Number")
 		self.vendor_invoice_number_label.place(x=20,y=180)
-		self.vendor_invoice_number_entry = ttk.Entry(self)
+		self.vendor_invoice_number_entry_text = tk.StringVar()
+		self.vendor_invoice_number_entry = ttk.Entry(self,textvariable=self.vendor_invoice_number_entry_text)
 		self.vendor_invoice_number_entry.place(x=200,y=180)
 
 		self.liability_GL_label = ttk.Label(self,text="Invoice Liability GL:")
@@ -241,12 +255,14 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 		self.vendor_invoice_amount_label = ttk.Label(self,text="Invoice Amount")
 		self.vendor_invoice_amount_label.place(x=20,y=300)
-		self.vendor_invoice_amount_entry = ttk.Entry(self)
+		self.vendor_invoice_amount_entry_text = tk.StringVar()
+		self.vendor_invoice_amount_entry = ttk.Entry(self,textvariable=self.vendor_invoice_amount_entry_text)
 		self.vendor_invoice_amount_entry.place(x=200,y=300)
 
 		self.vendor_invoice_notes_label = ttk.Label(self,text="Invoice Notes")
 		self.vendor_invoice_notes_label.place(x=20,y=340)
-		self.vendor_invoice_notes_entry = ttk.Entry(self)
+		self.vendor_invoice_notes_entry_text = tk.StringVar()
+		self.vendor_invoice_notes_entry = ttk.Entry(self,textvariable=self.vendor_invoice_notes_entry_text)
 		self.vendor_invoice_notes_entry.place(x=200,y=340)
 
 		self.enter_invoice_button = ttk.Button(self,text="Enter Invoice",command=self.create_new_invoice)
@@ -264,6 +280,11 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			if self.clicked.get() == "Select Vendor":
 
 				select_vendor_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Select a vendor for new invoice.")
+
+			#Journal entry number error messages:
+			elif self.JE_number_entry.get() == "":
+
+				journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Invoice",message="Journal entry number cannot be blank.")
 
 			#Invoice issue date error messages:
 			elif self.vendor_invoice_issue_date_entry.get() == "":
@@ -297,9 +318,10 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			else:
 
+				#__________________________________________
+				#Collect invoice data from Tkinter widgets:
+				#__________________________________________
 				new_invoice_data = []
-
-				new_JE_data = []
 
 				new_invoice_name = self.clicked.get()
 				new_invoice_issue_date = self.vendor_invoice_issue_date_entry.get()
@@ -325,6 +347,11 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				new_invoice = NEW_INVOICE_ENTRY(new_invoice_data)
 				new_invoice.enter_invoice()
+
+				#________________________________________________
+				#Collect journal entry data from Tkinter widgets:
+				#________________________________________________
+				new_JE_data = []
 
 				journal_entry_timestamp = datetime.datetime.now()
 
@@ -363,6 +390,9 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 				JE_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				JE_entry.journal_entry()
 
+				#_______________________________________________________
+				#Update journal entry chronology for next journal entry:
+				#_______________________________________________________
 				next_JE_number = []
 
 				int_format_JE_number = int(new_journal_entry_number)
@@ -374,6 +404,18 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 				next_journal_entry_number.update_JE_chronology()
 
 				confirmation_message = tk.messagebox.showinfo(title="New Vendor Invoice",message="New vendor invoice successfully created.")
+
+				#______________________________________
+				#Clear data from Tkinter entry widgets:
+				#______________________________________
+				self.JE_number_entry_text.set("")
+				self.vendor_invoice_issue_date_entry_text.set("")
+				self.vendor_invoice_due_date_entry_text.set("")
+				self.vendor_invoice_number_entry_text.set("")
+				self.liability_GL_text.set("Select Liability GL")
+				self.expense_GL_text.set("Select Expense GL")
+				self.vendor_invoice_amount_entry_text.set("")
+				self.vendor_invoice_notes_entry_text.set("")
 
 		except Exception as error:
 

@@ -125,15 +125,35 @@ class NEW_GL_WINDOW(tk.Toplevel):
 
 				cursor.close()
 
+			#new_GL_name error messages:
+
 			if new_GL_name in GL_names:
 
-				duplicate_GL_name_error_message = tk.messagebox.showinfo(title="New General Ledger",message="Duplicate GL name:  please use a different name for new GL.")
+				GL_name_error_message_1 = tk.messagebox.showinfo(title="New General Ledger",message="Duplicate general ledger name.  Please select a different general ledger name.")
+
+			elif new_GL_name == "":
+
+				GL_name_error_message_2 = tk.messagebox.showinfo(title="New General Ledger",message="General ledger name cannot be blank.")
+
+			#new_GL_number error messages:
+
+			elif new_GL_number == "":
+
+				GL_number_error_message_1 = tk.messagebox.showinfo(title="New General Ledger",message="General ledger number cannot be blank.")
+
+			#new_GL_type error messages:
+
+			elif new_GL_type == "Select GL Type":
+
+				GL_type_error_message_1 = tk.messagebox.showinfo(title="New General Ledger",message="Select general ledger type.")
 
 			else:
 
 				new_GL = NEW_GL_ENTRY(GL_data)
+
 				new_GL.enter_data()
-				new_GL_confirmation_message = tk.messagebox.showinfo(title="New General Ledger",message="New General Ledger created!")
+
+				new_GL_confirmation_message = tk.messagebox.showinfo(title="New General Ledger",message="New General Ledger created.")
 
 		except Exception as error:
 
