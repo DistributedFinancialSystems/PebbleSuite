@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AP_new_invoice.py
-[ ]
-[ ]
-[ ]
-"""
-
 import datetime
 from datetime import date
 import sqlite3
@@ -92,6 +82,28 @@ class NEW_JOURNAL_ENTRY:
 			cursor.close()
 
 
+class UPDATE_JOURNAL_ENTRY_CHRONOLOGY:
+
+	def __init__(self,journal_entry_chronology):
+
+		self.journal_entry_chronology = journal_entry_chronology
+
+
+	def update_JE_chronology(self):
+
+		update_JE_chronology = '''UPDATE journal_entry_chronology SET JOURNAL_ENTRY_CHRONOLOGY=?;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(update_JE_chronology,self.journal_entry_chronology)
+
+			connection.commit()
+
+			cursor.close()
+
+
 
 
 class NEW_INVOICE_WINDOW(tk.Toplevel):
@@ -103,6 +115,28 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 	alive = False
 
 	def __init__(self,*args,**kwargs):
+
+		#Journal Entry Chronology code:
+
+		journal_entry_chronology = []
+
+		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(journal_entry_chronology_sql_script)
+
+			for item in cursor:
+
+				journal_entry_chronology.append(item)
+
+			connection.commit()
+
+			cursor.close()
+
+		#Journal Entry Chronology code:
 
 		options = ["Select Vendor"]
 
@@ -153,8 +187,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 			cursor.close()
 
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=380)
-		self.title("New Invoice")
+		self.config(width=390,height=420)
+		self.title("New Vendor Invoice")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
@@ -167,50 +201,57 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 		self.vendor_option_menu = ttk.OptionMenu(self,self.clicked,options[0],*options)
 		self.vendor_option_menu.place(x=200,y=20)
 
+		self.JE_number_label = ttk.Label(self,text="Journal Entry Number:")
+		self.JE_number_label.place(x=20,y=60)
+		self.JE_number_entry_text = tk.StringVar()
+		self.JE_number_entry_text.set(journal_entry_chronology[0])
+		self.JE_number_entry = ttk.Entry(self,textvariable=self.JE_number_entry_text,state=tk.DISABLED)
+		self.JE_number_entry.place(x=200,y=60)
+
 		self.vendor_invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
-		self.vendor_invoice_issue_date_label.place(x=20,y=60)
+		self.vendor_invoice_issue_date_label.place(x=20,y=100)
 		self.vendor_invoice_issue_date_entry = ttk.Entry(self)
-		self.vendor_invoice_issue_date_entry.place(x=200,y=60)
+		self.vendor_invoice_issue_date_entry.place(x=200,y=100)
 
 		self.vendor_invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
-		self.vendor_invoice_due_date_label.place(x=20,y=100)
+		self.vendor_invoice_due_date_label.place(x=20,y=140)
 		self.vendor_invoice_due_date_entry = ttk.Entry(self)
-		self.vendor_invoice_due_date_entry.place(x=200,y=100)
+		self.vendor_invoice_due_date_entry.place(x=200,y=140)
 
 		self.vendor_invoice_number_label = ttk.Label(self,text="Invoice Number")
-		self.vendor_invoice_number_label.place(x=20,y=140)
+		self.vendor_invoice_number_label.place(x=20,y=180)
 		self.vendor_invoice_number_entry = ttk.Entry(self)
-		self.vendor_invoice_number_entry.place(x=200,y=140)
+		self.vendor_invoice_number_entry.place(x=200,y=180)
 
 		self.liability_GL_label = ttk.Label(self,text="Invoice Liability GL:")
-		self.liability_GL_label.place(x=20,y=180)
+		self.liability_GL_label.place(x=20,y=220)
 		self.liability_GL_text = tk.StringVar()
 		self.liability_GL_text.set("Select Liability GL")
 		self.liability_GL_option_menu = ttk.OptionMenu(self,self.liability_GL_text,liability_GL_options[0],*liability_GL_options)
-		self.liability_GL_option_menu.place(x=200,y=180)
+		self.liability_GL_option_menu.place(x=200,y=220)
 
 		self.expense_GL_label = tk.Label(self,text="Invoice Expense GL:")
-		self.expense_GL_label.place(x=20,y=220)
+		self.expense_GL_label.place(x=20,y=260)
 		self.expense_GL_text = tk.StringVar()
 		self.expense_GL_text.set("Select Expense GL")
 		self.expense_GL_option_menu = ttk.OptionMenu(self,self.expense_GL_text,expense_GL_options[0],*expense_GL_options)
-		self.expense_GL_option_menu.place(x=200,y=220)
+		self.expense_GL_option_menu.place(x=200,y=260)
 
 		self.vendor_invoice_amount_label = ttk.Label(self,text="Invoice Amount")
-		self.vendor_invoice_amount_label.place(x=20,y=260)
+		self.vendor_invoice_amount_label.place(x=20,y=300)
 		self.vendor_invoice_amount_entry = ttk.Entry(self)
-		self.vendor_invoice_amount_entry.place(x=200,y=260)
+		self.vendor_invoice_amount_entry.place(x=200,y=300)
 
 		self.vendor_invoice_notes_label = ttk.Label(self,text="Invoice Notes")
-		self.vendor_invoice_notes_label.place(x=20,y=300)
+		self.vendor_invoice_notes_label.place(x=20,y=340)
 		self.vendor_invoice_notes_entry = ttk.Entry(self)
-		self.vendor_invoice_notes_entry.place(x=200,y=300)
+		self.vendor_invoice_notes_entry.place(x=200,y=340)
 
 		self.enter_invoice_button = ttk.Button(self,text="Enter Invoice",command=self.create_new_invoice)
-		self.enter_invoice_button.place(x=200,y=340)
+		self.enter_invoice_button.place(x=200,y=380)
 
 		self.invoice_report_button = ttk.Button(self,text="Print Invoices",command=self.invoice_report)
-		self.invoice_report_button.place(x=20,y=340)
+		self.invoice_report_button.place(x=20,y=380)
 
 
 	def create_new_invoice(self):
@@ -256,6 +297,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				new_invoice_data = []
 
+				new_JE_data = []
+
 				new_invoice_name = self.clicked.get()
 				new_invoice_issue_date = self.vendor_invoice_issue_date_entry.get()
 				new_invoice_due_date = self.vendor_invoice_due_date_entry.get()
@@ -283,10 +326,8 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				journal_entry_timestamp = datetime.datetime.now()
 
-				new_JE_data = []
-
 				new_journal_entry_timestamp = journal_entry_timestamp
-				new_journal_entry_number = None
+				new_journal_entry_number = self.JE_number_entry.get()
 				new_journal_entry_date = self.vendor_invoice_issue_date_entry.get()
 				new_invoice_number = self.vendor_invoice_number_entry.get()
 				new_debit_general_ledger_name = self.expense_GL_text.get()
@@ -320,7 +361,17 @@ class NEW_INVOICE_WINDOW(tk.Toplevel):
 				JE_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				JE_entry.journal_entry()
 
-				confirmation_message = tk.messagebox.showinfo(title="New Vendor Invoice",message="New Invoice Created.")
+				next_JE_number = []
+
+				int_format_JE_number = int(new_journal_entry_number)
+				int_next_JE_number = int_format_JE_number + 1
+
+				next_JE_number.append(int_next_JE_number)
+
+				next_journal_entry_number = UPDATE_JOURNAL_ENTRY_CHRONOLOGY(next_JE_number)
+				next_journal_entry_number.update_JE_chronology()
+
+				confirmation_message = tk.messagebox.showinfo(title="New Vendor Invoice",message="New vendor invoice successfully created.")
 
 		except Exception as error:
 

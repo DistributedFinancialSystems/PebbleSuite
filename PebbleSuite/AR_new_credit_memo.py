@@ -83,6 +83,29 @@ class NEW_JOURNAL_ENTRY:
 
 
 
+class UPDATE_JOURNAL_ENTRY_CHRONOLOGY:
+
+	def __init__(self,journal_entry_chronology):
+
+		self.journal_entry_chronology = journal_entry_chronology
+
+	def update_JE_chronology(self):
+
+		update_JE_chronology = '''UPDATE journal_entry_chronology SET JOURNAL_ENTRY_CHRONOLOGY=?;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(update_JE_chronology,self.journal_entry_chronology)
+
+			connection.commit()
+
+			cursor.close()
+
+
+
+
 class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
@@ -92,6 +115,28 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 	alive = False
 
 	def __init__(self,*args,**kwargs):
+
+		#Journal Entry Chronology code:
+
+		journal_entry_chronology = []
+
+		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(journal_entry_chronology_sql_script)
+
+			for item in cursor:
+
+				journal_entry_chronology.append(item)
+
+			connection.commit()
+
+			cursor.close()
+
+		#Journal Entry Chronology code:
 
 		options = ["Select Client"]
 
@@ -142,7 +187,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			cursor.close()
 
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=380)
+		self.config(width=390,height=420)
 		self.title("New Client Credit Memo")
 		self.focus()
 		self.resizable(0,0)
@@ -156,50 +201,57 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.client_option_menu = ttk.OptionMenu(self,self.clicked,options[0],*options)
 		self.client_option_menu.place(x=200,y=20)
 
+		self.JE_number_label = ttk.Label(self,text="Journal Entry Number:")
+		self.JE_number_label.place(x=20,y=60)
+		self.JE_number_entry_text = tk.StringVar()
+		self.JE_number_entry_text.set(journal_entry_chronology[0])
+		self.JE_number_entry = ttk.Entry(self,textvariable=self.JE_number_entry_text,state=tk.DISABLED)
+		self.JE_number_entry.place(x=200,y=60)
+
 		self.client_credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date:")
-		self.client_credit_memo_issue_date_label.place(x=20,y=60)
+		self.client_credit_memo_issue_date_label.place(x=20,y=100)
 		self.client_credit_memo_issue_date_entry = ttk.Entry(self)
-		self.client_credit_memo_issue_date_entry.place(x=200,y=60)
+		self.client_credit_memo_issue_date_entry.place(x=200,y=100)
 
 		self.client_credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date:")
-		self.client_credit_memo_due_date_label.place(x=20,y=100)
+		self.client_credit_memo_due_date_label.place(x=20,y=140)
 		self.client_credit_memo_due_date_entry = ttk.Entry(self)
-		self.client_credit_memo_due_date_entry.place(x=200,y=100)
+		self.client_credit_memo_due_date_entry.place(x=200,y=140)
 
 		self.client_credit_memo_number_label = ttk.Label(self,text="Credit Memo Number:")
-		self.client_credit_memo_number_label.place(x=20,y=140)
+		self.client_credit_memo_number_label.place(x=20,y=180)
 		self.client_credit_memo_number_entry = ttk.Entry(self)
-		self.client_credit_memo_number_entry.place(x=200,y=140)
+		self.client_credit_memo_number_entry.place(x=200,y=180)
 
 		self.liability_GL_label = ttk.Label(self,text="Credit Memo Liability GL:")
-		self.liability_GL_label.place(x=20,y=180)
+		self.liability_GL_label.place(x=20,y=220)
 		self.liability_GL_text = tk.StringVar()
 		self.liability_GL_text.set("Select Liability GL")
 		self.liability_GL_option_menu = ttk.OptionMenu(self,self.liability_GL_text,liability_GL_options[0],*liability_GL_options)
-		self.liability_GL_option_menu.place(x=200,y=180)
+		self.liability_GL_option_menu.place(x=200,y=220)
 
 		self.expense_GL_label = tk.Label(self,text="Credit Memo Expense GL:")
-		self.expense_GL_label.place(x=20,y=220)
+		self.expense_GL_label.place(x=20,y=260)
 		self.expense_GL_text = tk.StringVar()
 		self.expense_GL_text.set("Select Expense GL")
 		self.expense_GL_option_menu = ttk.OptionMenu(self,self.expense_GL_text,expense_GL_options[0],*expense_GL_options)
-		self.expense_GL_option_menu.place(x=200,y=220)
+		self.expense_GL_option_menu.place(x=200,y=260)
 
 		self.client_credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount:")
-		self.client_credit_memo_amount_label.place(x=20,y=260)
+		self.client_credit_memo_amount_label.place(x=20,y=300)
 		self.client_credit_memo_amount_entry = ttk.Entry(self)
-		self.client_credit_memo_amount_entry.place(x=200,y=260)
+		self.client_credit_memo_amount_entry.place(x=200,y=300)
 
 		self.client_credit_memo_notes_label = ttk.Label(self,text="Credit Memo Notes:")
-		self.client_credit_memo_notes_label.place(x=20,y=300)
+		self.client_credit_memo_notes_label.place(x=20,y=340)
 		self.client_credit_memo_notes_entry = ttk.Entry(self)
-		self.client_credit_memo_notes_entry.place(x=200,y=300)
+		self.client_credit_memo_notes_entry.place(x=200,y=340)
 
 		self.enter_credit_memo_button = ttk.Button(self,text="Enter Credit Memos",command=self.create_new_credit_memo)
-		self.enter_credit_memo_button.place(x=200,y=340)
+		self.enter_credit_memo_button.place(x=200,y=380)
 
 		self.credit_memo_report_button = ttk.Button(self,text="Print Credit Memos",command=self.credit_memo_report)
-		self.credit_memo_report_button.place(x=20,y=340)
+		self.credit_memo_report_button.place(x=20,y=380)
 
 
 	def create_new_credit_memo(self):
@@ -219,7 +271,7 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			journal_entry_timestamp = datetime.datetime.now()
 
 			new_journal_entry_timestamp = journal_entry_timestamp
-			new_journal_entry_number = None
+			new_journal_entry_number = self.JE_number_entry.get()
 			new_journal_entry_date = self.client_credit_memo_issue_date_entry.get()
 			new_credit_memo_number = self.client_credit_memo_number_entry.get()
 			new_debit_general_ledger_name = self.expense_GL_text.get()
@@ -273,6 +325,8 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				new_credit_memo_data = []
 
+				new_JE_data = []
+
 				new_credit_memo_data.append(new_credit_memo_name)
 				new_credit_memo_data.append(new_credit_memo_issue_date)
 				new_credit_memo_data.append(new_credit_memo_due_date)
@@ -285,8 +339,6 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				new_credit_memo = NEW_CLIENT_CREDIT_MEMO_ENTRY(new_credit_memo_data)
 				new_credit_memo.enter_credit_memo()
-
-				new_JE_data = []
 
 				new_JE_data.append(new_journal_entry_timestamp)
 				new_JE_data.append(new_journal_entry_number)
@@ -306,6 +358,16 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				journal_entry.journal_entry()
+
+				next_JE_number = []
+
+				int_format_JE_number = int(new_journal_entry_number)
+				int_next_JE_number = int_format_JE_number + 1
+
+				next_JE_number.append(int_next_JE_number)
+
+				next_journal_entry_number = UPDATE_JOURNAL_ENTRY_CHRONOLOGY(next_JE_number)
+				next_journal_entry_number.update_JE_chronology()
 
 				create_new_credit_memo_confirmation_message_1 = tk.messagebox.showinfo(title="New Client Credit Memo",message="New Credit Memo Created.")
 

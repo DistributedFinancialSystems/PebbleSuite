@@ -79,46 +79,49 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 	try:
 
-		journal_entry_chronology = []
-
-		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
-
-		with sqlite3.connect("SQL.db") as connection:
-
-			cursor = connection.cursor()
-
-			cursor.execute(journal_entry_chronology_sql_script)
-
-			for item in cursor:
-
-				journal_entry_chronology.append(item)
-
-			connection.commit()
-
-			cursor.close()
-
-		GL_data = []
-
-		GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
-
-		GL_options = ["Select General Ledger"]
-
-		with sqlite3.connect("SQL.db") as connection:
-
-			cursor = connection.cursor()
-
-			cursor.execute(GL_sql_script)
-
-			for item in cursor:
-
-				GL_options.append(" ".join(item))
-
-			connection.commit()
-
-			cursor.close()
-
-
 		def __init__(self,*args,**kwargs):
+
+			#Journal Entry Chronology code:
+
+			journal_entry_chronology = []
+
+			journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(journal_entry_chronology_sql_script)
+
+				for item in cursor:
+
+					journal_entry_chronology.append(item)
+
+				connection.commit()
+
+				cursor.close()
+
+			#Journal Entry Chronology code:
+
+			GL_data = []
+
+			GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
+
+			GL_options = ["Select General Ledger"]
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(GL_sql_script)
+
+				for item in cursor:
+
+					GL_options.append(" ".join(item))
+
+				connection.commit()
+
+				cursor.close()
 
 			super().__init__(*args,**kwargs)
 			self.config(width=400,height=340)
@@ -135,7 +138,7 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			self.JE_number_label = ttk.Label(self,text="Journal Entry Number")
 			self.JE_number_label.place(x=220,y=20)
 			self.JE_number_entry_text = tk.StringVar()
-			self.JE_number_entry_text.set(self.journal_entry_chronology[0])
+			self.JE_number_entry_text.set(journal_entry_chronology[0])
 			self.JE_number_entry = ttk.Entry(self,textvariable=self.JE_number_entry_text,state=tk.DISABLED)
 			self.JE_number_entry.place(x=220,y=45)
 
@@ -145,10 +148,10 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			self.JE_notes_entry.place(x=20,y=110)
 
 			self.debit = tk.StringVar()
-			self.debit.set(f"{self.GL_options[0]}")
+			self.debit.set(f"{GL_options[0]}")
 			self.debit_GL_option_menu_label = ttk.Label(self,text="Debit General Ledger")
 			self.debit_GL_option_menu_label.place(x=20,y=150)
-			self.debit_GL_option_menu = ttk.OptionMenu(self,self.debit,self.GL_options[0],*self.GL_options)
+			self.debit_GL_option_menu = ttk.OptionMenu(self,self.debit,GL_options[0],*GL_options)
 			self.debit_GL_option_menu.place(x=20,y=175)
 			self.debit_GL_amount_label = ttk.Label(self,text="Debit Amount")
 			self.debit_GL_amount_label.place(x=220,y=150)
@@ -156,10 +159,10 @@ class NEW_JE_WINDOW(tk.Toplevel):
 			self.debit_GL_amount_entry.place(x=220,y=175)
 
 			self.credit = tk.StringVar()
-			self.credit.set(f"{self.GL_options[0]}")
+			self.credit.set(f"{GL_options[0]}")
 			self.credit_GL_option_menu_label = ttk.Label(self,text="Credit General Ledger")
 			self.credit_GL_option_menu_label.place(x=20,y=220)
-			self.credit_GL_option_menu = ttk.OptionMenu(self,self.credit,self.GL_options[0],*self.GL_options)
+			self.credit_GL_option_menu = ttk.OptionMenu(self,self.credit,GL_options[0],*GL_options)
 			self.credit_GL_option_menu.place(x=20,y=245)
 			self.credit_GL_amount_label = ttk.Label(self,text="Credit Amount")
 			self.credit_GL_amount_label.place(x=220,y=220)
@@ -200,6 +203,8 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 			new_JE_notes = self.JE_notes_entry.get()
 			new_JE_reconciliation_status = 0
+
+			#Working here:
 
 			next_JE_number = []
 
