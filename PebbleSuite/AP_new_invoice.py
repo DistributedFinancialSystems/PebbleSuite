@@ -82,6 +82,8 @@ class NEW_JOURNAL_ENTRY:
 			cursor.close()
 
 
+
+
 class UPDATE_JOURNAL_ENTRY_CHRONOLOGY:
 
 	def __init__(self,journal_entry_chronology):

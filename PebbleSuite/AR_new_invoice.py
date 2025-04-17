@@ -26,8 +26,9 @@ class AR_NEW_INVOICE_ENTRY:
 					INVOICE_INCOME_ACCOUNT,
 					INVOICE_AMOUNT,
 					INVOICE_NOTES,
-					INVOICE_STATUS)
-					VALUES(?,?,?,?,?,?,?,?,?);'''
+					INVOICE_STATUS,
+					INVOICE_PAID_DATE)
+					VALUES(?,?,?,?,?,?,?,?,?,?);'''
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -320,6 +321,7 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				new_invoice_data.append(new_invoice_amount)
 				new_invoice_data.append(new_invoice_notes)
 				new_invoice_data.append(new_invoice_status)
+				new_invoice_data.append(new_invoice_paid_date)
 
 				new_invoice = AR_NEW_INVOICE_ENTRY(new_invoice_data)
 				new_invoice.enter_invoice()
@@ -369,9 +371,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				next_JE_number.append(int_next_JE_number)
 
 				next_journal_entry_number = UPDATE_JOURNAL_ENTRY_CHRONOLOGY(next_JE_number)
-				next_journal_entry_number.update_JE_chronology
+				next_journal_entry_number.update_JE_chronology()
 
-				journal_entry_confirmation_message = tk.messagebox.showinfo(title="New Client Invoice",message="New client invoice created")
+				journal_entry_confirmation_message = tk.messagebox.showinfo(title="New Client Invoice",message="New client invoice successfully created.")
 
 		except Exception as error:
 

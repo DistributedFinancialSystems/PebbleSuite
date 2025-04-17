@@ -58,7 +58,7 @@ class UPDATE_JOURNAL_ENTRY_CHRONOLOGY:
 
 	def update_JE_chronology(self):
 
-		update_JE_chronology = '''UPDATE journal_entry_chronology SET JOURNAL_ENTRY_CHRONOLOGY=?'''
+		update_JE_chronology = '''UPDATE journal_entry_chronology SET JOURNAL_ENTRY_CHRONOLOGY=?;'''
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -203,8 +203,6 @@ class NEW_JE_WINDOW(tk.Toplevel):
 
 			new_JE_notes = self.JE_notes_entry.get()
 			new_JE_reconciliation_status = 0
-
-			#Working here:
 
 			next_JE_number = []
 
