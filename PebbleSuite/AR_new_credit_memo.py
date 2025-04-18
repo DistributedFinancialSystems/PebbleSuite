@@ -116,8 +116,9 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def __init__(self,*args,**kwargs):
 
-		#Journal Entry Chronology code:
-
+		#_____________________________________________________
+		#Retrieving journal entry chronology data from SQL.db:
+		#_____________________________________________________
 		journal_entry_chronology = []
 
 		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
@@ -136,8 +137,9 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Journal Entry Chronology code:
-
+		#____________________________________
+		#Retrieving client names from SQL.db:
+		#____________________________________
 		options = ["Select Client"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -154,6 +156,9 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#______________________________________
+		#Retrieving liability GL's from SQL.db:
+		#______________________________________
 		liability_GL_options = ["Select Liability GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -170,6 +175,9 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#____________________________________
+		#Retrieving expense GL's from SQL.db:
+		#____________________________________
 		expense_GL_options = ["Select Expense GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -186,6 +194,9 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#____________________________
+		#Configuring Tkinter widgets:
+		#____________________________
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=420)
 		self.title("New Client Credit Memo")
@@ -210,17 +221,20 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		self.client_credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date:")
 		self.client_credit_memo_issue_date_label.place(x=20,y=100)
-		self.client_credit_memo_issue_date_entry = ttk.Entry(self)
+		self.client_credit_memo_issue_date_entry_text = tk.StringVar()
+		self.client_credit_memo_issue_date_entry = ttk.Entry(self,textvariable=self.client_credit_memo_issue_date_entry_text)
 		self.client_credit_memo_issue_date_entry.place(x=200,y=100)
 
 		self.client_credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date:")
 		self.client_credit_memo_due_date_label.place(x=20,y=140)
-		self.client_credit_memo_due_date_entry = ttk.Entry(self)
+		self.client_credit_memo_due_date_entry_text = tk.StringVar()
+		self.client_credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.client_credit_memo_due_date_entry_text)
 		self.client_credit_memo_due_date_entry.place(x=200,y=140)
 
 		self.client_credit_memo_number_label = ttk.Label(self,text="Credit Memo Number:")
 		self.client_credit_memo_number_label.place(x=20,y=180)
-		self.client_credit_memo_number_entry = ttk.Entry(self)
+		self.client_credit_memo_number_entry_text = tk.StringVar()
+		self.client_credit_memo_number_entry = ttk.Entry(self,textvariable=self.client_credit_memo_number_entry_text)
 		self.client_credit_memo_number_entry.place(x=200,y=180)
 
 		self.liability_GL_label = ttk.Label(self,text="Credit Memo Liability GL:")
@@ -239,12 +253,14 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 		self.client_credit_memo_amount_label = ttk.Label(self,text="Credit Memo Amount:")
 		self.client_credit_memo_amount_label.place(x=20,y=300)
-		self.client_credit_memo_amount_entry = ttk.Entry(self)
+		self.client_credit_memo_amount_entry_text = tk.StringVar()
+		self.client_credit_memo_amount_entry = ttk.Entry(self,textvariable=self.client_credit_memo_amount_entry_text)
 		self.client_credit_memo_amount_entry.place(x=200,y=300)
 
 		self.client_credit_memo_notes_label = ttk.Label(self,text="Credit Memo Notes:")
 		self.client_credit_memo_notes_label.place(x=20,y=340)
-		self.client_credit_memo_notes_entry = ttk.Entry(self)
+		self.client_credit_memo_notes_entry_text = tk.StringVar()
+		self.client_credit_memo_notes_entry = ttk.Entry(self,textvariable=self.client_credit_memo_notes_entry_text)
 		self.client_credit_memo_notes_entry.place(x=200,y=340)
 
 		self.enter_credit_memo_button = ttk.Button(self,text="Enter Credit Memos",command=self.create_new_credit_memo)
@@ -323,9 +339,10 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 			else:
 
+				#_________________________________________________
+				#Collecting credit memo data from Tkinter widgets:
+				#_________________________________________________
 				new_credit_memo_data = []
-
-				new_JE_data = []
 
 				new_credit_memo_data.append(new_credit_memo_name)
 				new_credit_memo_data.append(new_credit_memo_issue_date)
@@ -339,6 +356,11 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				new_credit_memo = NEW_CLIENT_CREDIT_MEMO_ENTRY(new_credit_memo_data)
 				new_credit_memo.enter_credit_memo()
+
+				#___________________________________________________
+				#Collecting journal entry data from Tkinter widgets:
+				#___________________________________________________
+				new_JE_data = []
 
 				new_JE_data.append(new_journal_entry_timestamp)
 				new_JE_data.append(new_journal_entry_number)
@@ -359,6 +381,9 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				journal_entry.journal_entry()
 
+				#_________________________________________________________
+				#Updating journal entry chronology for next journal entry:
+				#_________________________________________________________
 				next_JE_number = []
 
 				int_format_JE_number = int(new_journal_entry_number)
@@ -370,6 +395,18 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 				next_journal_entry_number.update_JE_chronology()
 
 				create_new_credit_memo_confirmation_message_1 = tk.messagebox.showinfo(title="New Client Credit Memo",message="New Credit Memo Created.")
+
+				#_________________________________________
+				#Clearing data from Tkinter entry widgets:
+				#_________________________________________
+				self.JE_number_entry_text.set("")
+				self.client_credit_memo_issue_date_entry_text.set("")
+				self.client_credit_memo_due_date_entry_text.set("")
+				self.client_credit_memo_number_entry_text.set("")
+				self.liability_GL_text.set("Select Liability GL")
+				self.expense_GL_text.set("Select Expense GL")
+				self.client_credit_memo_amount_entry_text.set("")
+				self.client_credit_memo_notes_entry_text.set("")
 
 		except Exception as error:
 
@@ -406,3 +443,4 @@ class NEW_CLIENT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.__class__.alive = False
 
 		return super().destroy()
+

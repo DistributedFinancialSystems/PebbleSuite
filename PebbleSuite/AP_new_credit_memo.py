@@ -398,6 +398,19 @@ class NEW_VENDOR_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 				confirmation_message = tk.messagebox.showinfo(title="New Vendor Credit Memo",message="New Credit Memo Created.")
 
+				#_______________________________________________________
+				#Update journal entry chronology for next journal entry:
+				#_______________________________________________________
+
+				self.JE_number_entry_text.set("")
+				self.vendor_credit_memo_issue_date_entry_text.set("")
+				self.vendor_credit_memo_due_date_entry_text.set("")
+				self.vendor_credit_memo_number_entry_text.set("")
+				self.asset_GL_text.set("Select Asset GL")
+				self.income_GL_text.set("Select Income GL")
+				self.vendor_credit_memo_amount_entry_text.set("")
+				self.vendor_credit_memo_notes_entry_text.set("")
+
 		except Exception as error:
 
 			journal_entry_error_message_1 = tk.messagebox.showinfo(title="New Vendor Credit Memo",message=f"Create New Credit Memo:  {error}")

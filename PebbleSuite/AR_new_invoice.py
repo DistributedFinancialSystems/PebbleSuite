@@ -118,8 +118,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 	def __init__(self,*args,**kwargs):
 
-		#Journal Entry Chronology code:
-
+		#___________________________________________________
+		#Retrieve journal entry chronology data from SQL.db:
+		#___________________________________________________
 		journal_entry_chronology = []
 
 		journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
@@ -138,8 +139,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
-		#Journal Entry Chronology code:
-
+		#__________________________________
+		#Retrieve client names from SQL.db:
+		#__________________________________
 		options = ["Select Client"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -156,6 +158,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#___________________________________________
+		#Retrieve asset general ledgers from SQL.db:
+		#___________________________________________
 		asset_GL_options = ["Select Asset GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -172,6 +177,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#____________________________________________
+		#Retrieve income general ledgers from SQL.db:
+		#____________________________________________
 		income_GL_options = ["Select Income GL"]
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -188,6 +196,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		#__________________________
+		#Configure Tkinter widgets:
+		#__________________________
 		super().__init__(*args,**kwargs)
 		self.config(width=390,height=420)
 		self.title("New Client Invoice")
@@ -212,17 +223,20 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 		self.client_invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
 		self.client_invoice_issue_date_label.place(x=20,y=100)
-		self.client_invoice_issue_date_entry = ttk.Entry(self)
+		self.client_invoice_issue_date_entry_text = tk.StringVar()
+		self.client_invoice_issue_date_entry = ttk.Entry(self,textvariable=self.client_invoice_issue_date_entry_text)
 		self.client_invoice_issue_date_entry.place(x=200,y=100)
 
 		self.client_invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
 		self.client_invoice_due_date_label.place(x=20,y=140)
-		self.client_invoice_due_date_entry = ttk.Entry(self)
+		self.client_invoice_due_date_entry_text = tk.StringVar()
+		self.client_invoice_due_date_entry = ttk.Entry(self,textvariable=self.client_invoice_due_date_entry_text)
 		self.client_invoice_due_date_entry.place(x=200,y=140)
 
 		self.client_invoice_number_label = ttk.Label(self,text="Invoice Number")
 		self.client_invoice_number_label.place(x=20,y=180)
-		self.client_invoice_number_entry = ttk.Entry(self)
+		self.client_invoice_number_entry_text = tk.StringVar()
+		self.client_invoice_number_entry = ttk.Entry(self,textvariable=self.client_invoice_number_entry_text)
 		self.client_invoice_number_entry.place(x=200,y=180)
 
 		self.asset_GL_label = ttk.Label(self,text="Invoice Asset GL:")
@@ -241,12 +255,14 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 		self.client_invoice_amount_label = ttk.Label(self,text="Invoice Amount")
 		self.client_invoice_amount_label.place(x=20,y=300)
-		self.client_invoice_amount_entry = ttk.Entry(self)
+		self.client_invoice_amount_entry_text = tk.StringVar()
+		self.client_invoice_amount_entry = ttk.Entry(self,textvariable=self.client_invoice_amount_entry_text)
 		self.client_invoice_amount_entry.place(x=200,y=300)
 
 		self.client_invoice_notes_label = ttk.Label(self,text="Invoice Notes")
 		self.client_invoice_notes_label.place(x=20,y=340)
-		self.client_invoice_notes_entry = ttk.Entry(self)
+		self.client_invoice_notes_entry_text = tk.StringVar()
+		self.client_invoice_notes_entry = ttk.Entry(self,textvariable=self.client_invoice_notes_entry_text)
 		self.client_invoice_notes_entry.place(x=200,y=340)
 
 		self.enter_invoice_button = ttk.Button(self,text="Enter Invoice",command=self.create_new_invoice)
@@ -297,9 +313,10 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 			else:
 
+				#__________________________________________
+				#Collect invoice data from Tkinter widgets:
+				#__________________________________________
 				new_invoice_data = []
-
-				new_JE_data = []
 
 				new_invoice_name = self.clicked.get()
 				new_invoice_issue_date = self.client_invoice_issue_date_entry.get()
@@ -325,6 +342,11 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 
 				new_invoice = AR_NEW_INVOICE_ENTRY(new_invoice_data)
 				new_invoice.enter_invoice()
+
+				#________________________________________________
+				#Collect journal entry data from Tkinter widgets:
+				#________________________________________________
+				new_JE_data = []
 
 				journal_entry_timestamp = datetime.datetime.now()
 
@@ -363,6 +385,9 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				journal_entry = NEW_JOURNAL_ENTRY(new_JE_data)
 				journal_entry.journal_entry()
 
+				#_______________________________________________________
+				#Update journal entry chronology for next journal entry:
+				#_______________________________________________________
 				next_JE_number = []
 
 				int_format_JE_number = int(new_journal_entry_number)
@@ -374,6 +399,18 @@ class AR_NEW_INVOICE_WINDOW(tk.Toplevel):
 				next_journal_entry_number.update_JE_chronology()
 
 				journal_entry_confirmation_message = tk.messagebox.showinfo(title="New Client Invoice",message="New client invoice successfully created.")
+
+				#______________________________________
+				#Clear data from Tkinter entry widgets:
+				#______________________________________
+				self.JE_number_entry_text.set("")
+				self.client_invoice_issue_date_entry_text.set("")
+				self.client_invoice_due_date_entry_text.set("")
+				self.client_invoice_number_entry_text.set("")
+				self.asset_GL_text.set("Select Asset GL")
+				self.income_GL_text.set("Select Income GL")
+				self.client_invoice_amount_entry_text.set("")
+				self.client_invoice_notes_entry_text.set("")
 
 		except Exception as error:
 
