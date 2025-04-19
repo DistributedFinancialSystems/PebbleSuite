@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
+import stripe
 
 
 
@@ -38,6 +39,38 @@ class NEW_CUSTOMER_ENTRY:
 			connection.commit()
 
 			cursor.close()
+
+	def stripe_entry(self,customer_name):
+
+		try:
+
+			stripe_api_key = None
+
+			retrieve_stripe_api_key = '''SELECT * FROM stripe_api_key;'''
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(retrieve_stripe_api_key)
+
+				for item in cursor:
+
+					stripe_api_key = str(*item)
+
+					print(stripe_api_key)
+
+				connection.commit()
+
+				cursor.close()
+
+			stripe.api_key = stripe_api_key
+
+			customer = stripe.Customer.create(name=customer_name)
+
+		except Exception as error:
+
+			print(error)
 
 
 
@@ -177,6 +210,8 @@ class NEW_CUSTOMER_WINDOW(tk.Toplevel):
 				new_customer = NEW_CUSTOMER_ENTRY(new_customer_data)
 
 				new_customer.enter_data()
+
+				new_customer.stripe_entry(new_customer_name)
 
 				customer_names.clear()
 
