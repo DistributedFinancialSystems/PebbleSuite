@@ -16,6 +16,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
+import stripe
 
 #PebbleSuite custom modules.
 from MenuBar import *
@@ -84,6 +85,9 @@ from Reports_AP_aging_report import *
 from Reports_AR_aging_report import *
 from Reports_vendor_summary import *
 from Reports_client_summary import *
+
+#Settings Menu modules:
+from Settings_stripe_account import *
 
 
 

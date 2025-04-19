@@ -16,6 +16,9 @@ class database:
 
 	def create_pebblesuite_tables(self):
 
+		stripe_api_script = ('''CREATE TABLE IF NOT EXISTS stripe_api_key(
+					STRIPE_API_KEY TEXT);''')
+
 		journal_entry_chronology = ('''CREATE TABLE IF NOT EXISTS journal_entry_chronology(
 						JOURNAL_ENTRY_CHRONOLOGY INTEGER);''')
 
@@ -165,6 +168,7 @@ class database:
 
 			cursor = connection.cursor()
 
+			cursor.execute(stripe_api_script)
 			cursor.execute(journal_entry_chronology)
 			cursor.execute(tasks_sql_script)
 			cursor.execute(vendors_sql_script)
@@ -192,6 +196,10 @@ if __name__ == "__main__":
 	connect_database = database(database_name)
 	connect_database.create_pebblesuite_tables()
 
+	stripe_API_key_default = '''INSERT INTO stripe_api_key(
+				STRIPE_API_KEY)
+				VALUES(0);'''
+
 	journal_entry_script = '''INSERT INTO journal_entry_chronology(
 				JOURNAL_ENTRY_CHRONOLOGY)
 				VALUES(1);'''
@@ -199,6 +207,7 @@ if __name__ == "__main__":
 	with sqlite3.connect("SQL.db") as connection:
 
 		cursor = connection.cursor()
+		cursor.execute(stripe_API_key_default)
 		cursor.execute(journal_entry_script)
 		connection.commit()
 		cursor.close()

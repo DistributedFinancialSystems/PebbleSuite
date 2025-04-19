@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
+import stripe
 
 #Accounts Payable Menu modules:
 from AP_new_vendor import *
@@ -69,6 +70,9 @@ from Reports_AP_aging_report import *
 from Reports_AR_aging_report import *
 from Reports_vendor_summary import *
 from Reports_client_summary import *
+
+#Settings Menu modules:
+from Settings_stripe_account import *
 
 
 
@@ -210,6 +214,7 @@ class MENU_BAR(tk.Menu):
 		self.settings_menu.add_command(label="Database Settings",command=self.new_settings)
 		self.settings_menu.add_command(label="Passwords",command=self.new_settings)
 		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
+		self.settings_menu.add_command(label="Stripe Account",command=self.update_stripe_API_key)
 		self.add_cascade(label="Settings",menu=self.settings_menu)
 
 
@@ -588,3 +593,10 @@ class MENU_BAR(tk.Menu):
 
 		showinfo(title="Settings Menu",message="This is the Settings menu!")
 
+	def update_stripe_API_key(self):
+
+		if not STRIPE_ACCOUNT_WINDOW.alive:
+			self.secondary_window = STRIPE_ACCOUNT_WINDOW()
+
+
+#End of MenuBar.py file.
