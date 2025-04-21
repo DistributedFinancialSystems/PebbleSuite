@@ -58,8 +58,6 @@ class NEW_CUSTOMER_ENTRY:
 
 					stripe_api_key = str(*item)
 
-					print(stripe_api_key)
-
 				connection.commit()
 
 				cursor.close()
