@@ -112,7 +112,8 @@ class database:
 					CONTACT_NAME TEXT,
 					CONTACT_PHONE TEXT,
 					CONTACT_EMAIL TEXT,
-					CUSTOMER_NOTES TEXT);''')
+					CUSTOMER_NOTES TEXT,
+					STRIPE_ID TEXT);''')
 
 		customer_sales_sql_script = ('''CREATE TABLE IF NOT EXISTS customer_sales(
 						SALE_DATE TIMESTAMP,

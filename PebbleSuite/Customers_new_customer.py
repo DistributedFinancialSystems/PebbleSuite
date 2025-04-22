@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 import stripe
+import time
 
 
 
@@ -27,8 +28,9 @@ class NEW_CUSTOMER_ENTRY:
 					CONTACT_NAME,
 					CONTACT_PHONE,
 					CONTACT_EMAIL,
-					CUSTOMER_NOTES)
-					VALUES(?,?,?,?,?,?,?,?,?,?,?)'''
+					CUSTOMER_NOTES,
+					STRIPE_ID)
+					VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'''
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -45,6 +47,8 @@ class NEW_CUSTOMER_ENTRY:
 		try:
 
 			stripe_api_key = None
+
+			customer_id = []
 
 			retrieve_stripe_api_key = '''SELECT * FROM stripe_api_key;'''
 
@@ -66,9 +70,27 @@ class NEW_CUSTOMER_ENTRY:
 
 			customer = stripe.Customer.create(name=customer_name)
 
+			stripe_entry_confirmation_message_1 = tk.messagebox.showinfo(title="Add New Customer",message="Adding Customer to Stripe Account.")
+
+			time.sleep(10)
+
+			stripe_entry_confirmation_message_2 = tk.messagebox.showinfo(title="Add New Customer",message="Retrieving New Customer Data.")
+
+			time.sleep(10)
+
+			new_customer_data = stripe.Customer.search(query=f"name: '{customer_name}'")
+
+			for item in new_customer_data:
+
+				print(item)
+
+				print("\n\n\n\n\n")
+
+				print(item["id"])
+
 		except Exception as error:
 
-			print(error)
+			stripe_entry_error_message_1 = tk.messagebox.showinfo(title="Add New Customer",message=f"{error}")
 
 
 
@@ -164,6 +186,7 @@ class NEW_CUSTOMER_WINDOW(tk.Toplevel):
 			new_customer_contact_phone = self.customer_contact_phone_entry.get()
 			new_customer_contact_email = self.customer_contact_email_entry.get()
 			new_customer_contact_notes = self.customer_contact_notes_entry.get()
+			new_customer_stripe_id = None
 
 			customer_names = []
 
@@ -204,6 +227,7 @@ class NEW_CUSTOMER_WINDOW(tk.Toplevel):
 				new_customer_data.append(new_customer_contact_phone)
 				new_customer_data.append(new_customer_contact_email)
 				new_customer_data.append(new_customer_contact_notes)
+				new_customer_data.append(new_customer_stripe_id)
 
 				new_customer = NEW_CUSTOMER_ENTRY(new_customer_data)
 
