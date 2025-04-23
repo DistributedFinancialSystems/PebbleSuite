@@ -82,17 +82,21 @@ class NEW_CUSTOMER_ENTRY:
 
 			for item in new_customer_data:
 
-				print(item)
-
-				print("\n\n\n\n\n")
-
-				print(item["id"])
-
 				customer_id = item["id"]
 
-				print(f"customer id: {customer_id}")
+			update_customer_id_sql_script = '''UPDATE customers SET STRIPE_ID=? WHERE CUSTOMER_NAME=?;'''
 
-			print(f"customer id: {customer_id}")
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(update_customer_id_sql_script,(customer_id,customer_name))
+
+				connection.commit()
+
+				cursor.close()
+
+			stripe_entry_confirmation_message_1 = tk.messagebox.showinfo(title="Add New Customer",message=f"{customer_name} successfully entered into Stripe account.")
 
 		except Exception as error:
 
