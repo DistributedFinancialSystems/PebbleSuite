@@ -48,7 +48,7 @@ class NEW_CUSTOMER_ENTRY:
 
 			stripe_api_key = None
 
-			customer_id = []
+			customer_id = None
 
 			retrieve_stripe_api_key = '''SELECT * FROM stripe_api_key;'''
 
@@ -87,6 +87,12 @@ class NEW_CUSTOMER_ENTRY:
 				print("\n\n\n\n\n")
 
 				print(item["id"])
+
+				customer_id = item["id"]
+
+				print(f"customer id: {customer_id}")
+
+			print(f"customer id: {customer_id}")
 
 		except Exception as error:
 
