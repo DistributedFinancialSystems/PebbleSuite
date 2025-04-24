@@ -3,15 +3,20 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
-
+import stripe
+import time
 
 
 
 class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
+	alive = False
+
 	customer_sql_script = '''SELECT CUSTOMER_NAME FROM customers;'''
 
-	alive = False
+	stripe_api_key = None
+
+	stripe_customer_id = None
 
 	def __init__(self,*args,**kwargs):
 
@@ -155,6 +160,11 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 				self.customer_contact_phone_entry_text.set(f"{collect[0][8]}")
 				self.customer_contact_email_entry_text.set(f"{collect[0][9]}")
 				self.customer_contact_notes_entry_text.set(f"{collect[0][10]}")
+				self.stripe_customer_id = (f"{collect[0][11]}")
+
+				print(collect)
+
+				print(f"{self.stripe_customer_id}")
 
 		except Exception as error:
 
