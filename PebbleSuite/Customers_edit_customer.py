@@ -10,15 +10,23 @@ import time
 
 class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
+	"""
+	_______________________________________
+	Define class variables and SQL scripts:
+	_______________________________________
+	"""
+
 	alive = False
 
 	customer_sql_script = '''SELECT CUSTOMER_NAME FROM customers;'''
 
-	stripe_api_key = None
-
-	stripe_customer_id = None
-
 	def __init__(self,*args,**kwargs):
+
+		"""
+		___________________________________
+		Retrieve customer data from SQL.db:
+		___________________________________
+		"""
 
 		customer_data = []
 
@@ -38,8 +46,14 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		"""
+		_______________________
+		Define Tkinter widgets:
+		_______________________
+		"""
+
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=520)
+		self.config(width=390,height=560)
 		self.title("Edit Customer")
 		self.focus()
 		self.resizable(0,0)
@@ -119,6 +133,8 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 		self.change_customer_data_button = ttk.Button(self,text="Submit Data Changes",command=self.change_customer_data)
 		self.change_customer_data_button.place(x=200,y=460)
 
+		self.customer_stripe_id = tk.StringVar()
+
 
 	def search_customer_data(self):
 
@@ -160,11 +176,7 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 				self.customer_contact_phone_entry_text.set(f"{collect[0][8]}")
 				self.customer_contact_email_entry_text.set(f"{collect[0][9]}")
 				self.customer_contact_notes_entry_text.set(f"{collect[0][10]}")
-				self.stripe_customer_id = (f"{collect[0][11]}")
-
-				print(collect)
-
-				print(f"{self.stripe_customer_id}")
+				self.customer_stripe_id.set(f"{collect[0][11]}")
 
 		except Exception as error:
 
@@ -205,7 +217,17 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
 			else:
 
+				stripe_id_sql_script = '''SELECT STRIPE_API_KEY FROM stripe_api_key;'''
+
+				stripe_api_key = tk.StringVar()
+
 				with sqlite3.connect("SQL.db") as connection:
+
+					"""
+					_______________________________
+					Update customer data in SQL.db:
+					_______________________________
+					"""
 
 					cursor = connection.cursor()
 
@@ -219,6 +241,38 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 					cursor.execute(edit_contact_phone_sql_script,(new_contact_phone,search_customer_name))
 					cursor.execute(edit_contact_email_sql_script,(new_contact_email,search_customer_name))
 					cursor.execute(edit_customer_notes_sql_script,(new_customer_notes,search_customer_name))
+
+					"""
+					____________________________________
+					Retrieve Stripe API key from SQL.db:
+					____________________________________
+					"""
+
+					cursor.execute(stripe_id_sql_script)
+
+					for item in cursor:
+
+						stripe_api_key.set(*item)
+
+					"""
+					_______________________________________
+					Update customer data in Stripe account:
+					_______________________________________
+					"""
+
+					get_stripe_api_key = stripe_api_key.get() #Good
+
+					customer_stripe_id = self.customer_stripe_id.get() #Good
+
+					stripe.api_key = get_stripe_api_key
+
+					update_customer = stripe.Customer.modify(customer_stripe_id,email=f'{new_contact_email}')
+
+					time.sleep(10)
+
+					stripe_process_message_1 = tk.messagebox.showinfo(title="Edit Customer",message="Updating customer details in Stripe account.")
+
+					time.sleep(10)
 
 					connection.commit()
 
