@@ -36,6 +36,12 @@ class EDIT_GL_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		"""
+		_______________________
+		DEFINE TKINTER WIDGETS:
+		_______________________
+		"""
+
 		super().__init__(*args,**kwargs)
 		self.config(width=600,height=265)
 		self.title("Edit General Ledger")
