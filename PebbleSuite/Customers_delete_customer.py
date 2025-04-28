@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
+import stripe
+import time
 
 
 
@@ -40,6 +42,7 @@ class DELETE_CUSTOMER_ENTRY:
 			cursor.execute(delete_customer_sql_script,[self.delete_customer_entry])
 
 			"""
+			#DO NOT INCLUDE (BELOW)
 
 			cursor.execute(query_customer_invoices_sql_script,[self.delete_customer_entry])
 			cursor.execute(delete_customer_invoices_sql_script,[self.delete_customer_entry])
@@ -51,13 +54,65 @@ class DELETE_CUSTOMER_ENTRY:
 
 			delete_customer_credit_memos_confirmation_messages = tk.messagebox.showinfo(title="Delete Customer",message="Customer credit memo data successfully deleted")
 
+			#DO NOT INCLUDE (ABOVE)
 			"""
 
 			connection.commit()
 
 			cursor.close()
 
-			delete_customer_confirmation_message_1 = tk.messagebox.showinfo(title="Delete Customer",message="Customer contact data successfully deleted.")
+		delete_data_confirmation_message = tk.messagebox.showinfo(title="Delete Customer",message="Customer successfully deleted.")
+
+
+	def stripe_entry(self):
+
+		stripe_api_key = None
+
+		customer_id = None
+
+		retrieve_stripe_api_key = '''SELECT * FROM stripe_api_key;'''
+
+		retrieve_customer_id = '''SELECT STRIPE_ID FROM customers WHERE CUSTOMER_NAME=?;'''
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(retrieve_stripe_api_key)
+
+			for item in cursor:
+
+				stripe_api_key = str(*item)
+
+			connection.commit()
+
+			cursor.close()
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute(retrieve_customer_id,[self.delete_customer_entry])
+
+			for item in cursor:
+
+				customer_id = str(*item)
+
+			connection.commit()
+
+			cursor.close()
+
+		stripe.api_key = stripe_api_key
+
+		customer = stripe.Customer.delete(customer_id)
+
+		time.sleep(10)
+
+		stripe_entry_confirmation_message_1 = tk.messagebox.showinfo(title="Delete Customer",message="Deleting Customer from Stripe Account, please wait...")
+
+		time.sleep(10)
+
+		stripe_entry_confirmation_message_2 = tk.messagebox.showinfo(title="Delete Customer",message="Customer successfully deleted from Stripe account.")
 
 
 
@@ -119,6 +174,7 @@ class DELETE_CUSTOMER_WINDOW(tk.Toplevel):
 			else:
 
 				delete_object = DELETE_CUSTOMER_ENTRY(customer_data)
+				delete_object.stripe_entry()
 				delete_object.delete_data()
 
 		except Exception as error:
