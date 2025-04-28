@@ -52,14 +52,12 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 		_______________________
 		"""
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=600)
+		self.config(width=700,height=460)
 		self.title("Edit Customer")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
 
-		#self.clicked = tk.StringVar()
-		#self.clicked.set(f"{options[0]}")
 		"""
 		"""
 
@@ -69,9 +67,9 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 		________________________________________________________
 		"""
 		self.customer_scrollbar = ttk.Scrollbar(self)
-		self.customer_scrollbar.place(x=350,y=15,width=20,height=100)
+		self.customer_scrollbar.place(x=240,y=15,width=20,height=390)
 		self.customer_listbox = tk.Listbox(self,yscrollcommand=self.customer_scrollbar.set)
-		self.customer_listbox.place(x=20,y=15,width=330,height=100)
+		self.customer_listbox.place(x=20,y=15,width=220,height=390)
 		self.customer_scrollbar.config(command=self.customer_listbox.yview)
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -89,78 +87,78 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 			cursor.close()
 
 		self.sort_customers_button = ttk.Button(self,text="Sort Customer Names",command=self.sort_customers)
-		self.sort_customers_button.place(x=20,y=120)
+		self.sort_customers_button.place(x=20,y=420)
 
 		self.search_customer_data_button = ttk.Button(self,text="Retrieve Customer Data",command=self.search_customer_data)
-		self.search_customer_data_button.place(x=200,y=120)
+		self.search_customer_data_button.place(x=200,y=420)
 
 		self.customer_name = tk.StringVar()
 
 		self.customer_address1_label = ttk.Label(self,text="Address 1:")
-		self.customer_address1_label.place(x=20,y=160)
+		self.customer_address1_label.place(x=300,y=20)
 		self.customer_address1_entry_text = tk.StringVar()
 		self.customer_address1_entry = ttk.Entry(self,textvariable=self.customer_address1_entry_text)
-		self.customer_address1_entry.place(x=200,y=160)
+		self.customer_address1_entry.place(x=500,y=20)
 
 		self.customer_address2_label = tk.Label(self,text="Address 2:")
-		self.customer_address2_label.place(x=20,y=200)
+		self.customer_address2_label.place(x=300,y=60)
 		self.customer_address2_entry_text = tk.StringVar()
 		self.customer_address2_entry = ttk.Entry(self,textvariable=self.customer_address2_entry_text)
-		self.customer_address2_entry.place(x=200,y=200)
+		self.customer_address2_entry.place(x=500,y=60)
 
 		self.customer_city_label = ttk.Label(self,text="City:")
-		self.customer_city_label.place(x=20,y=240)
+		self.customer_city_label.place(x=300,y=100)
 		self.customer_city_entry_text = tk.StringVar()
 		self.customer_city_entry = tk.Entry(self,textvariable=self.customer_city_entry_text)
-		self.customer_city_entry.place(x=200,y=240)
+		self.customer_city_entry.place(x=500,y=100)
 
 		self.customer_state_label = ttk.Label(self,text="State/Province/Territory:")
-		self.customer_state_label.place(x=20,y=280)
+		self.customer_state_label.place(x=300,y=140)
 		self.customer_state_entry_text = tk.StringVar()
 		self.customer_state_entry = ttk.Entry(self,textvariable=self.customer_state_entry_text)
-		self.customer_state_entry.place(x=200,y=280)
+		self.customer_state_entry.place(x=500,y=140)
 
 		self.customer_zip_postal_code_label = ttk.Label(self,text="ZIP Code/Postal Code:")
-		self.customer_zip_postal_code_label.place(x=20,y=320)
+		self.customer_zip_postal_code_label.place(x=300,y=180)
 		self.customer_zip_postal_code_entry_text = tk.StringVar()
 		self.customer_zip_postal_code_entry = ttk.Entry(self,textvariable=self.customer_zip_postal_code_entry_text)
-		self.customer_zip_postal_code_entry.place(x=200,y=320)
+		self.customer_zip_postal_code_entry.place(x=500,y=180)
 
 		self.customer_country_label = ttk.Label(self,text="Country:")
-		self.customer_country_label.place(x=20,y=360)
+		self.customer_country_label.place(x=300,y=220)
 		self.customer_country_entry_text = tk.StringVar()
 		self.customer_country_entry = tk.Entry(self,textvariable=self.customer_country_entry_text)
-		self.customer_country_entry.place(x=200,y=360)
+		self.customer_country_entry.place(x=500,y=220)
 
 		self.customer_contact_name_label = ttk.Label(self,text="Customer Contact Name:")
-		self.customer_contact_name_label.place(x=20,y=400)
+		self.customer_contact_name_label.place(x=300,y=260)
 		self.customer_contact_name_entry_text = tk.StringVar()
 		self.customer_contact_name_entry = ttk.Entry(self,textvariable=self.customer_contact_name_entry_text)
-		self.customer_contact_name_entry.place(x=200,y=400)
+		self.customer_contact_name_entry.place(x=500,y=260)
 
 		self.customer_contact_phone_label = ttk.Label(self,text="Customer Contact Phone:")
-		self.customer_contact_phone_label.place(x=20,y=440)
+		self.customer_contact_phone_label.place(x=300,y=300)
 		self.customer_contact_phone_entry_text = tk.StringVar()
 		self.customer_contact_phone_entry = ttk.Entry(self,textvariable=self.customer_contact_phone_entry_text)
-		self.customer_contact_phone_entry.place(x=200,y=440)
+		self.customer_contact_phone_entry.place(x=500,y=300)
 
 		self.customer_contact_email_label = ttk.Label(self,text="Customer Contact Email:")
-		self.customer_contact_email_label.place(x=20,y=480)
+		self.customer_contact_email_label.place(x=300,y=340)
 		self.customer_contact_email_entry_text = tk.StringVar()
 		self.customer_contact_email_entry = ttk.Entry(self,textvariable=self.customer_contact_email_entry_text)
-		self.customer_contact_email_entry.place(x=200,y=480)
+		self.customer_contact_email_entry.place(x=500,y=340)
 
 		self.customer_contact_notes_label = ttk.Label(self,text="Customer Contact Notes:")
-		self.customer_contact_notes_label.place(x=20,y=520)
+		self.customer_contact_notes_label.place(x=300,y=380)
 		self.customer_contact_notes_entry_text = tk.StringVar()
 		self.customer_contact_notes_entry = ttk.Entry(self,textvariable=self.customer_contact_notes_entry_text)
-		self.customer_contact_notes_entry.place(x=200,y=520)
+		self.customer_contact_notes_entry.place(x=500,y=380)
 
 		self.clear_data_entries_button = ttk.Button(self,text="Clear Data Entries",command=self.clear_data_entries)
-		self.clear_data_entries_button.place(x=20,y=560)
+		self.clear_data_entries_button.place(x=300,y=420)
 
 		self.change_customer_data_button = ttk.Button(self,text="Submit Data Changes",command=self.change_customer_data)
-		self.change_customer_data_button.place(x=200,y=560)
+		self.change_customer_data_button.place(x=500,y=420)
 
 		self.customer_stripe_id = tk.StringVar()
 
