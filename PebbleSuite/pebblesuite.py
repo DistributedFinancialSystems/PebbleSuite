@@ -106,10 +106,48 @@ class APP(tk.Tk):
 		root_menu = MENU_BAR(self)
 		self.config(menu=root_menu)
 
-		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=377,y=150,width=20,height=335)
-		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=150,width=357,height=335)
+		self.tasks_frame = tk.Frame(self,height=540,width=960)
+		self.tasks_frame.pack()
+
+		self.files_frame = tk.Frame(self,height=540,width=960)
+		self.files_frame.pack()
+
+		self.tasks_button = ttk.Button(self,text="Tasks",command=self.tasks_window)
+		self.tasks_button.place(x=20,y=20)
+
+		self.files_button = ttk.Button(self,text="Files",command=self.files_window)
+		self.files_button.place(x=120,y=20)
+
+
+	def files_window(self):
+
+		for widget in self.tasks_frame.winfo_children():
+
+			widget.destroy()
+
+		self.scrollbar = ttk.Scrollbar(self.files_frame)
+		self.scrollbar.place(x=120,y=100,width=20,height=100)
+		self.listbox = tk.Listbox(self.files_frame,yscrollcommand=self.scrollbar.set)
+		self.listbox.place(x=20,y=100,width=100,height=100)
+		self.scrollbar.config(command=self.listbox.yview)
+
+
+		"""
+		______________________
+		TASKS TKINTER WIDGETS:
+		______________________
+		"""
+
+	def tasks_window(self):
+
+		for widget in self.files_frame.winfo_children():
+
+			widget.destroy()
+
+		self.scrollbar = ttk.Scrollbar(self.tasks_frame)
+		self.scrollbar.place(x=377,y=155,width=20,height=335)
+		self.listbox = tk.Listbox(self.tasks_frame, yscrollcommand=self.scrollbar.set)
+		self.listbox.place(x=20,y=155,width=357,height=335)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -126,66 +164,55 @@ class APP(tk.Tk):
 
 			cursor.close()
 
-		self.text_scrollbar = ttk.Scrollbar(self)
-		self.text_scrollbar.place(x=920,y=150,width=20,height=335)
-		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
-		self.textbox.place(x=430,y=150,width=490,height=335)
+		self.text_scrollbar = ttk.Scrollbar(self.tasks_frame)
+		self.text_scrollbar.place(x=920,y=155,width=20,height=335)
+		self.textbox = tk.Text(self.tasks_frame,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
+		self.textbox.place(x=430,y=155,width=490,height=335)
 
-		self.new_task_button = ttk.Button(self,text="Create New Task",command=self.new_task)
-		self.new_task_button.place(x=280,y=80)
+		self.new_task_button = ttk.Button(self.tasks_frame,text="Create New Task",command=self.new_task)
+		self.new_task_button.place(x=275,y=120)
 
-		self.clear_note_data_button = ttk.Button(self,text="Clear Task Entries",command=self.clear_note_entries)
-		self.clear_note_data_button.place(x=110,y=495)
+		self.clear_note_data_button = ttk.Button(self.tasks_frame,text="Clear Task Entries",command=self.clear_note_entries)
+		self.clear_note_data_button.place(x=110,y=500)
 
-		self.new_task_name_label = ttk.Label(self,text="New Task Name:")
-		self.new_task_name_label.place(x=20,y=15)
-		self.new_task_name_entry = ttk.Entry(self)
-		self.new_task_name_entry.place(x=20,y=40,width=375)
+		self.new_task_name_label = ttk.Label(self.tasks_frame,text="New Task Name:")
+		self.new_task_name_label.place(x=20,y=60)
+		self.new_task_name_entry = ttk.Entry(self.tasks_frame)
+		self.new_task_name_entry.place(x=20,y=80,width=375)
 
-		self.new_note_date_label = ttk.Label(self,text="New Task Date:")
-		self.new_note_date_label.place(x=20,y=80)
+		self.new_note_date_label = ttk.Label(self.tasks_frame,text="New Task Date:")
+		self.new_note_date_label.place(x=20,y=120)
 		self.new_task_date_entry_text = tk.StringVar()
 		self.new_task_date_entry_text.set("MM/DD/YYYY")
-		self.new_task_date_entry = ttk.Entry(self,textvariable=self.new_task_date_entry_text)
-		self.new_task_date_entry.place(x=130,y=80,width=100)
+		self.new_task_date_entry = ttk.Entry(self.tasks_frame,textvariable=self.new_task_date_entry_text)
+		self.new_task_date_entry.place(x=130,y=120,width=100)
 
-		self.note_names_list_label = ttk.Label(self,text="Task List:")
-		self.note_names_list_label.place(x=20,y=125)
+		self.open_task_note_button = ttk.Button(self.tasks_frame,text="Open Task",command=self.display_note)
+		self.open_task_note_button.place(x=20,y=500)
 
-		self.open_task_note_button = ttk.Button(self,text="Open Task",command=self.display_note)
-		self.open_task_note_button.place(x=20,y=495)
+		self.update_task_note_button = ttk.Button(self.tasks_frame,text="Save Changes",command=self.save_note_changes)
+		self.update_task_note_button.place(x=430,y=500)
 
-		self.update_task_note_button = ttk.Button(self,text="Save Changes",command=self.save_note_changes)
-		self.update_task_note_button.place(x=430,y=495)
+		self.clear_task_note_button = ttk.Button(self.tasks_frame,text="Close Task",command=self.close_note)
+		self.clear_task_note_button.place(x=535,y=500)
 
-		self.clear_task_note_button = ttk.Button(self,text="Close Task",command=self.close_note)
-		self.clear_task_note_button.place(x=535,y=495)
+		self.delete_task_note_button = ttk.Button(self.tasks_frame,text="Delete Task",command=self.delete_task_note)
+		self.delete_task_note_button.place(x=240,y=500)
 
-		self.delete_task_note_button = ttk.Button(self,text="Delete Task",command=self.delete_task_note)
-		self.delete_task_note_button.place(x=240,y=495)
-
-		self.editing_task_name_label = ttk.Label(self,text="Current Task:")
-		self.editing_task_name_label.place(x=430,y=15)
+		self.editing_task_name_label = ttk.Label(self.tasks_frame,text="Current Task:")
+		self.editing_task_name_label.place(x=430,y=60)
 		self.editing_task_name_entry_text = tk.StringVar()
-		self.editing_task_name_entry = ttk.Entry(self,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
-		self.editing_task_name_entry.place(x=430,y=40,width=375)
+		self.editing_task_name_entry = ttk.Entry(self.tasks_frame,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
+		self.editing_task_name_entry.place(x=430,y=80,width=375)
 
-		self.editing_task_date_label = ttk.Label(self,text="Date Created:")
-		self.editing_task_date_label.place(x=825,y=15)
+		self.editing_task_date_label = ttk.Label(self.tasks_frame,text="Date Created:")
+		self.editing_task_date_label.place(x=825,y=60)
 		self.editing_task_date_entry_text = tk.StringVar()
-		self.editing_task_date_entry = ttk.Entry(self,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
-		self.editing_task_date_entry.place(x=825,y=40,width=100)
+		self.editing_task_date_entry = ttk.Entry(self.tasks_frame,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
+		self.editing_task_date_entry.place(x=825,y=80,width=100)
 
-		self.editing_task_notes_label = ttk.Label(self,text="Current Task Notes:")
-		self.editing_task_notes_label.place(x=430,y=125)
-
-		self.test_button = ttk.Button(self,text="Test",command=self.test_button)
-		self.test_button.place(x=430,y=100)
-
-	def test_button(self):
-
-		new_test_entry = ttk.Entry(self)
-		new_test_entry.place(x=485,y=100)
+		self.editing_task_notes_label = ttk.Label(self.tasks_frame,text="Current Task Notes:")
+		self.editing_task_notes_label.place(x=430,y=120)
 
 
 	def new_task(self):
