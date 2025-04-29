@@ -179,6 +179,14 @@ class APP(tk.Tk):
 		self.editing_task_notes_label = ttk.Label(self,text="Current Task Notes:")
 		self.editing_task_notes_label.place(x=430,y=125)
 
+		self.test_button = ttk.Button(self,text="Test",command=self.test_button)
+		self.test_button.place(x=430,y=100)
+
+	def test_button(self):
+
+		new_test_entry = ttk.Entry(self)
+		new_test_entry.place(x=485,y=100)
+
 
 	def new_task(self):
 
