@@ -1,20 +1,18 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
+import pandas as pd
+import time
 
 
 
 
 class VENDOR_SUMMARY_WINDOW(tk.Toplevel):
 
-	#Define class variables:
 	alive = False
 
-
-	#Define VENDOR_SUMMARY tkinter widgets:
 	def __init__(self,*args,**kwargs):
 		super().__init__(*args,**kwargs)
 		self.config(width=220,height=120)
@@ -32,41 +30,58 @@ class VENDOR_SUMMARY_WINDOW(tk.Toplevel):
 
 	def print_vendors(self):
 
-		#Define SQL database scripts:
 		print_vendors_sql_script = '''SELECT * FROM vendors;'''
 
-
-		#Initialize SQL database connection:
 		try:
 			with sqlite3.connect("SQL.db") as connection:
+
 				cursor = connection.cursor()
+
 				cursor.execute(print_vendors_sql_script)
 
 				for item in cursor:
+
 					print(item)
 
 				connection.commit()
+
 				cursor.close()
 
-		except sqlite3.Error as error:
+		except Exception as error:
 
-			print_vendors_error_message = tk.messagebox.showinfo(title="Error Message",message=f"{error}")
+			print_vendors_error_message_1 = tk.messagebox.showinfo(title="Vendor Summary",message=f"{error}")
+
 
 	def export_vendors(self):
 
-		#Define SQL.db scripts:
-
-		#Initialize SQL.db connection:
+		retrieve_vendors_sql_script = '''SELECT * FROM vendors;'''
 
 		try:
-			pass
+			with sqlite3.connect("SQL.db") as connection:
 
-		except sqlite3.Error as error:
+				cursor = connection.cursor()
 
-			export_vendors_error_message = tk.messagebox.showinfo(title="Export Vendors",message=f"{error}")
+				cursor.execute(retrieve_vendors_sql_script)
+
+				rows = cursor.fetchall()
+
+				df = pd.DataFrame(rows,columns=[column[0] for column in cursor.description])
+
+				df.to_csv(f'{time.time()} - output.csv',index=False)
+
+				connection.commit()
+
+				cursor.close()
+
+			export_vendors_confirmation_message_1 = tk.messagebox.showinfo(title="Vendor Summary",message="Vendor data successfully exported.")
+
+		except Exception as error:
+
+			export_vendors_error_message_1 = tk.messagebox.showinfo(title="Vendor Summary",message=f"{error}")
 
 
 	def destroy(self):
 
 		self.__class__.alive = False
+
 		return super().destroy()
