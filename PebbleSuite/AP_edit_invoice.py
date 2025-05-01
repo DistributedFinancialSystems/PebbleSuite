@@ -140,9 +140,11 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def search_invoices(self):
 
-		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
-
 		try:
+
+			search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
+
+			self.listbox.delete(0,tk.END)
 
 			for item in self.select_vendor_listbox.curselection():
 
@@ -180,9 +182,9 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 	def edit_invoice(self):
 
-		query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
-
 		try:
+
+			query_invoice_sql_script = '''SELECT * FROM vendor_invoices WHERE INVOICE_NUMBER=?;'''
 
 			for item in self.listbox.curselection():
 

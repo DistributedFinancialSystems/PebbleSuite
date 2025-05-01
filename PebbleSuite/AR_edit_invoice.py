@@ -138,6 +138,8 @@ class AR_EDIT_INVOICE_WINDOW(tk.Toplevel):
 
 			search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=? AND INVOICE_STATUS="Open";'''
 
+			self.listbox.delete(0,tk.END)
+
 			for item in self.select_client_listbox.curselection():
 
 				select_client = self.select_client_listbox.get(item)
