@@ -63,6 +63,7 @@ from Inventory_new_inventory import *
 
 #Journal Entries Menu modules:
 from JE_new_journal_entry import *
+from JE_JE_summary import *
 
 #Reports Menu modules:
 from Reports_commands import *
@@ -168,7 +169,7 @@ class MENU_BAR(tk.Menu):
 		self.JE_menu.add_command(label="Edit Journal Entry",command=self.new_JE)
 		self.JE_menu.add_command(label="Delete Journal Entry",command=self.new_JE)
 		self.JE_menu.add_separator()
-		self.JE_menu.add_command(label="Journal Entry Summary",command=self.new_JE)
+		self.JE_menu.add_command(label="Journal Entry Summary",command=self.JE_summary)
 		self.JE_menu.add_command(label="Multi-Journal Entry",command=self.new_JE)
 		self.add_cascade(label="Journal Entries",menu=self.JE_menu)
 
@@ -524,6 +525,11 @@ class MENU_BAR(tk.Menu):
 
 		if not NEW_JE_WINDOW.alive:
 			self.secondary_window = NEW_JE_WINDOW()
+
+	def JE_summary(self):
+
+		if not JE_SUMMARY_WINDOW.alive:
+			self.secondary_window = JE_SUMMARY_WINDOW()
 
 	def new_ME(self):
 

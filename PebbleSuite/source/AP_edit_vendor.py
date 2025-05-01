@@ -22,25 +22,8 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 	Retrieve customer data from SQL.db:
 	___________________________________
 	"""
+
 	def __init__(self,*args,**kwargs):
-
-		vendor_data = []
-
-		options = ["Select Vendor"]
-
-		with sqlite3.connect("SQL.db") as connection:
-
-			cursor = connection.cursor()
-
-			cursor.execute(self.vendor_sql_script)
-
-			for item in cursor:
-
-				options.append(" ".join(item))
-
-			connection.commit()
-
-			cursor.close()
 		"""
 		_______________________
 		Define Tkinter widgets:
@@ -289,6 +272,18 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 					cursor.close()
 
 				edit_vendor_confirmation_message_1 = tk.messagebox.showinfo(title="Edit Vendor",message="Vendor detail successfully changed.")
+
+				self.vendor_name.set("")
+				self.vendor_address1_entry_text.set("")
+				self.vendor_address2_entry_text.set("")
+				self.vendor_city_entry_text.set("")
+				self.vendor_state_entry_text.set("")
+				self.vendor_zip_postal_code_entry_text.set("")
+				self.vendor_country_entry_text.set("")
+				self.vendor_contact_name_entry_text.set("")
+				self.vendor_contact_phone_entry_text.set("")
+				self.vendor_contact_email_entry_text.set("")
+				self.vendor_1099_entry_text.set("")
 
 		except Exception as error:
 

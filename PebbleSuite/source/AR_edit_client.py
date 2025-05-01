@@ -26,28 +26,6 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 	def __init__(self,*args,**kwargs):
 
 		"""
-
-		client_data = []
-
-		options = ["Select Client"]
-
-		with sqlite3.connect("SQL.db") as connection:
-
-			cursor = connection.cursor()
-
-			cursor.execute(self.client_sql_script)
-
-			for item in cursor:
-
-				options.append(" ".join(item))
-
-			connection.commit()
-
-			cursor.close()
-
-		"""
-
-		"""
 		_______________________
 		Define Tkinter widgets:
 		_______________________
@@ -293,6 +271,18 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 					cursor.close()
 
 				edit_client_confirmation_message_1 = tk.messagebox.showinfo(title="Edit Client",message="Client details successfully changed.")
+
+				self.client_name.set("")
+				self.client_address1_entry_text.set("")
+				self.client_address2_entry_text.set("")
+				self.client_city_entry_text.set("")
+				self.client_state_entry_text.set("")
+				self.client_zip_postal_code_entry_text.set("")
+				self.client_country_entry_text.set("")
+				self.client_contact_name_entry_text.set("")
+				self.client_contact_phone_entry_text.set("")
+				self.client_contact_email_entry_text.set("")
+				self.client_contact_notes_entry_text.set("")
 
 		except Exception as error:
 
