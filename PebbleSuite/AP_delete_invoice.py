@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AP_delete_invoice.py
-[ ]
-[ ]
-[ ]
-"""
-
 import datetime
 from datetime import date
 import sqlite3
@@ -99,6 +89,8 @@ class DELETE_INVOICE_WINDOW(tk.Toplevel):
 		search_vendor_sql_script = '''SELECT INVOICE_NUMBER FROM vendor_invoices WHERE INVOICE_NAME=?'''
 
 		try:
+
+			self.listbox.delete(0,tk.END)
 
 			for item in self.select_vendor_listbox.curselection():
 

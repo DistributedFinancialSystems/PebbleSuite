@@ -9,7 +9,6 @@ import time
 
 
 class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
-
 	"""
 	_______________________________________
 	Define class variables and SQL scripts:
@@ -18,14 +17,13 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 	alive = False
 
 	customer_sql_script = '''SELECT CUSTOMER_NAME FROM customers;'''
-
+	"""
+	___________________________________
+	Retrieve customer data from SQL.db:
+	___________________________________
+	"""
 	def __init__(self,*args,**kwargs):
 
-		"""
-		___________________________________
-		Retrieve customer data from SQL.db:
-		___________________________________
-		"""
 		customer_data = []
 
 		options = ["Select Customer"]
@@ -44,9 +42,6 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 
 			cursor.close()
 		"""
-		"""
-
-		"""
 		_______________________
 		Define Tkinter widgets:
 		_______________________
@@ -57,16 +52,11 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
-
-		"""
-		"""
-
 		"""
 		________________________________________________________
 		RETRIEVE CUSTOMER NAMES FROM SQL.DB, ENTER INTO LISTBOX.
 		________________________________________________________
 		"""
-
 		self.customers_label = ttk.Label(self,text="Customers:")
 		self.customers_label.place(x=20,y=20)
 		self.sort_customers_button = ttk.Button(self,text="Sort Customers A-Z",command=self.sort_customers)
@@ -291,7 +281,6 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 					Update customer data in SQL.db:
 					_______________________________
 					"""
-
 					cursor = connection.cursor()
 
 					cursor.execute(edit_customer_address1_sql_script,(new_address1,search_customer_name))
@@ -304,28 +293,24 @@ class EDIT_CUSTOMER_WINDOW(tk.Toplevel):
 					cursor.execute(edit_contact_phone_sql_script,(new_contact_phone,search_customer_name))
 					cursor.execute(edit_contact_email_sql_script,(new_contact_email,search_customer_name))
 					cursor.execute(edit_customer_notes_sql_script,(new_customer_notes,search_customer_name))
-
 					"""
 					____________________________________
 					Retrieve Stripe API key from SQL.db:
 					____________________________________
 					"""
-
 					cursor.execute(stripe_id_sql_script)
 
 					for item in cursor:
 
 						stripe_api_key.set(*item)
-
 					"""
 					_______________________________________
 					Update customer data in Stripe account:
 					_______________________________________
 					"""
+					get_stripe_api_key = stripe_api_key.get()
 
-					get_stripe_api_key = stripe_api_key.get() #Good
-
-					customer_stripe_id = self.customer_stripe_id.get() #Good
+					customer_stripe_id = self.customer_stripe_id.get()
 
 					stripe.api_key = get_stripe_api_key
 

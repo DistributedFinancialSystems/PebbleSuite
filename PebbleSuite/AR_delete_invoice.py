@@ -88,6 +88,8 @@ class AR_DELETE_INVOICE_WINDOW(tk.Toplevel):
 
 		try:
 
+			self.listbox.delete(0,tk.END)
+
 			search_client_sql_script = '''SELECT INVOICE_NUMBER FROM client_invoices WHERE INVOICE_NAME=?'''
 
 			for item in self.select_client_listbox.curselection():

@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -10,10 +9,19 @@ from tkinter.messagebox import showinfo
 
 class EDIT_VENDOR_WINDOW(tk.Toplevel):
 
+	"""
+	_______________________________________
+	Define class variables and SQL scripts:
+	_______________________________________
+	"""
 	vendor_sql_script = '''SELECT VENDOR_NAME FROM vendors;'''
 
 	alive = False
-
+	"""
+	___________________________________
+	Retrieve customer data from SQL.db:
+	___________________________________
+	"""
 	def __init__(self,*args,**kwargs):
 
 		options = ["Select Vendor"]
@@ -31,14 +39,22 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 			connection.commit()
 
 			cursor.close()
-
+		"""
+		_______________________
+		Define Tkinter widgets:
+		_______________________
+		"""
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=520)
+		self.config(width=700,height=505)
 		self.title("Edit Vendor")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
-
+		"""
+		_____________________________________________________________
+		Retrieve vendor names from SQL.db, enter into listbox widget:
+		_____________________________________________________________
+		"""
 		self.clicked = tk.StringVar()
 		self.clicked.set(f"{options[0]}")
 
