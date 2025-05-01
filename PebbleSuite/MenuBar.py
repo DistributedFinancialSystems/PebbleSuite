@@ -139,20 +139,13 @@ class MENU_BAR(tk.Menu):
 		self.GL_menu.add_command(label="Edit General Ledger",command=self.edit_GL)
 		self.GL_menu.add_command(label="Delete General Ledger",command=self.delete_GL)
 		self.GL_menu.add_separator()
-		self.GL_menu.add_command(label="Export General Ledgers",command=self.new_GL)
 		self.GL_menu.add_command(label="General Ledger Summary",command=self.GL_summary)
 		self.GL_menu.add_command(label="Reconcile General Ledger",command=self.new_GL)
 		self.add_cascade(label="General Ledgers",menu=self.GL_menu)
 
 		#Help Menu Tkinter widgets
 		self.help_menu = tk.Menu(self)
-		self.help_menu.add_command(label="Accounts Payable",command=self.new_help)
-		self.help_menu.add_command(label="Accounts Receivable",command=self.new_help)
-		self.help_menu.add_command(label="Billing",command=self.new_help)
-		self.help_menu.add_command(label="General Ledgers",command=self.new_help)
-		self.help_menu.add_command(label="Journal Entries",command=self.new_help)
-		self.help_menu.add_command(label="Reports",command=self.new_help)
-		self.help_menu.add_command(label="Taxes",command=self.new_help)
+		self.help_menu.add_command(label="NULL",command=self.new_help)
 		self.add_cascade(label="Help",menu=self.help_menu)
 
 		#Inventory Menu
@@ -176,7 +169,6 @@ class MENU_BAR(tk.Menu):
 		self.JE_menu.add_command(label="Delete Journal Entry",command=self.new_JE)
 		self.JE_menu.add_separator()
 		self.JE_menu.add_command(label="Journal Entry Summary",command=self.new_JE)
-		self.JE_menu.add_command(label="Export Journal Entries",command=self.new_JE)
 		self.JE_menu.add_command(label="Multi-Journal Entry",command=self.new_JE)
 		self.add_cascade(label="Journal Entries",menu=self.JE_menu)
 

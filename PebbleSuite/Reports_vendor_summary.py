@@ -67,7 +67,7 @@ class VENDOR_SUMMARY_WINDOW(tk.Toplevel):
 
 				df = pd.DataFrame(rows,columns=[column[0] for column in cursor.description])
 
-				df.to_csv(f'{time.time()} - output.csv',index=False)
+				df.to_csv(f'{time.time()}_export_vendors.csv',index=False)
 
 				connection.commit()
 
