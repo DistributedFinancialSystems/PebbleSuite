@@ -1,4 +1,3 @@
-#Python Standard Library dependencies
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -10,11 +9,23 @@ from tkinter.messagebox import showinfo
 
 class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
+	"""
+	_______________________________________
+	Define class variables and SQL scripts:
+	_______________________________________
+	"""
 	client_sql_script = '''SELECT CLIENT_NAME FROM clients;'''
 
 	alive = False
 
+	"""
+	___________________________________
+	Retrieve customer data from SQL.db:
+	___________________________________
+	"""
 	def __init__(self,*args,**kwargs):
+
+		"""
 
 		client_data = []
 
@@ -34,118 +45,160 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 			cursor.close()
 
+		"""
+
+		"""
+		_______________________
+		Define Tkinter widgets:
+		_______________________
+		"""
 		super().__init__(*args,**kwargs)
-		self.config(width=390,height=520)
+		self.config(width=700,height=505)
 		self.title("Edit Client")
 		self.focus()
 		self.resizable(0,0)
 		self.__class__.alive = True
-
-		self.clicked = tk.StringVar()
-		self.clicked.set(f"{options[0]}")
-
-		self.client_name_label = ttk.Label(self,text="Client Name")
+		"""
+		_____________________________________________________________
+		Retrieve client names from SQL.db, enter into listbox widget:
+		_____________________________________________________________
+		"""
+		self.client_name_label = ttk.Label(self,text="Clients:")
 		self.client_name_label.place(x=20,y=20)
-		self.client_option_menu = ttk.OptionMenu(self,self.clicked,options[0],*options)
-		self.client_option_menu.place(x=200,y=20)
 
-		self.client_address1_label = ttk.Label(self,text="Address 1:")
-		self.client_address1_label.place(x=20,y=60)
-		self.client_address1_entry_text = tk.StringVar()
-		self.client_address1_entry = ttk.Entry(self,textvariable=self.client_address1_entry_text)
-		self.client_address1_entry.place(x=200,y=60)
+		self.sort_clients_button = ttk.Button(self,text="Sort Clients A-Z",command=self.sort_clients)
+		self.sort_clients_button.place(x=120,y=20)
 
-		self.client_address2_label = tk.Label(self,text="Address 2:")
-		self.client_address2_label.place(x=20,y=100)
-		self.client_address2_entry_text = tk.StringVar()
-		self.client_address2_entry = ttk.Entry(self,textvariable=self.client_address2_entry_text)
-		self.client_address2_entry.place(x=200,y=100)
+		self.client_scrollbar = ttk.Scrollbar(self)
+		self.client_scrollbar.place(x=240,y=60,width=20,height=380)
+		self.client_listbox = tk.Listbox(self,yscrollcommand=self.client_scrollbar.set)
+		self.client_listbox.place(x=20,y=60, width=220,height=380)
+		self.client_scrollbar.config(command=self.client_listbox.yview)
 
-		self.client_city_label = ttk.Label(self,text="City:")
-		self.client_city_label.place(x=20,y=140)
-		self.client_city_entry_text = tk.StringVar()
-		self.client_city_entry = tk.Entry(self,textvariable=self.client_city_entry_text)
-		self.client_city_entry.place(x=200,y=140)
+		with sqlite3.connect("SQL.db") as connection:
 
-		self.client_state_label = ttk.Label(self,text="State/Province/Territory:")
-		self.client_state_label.place(x=20,y=180)
-		self.client_state_entry_text = tk.StringVar()
-		self.client_state_entry = ttk.Entry(self,textvariable=self.client_state_entry_text)
-		self.client_state_entry.place(x=200,y=180)
+			cursor = connection.cursor()
 
-		self.client_zip_postal_code_label = ttk.Label(self,text="ZIP Code/Postal Code:")
-		self.client_zip_postal_code_label.place(x=20,y=220)
-		self.client_zip_postal_code_entry_text = tk.StringVar()
-		self.client_zip_postal_code_entry = ttk.Entry(self,textvariable=self.client_zip_postal_code_entry_text)
-		self.client_zip_postal_code_entry.place(x=200,y=220)
+			cursor.execute(self.client_sql_script)
 
-		self.client_country_label = ttk.Label(self,text="Country:")
-		self.client_country_label.place(x=20,y=260)
-		self.client_country_entry_text = tk.StringVar()
-		self.client_country_entry = tk.Entry(self,textvariable=self.client_country_entry_text)
-		self.client_country_entry.place(x=200,y=260)
+			for item in cursor:
 
-		self.client_contact_name_label = ttk.Label(self,text="Client Contact Name:")
-		self.client_contact_name_label.place(x=20,y=300)
-		self.client_contact_name_entry_text = tk.StringVar()
-		self.client_contact_name_entry = ttk.Entry(self,textvariable=self.client_contact_name_entry_text)
-		self.client_contact_name_entry.place(x=200,y=300)
+				self.client_listbox.insert(0," ".join(item))
 
-		self.client_contact_phone_label = ttk.Label(self,text="Client Contact Phone:")
-		self.client_contact_phone_label.place(x=20,y=340)
-		self.client_contact_phone_entry_text = tk.StringVar()
-		self.client_contact_phone_entry = ttk.Entry(self,textvariable=self.client_contact_phone_entry_text)
-		self.client_contact_phone_entry.place(x=200,y=340)
+			connection.commit()
 
-		self.client_contact_email_label = ttk.Label(self,text="Client Contact Email:")
-		self.client_contact_email_label.place(x=20,y=380)
-		self.client_contact_email_entry_text = tk.StringVar()
-		self.client_contact_email_entry = ttk.Entry(self,textvariable=self.client_contact_email_entry_text)
-		self.client_contact_email_entry.place(x=200,y=380)
+			cursor.close()
 
-		self.client_contact_notes_label = ttk.Label(self,text="Client Contact Notes:")
-		self.client_contact_notes_label.place(x=20,y=420)
-		self.client_contact_notes_entry_text = tk.StringVar()
-		self.client_contact_notes_entry = ttk.Entry(self,textvariable=self.client_contact_notes_entry_text)
-		self.client_contact_notes_entry.place(x=200,y=420)
-
-		self.search_client_data_button = ttk.Button(self,text="Retrieve Client Data",command=self.search_client_data)
+		self.search_client_data_button = ttk.Button(self,text="Reterieve Client Data",command=self.search_client_data)
 		self.search_client_data_button.place(x=20,y=460)
 
+		self.client_name_label = ttk.Label(self,text="Client Name:")
+		self.client_name_label.place(x=300,y=20)
+		self.client_name = tk.StringVar()
+		self.client_name_entry = ttk.Entry(self,textvariable=self.client_name,state=tk.DISABLED)
+		self.client_name_entry.place(x=500,y=20)
+
+		self.client_address1_label = ttk.Label(self,text="Address 1:")
+		self.client_address1_label.place(x=300,y=60)
+		self.client_address1_entry_text = tk.StringVar()
+		self.client_address1_entry = ttk.Entry(self,textvariable=self.client_address1_entry_text)
+		self.client_address1_entry.place(x=500,y=60)
+
+		self.client_address2_label = tk.Label(self,text="Address 2:")
+		self.client_address2_label.place(x=300,y=100)
+		self.client_address2_entry_text = tk.StringVar()
+		self.client_address2_entry = ttk.Entry(self,textvariable=self.client_address2_entry_text)
+		self.client_address2_entry.place(x=500,y=100)
+
+		self.client_city_label = ttk.Label(self,text="City:")
+		self.client_city_label.place(x=300,y=140)
+		self.client_city_entry_text = tk.StringVar()
+		self.client_city_entry = tk.Entry(self,textvariable=self.client_city_entry_text)
+		self.client_city_entry.place(x=500,y=140)
+
+		self.client_state_label = ttk.Label(self,text="State/Province/Territory:")
+		self.client_state_label.place(x=300,y=180)
+		self.client_state_entry_text = tk.StringVar()
+		self.client_state_entry = ttk.Entry(self,textvariable=self.client_state_entry_text)
+		self.client_state_entry.place(x=500,y=180)
+
+		self.client_zip_postal_code_label = ttk.Label(self,text="ZIP Code/Postal Code:")
+		self.client_zip_postal_code_label.place(x=300,y=220)
+		self.client_zip_postal_code_entry_text = tk.StringVar()
+		self.client_zip_postal_code_entry = ttk.Entry(self,textvariable=self.client_zip_postal_code_entry_text)
+		self.client_zip_postal_code_entry.place(x=500,y=220)
+
+		self.client_country_label = ttk.Label(self,text="Country:")
+		self.client_country_label.place(x=300,y=260)
+		self.client_country_entry_text = tk.StringVar()
+		self.client_country_entry = tk.Entry(self,textvariable=self.client_country_entry_text)
+		self.client_country_entry.place(x=500,y=260)
+
+		self.client_contact_name_label = ttk.Label(self,text="Client Contact Name:")
+		self.client_contact_name_label.place(x=300,y=300)
+		self.client_contact_name_entry_text = tk.StringVar()
+		self.client_contact_name_entry = ttk.Entry(self,textvariable=self.client_contact_name_entry_text)
+		self.client_contact_name_entry.place(x=500,y=300)
+
+		self.client_contact_phone_label = ttk.Label(self,text="Client Contact Phone:")
+		self.client_contact_phone_label.place(x=300,y=340)
+		self.client_contact_phone_entry_text = tk.StringVar()
+		self.client_contact_phone_entry = ttk.Entry(self,textvariable=self.client_contact_phone_entry_text)
+		self.client_contact_phone_entry.place(x=500,y=340)
+
+		self.client_contact_email_label = ttk.Label(self,text="Client Contact Email:")
+		self.client_contact_email_label.place(x=300,y=380)
+		self.client_contact_email_entry_text = tk.StringVar()
+		self.client_contact_email_entry = ttk.Entry(self,textvariable=self.client_contact_email_entry_text)
+		self.client_contact_email_entry.place(x=500,y=380)
+
+		self.client_contact_notes_label = ttk.Label(self,text="Client Contact Notes:")
+		self.client_contact_notes_label.place(x=300,y=420)
+		self.client_contact_notes_entry_text = tk.StringVar()
+		self.client_contact_notes_entry = ttk.Entry(self,textvariable=self.client_contact_notes_entry_text)
+		self.client_contact_notes_entry.place(x=500,y=420)
+
+		self.search_client_data_button = ttk.Button(self,text="Clear Data Entries",command=self.clear_data_entries)
+		self.search_client_data_button.place(x=300,y=460)
+
 		self.change_client_data_button = ttk.Button(self,text="Submit Data Changes",command=self.change_client_data)
-		self.change_client_data_button.place(x=200,y=460)
+		self.change_client_data_button.place(x=500,y=460)
+
+
+	def sort_clients(self):
+
+		try:
+
+			pass
+
+		except Exception as error:
+
+			sort_clients_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message=f"{error}")
 
 
 	def search_client_data(self):
 
 		try:
 
-			search_clients_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
-
-			search_client_name = self.clicked.get()
-
 			collect = []
 
-			if search_client_name == "Select Client":
+			search_clients_sql_script = '''SELECT * FROM clients WHERE CLIENT_NAME=?'''
 
-				search_client_data_error_message = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
+			for item in self.client_listbox.curselection():
 
-			else:
+				select_vendor = self.client_listbox.get(item)
 
-				with sqlite3.connect("SQL.db") as connection:
+			with sqlite3.connect("SQL.db") as connection:
 
-					cursor = connection.cursor()
+				cursor = connection.cursor()
 
-					cursor.execute(search_clients_sql_script,[search_client_name])
+				cursor.execute(search_clients_sql_script,[select_vendor])
 
-					for item in cursor:
+				for item in cursor:
 
-						collect.append(item)
+					collect.append(item)
 
-					connection.commit()
-
-					cursor.close()
-
+				self.client_name.set(f"{collect[0][0]}")
 				self.client_address1_entry_text.set(f"{collect[0][1]}")
 				self.client_address2_entry_text.set(f"{collect[0][2]}")
 				self.client_city_entry_text.set(f"{collect[0][3]}")
@@ -157,9 +210,33 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 				self.client_contact_email_entry_text.set(f"{collect[0][9]}")
 				self.client_contact_notes_entry_text.set(f"{collect[0][10]}")
 
+				connection.commit()
+
+				cursor.close()
+
 		except Exception as error:
 
 			search_client_data_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message=f"{error}")
+
+	def clear_data_entries(self):
+
+		try:
+
+			self.client_name.set("")
+			self.client_address1_entry_text.set("")
+			self.client_address2_entry_text.set("")
+			self.client_city_entry_text.set("")
+			self.client_state_entry_text.set("")
+			self.client_zip_postal_code_entry_text.set("")
+			self.client_country_entry_text.set("")
+			self.client_contact_name_entry_text.set("")
+			self.client_contact_phone_entry_text.set("")
+			self.client_contact_email_entry_text.set("")
+			self.client_contact_notes_entry_text.set("")
+
+		except Exception as error:
+
+			clear_data_entries_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message=f"{error}")
 
 
 	def change_client_data(self):
@@ -178,7 +255,7 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 			edit_contact_email_sql_script = '''UPDATE clients SET CONTACT_EMAIL=? WHERE CLIENT_NAME=?;'''
 			edit_client_notes_sql_script = '''UPDATE clients SET CONTACT_NOTES=? WHERE CLIENT_NAME=?;'''
 
-			search_client_name = self.clicked.get()
+			search_client_name = self.client_name.get()
 			new_address1 = self.client_address1_entry.get()
 			new_address2 = self.client_address2_entry.get()
 			new_city = self.client_city_entry.get()

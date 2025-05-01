@@ -57,9 +57,9 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 		Retrieve vendor names from SQL.db, enter into listbox widget:
 		_____________________________________________________________
 		"""
-
 		self.vendor_name_label = ttk.Label(self,text="Vendors:")
 		self.vendor_name_label.place(x=20,y=20)
+
 		self.sort_vendors_button = ttk.Button(self,text="Sort Vendors A-Z",command=self.sort_vendors)
 		self.sort_vendors_button.place(x=120,y=20)
 
@@ -86,7 +86,7 @@ class EDIT_VENDOR_WINDOW(tk.Toplevel):
 		self.search_vendor_data_button = ttk.Button(self,text="Retrieve Vendor Data",command=self.search_vendor_data)
 		self.search_vendor_data_button.place(x=20,y=460)
 
-		self.vendor_name_label = ttk.Label(self,text="Vendor:")
+		self.vendor_name_label = ttk.Label(self,text="Vendor Name:")
 		self.vendor_name_label.place(x=300,y=20)
 		self.vendor_name = tk.StringVar()
 		self.vendor_name_entry = ttk.Entry(self,textvariable=self.vendor_name,state=tk.DISABLED)
