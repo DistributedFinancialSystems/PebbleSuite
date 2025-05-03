@@ -80,9 +80,11 @@ class NEW_JE_WINDOW(tk.Toplevel):
 	try:
 
 		def __init__(self,*args,**kwargs):
-
-			#Journal Entry Chronology code:
-
+			"""
+			______________________________
+			Journal Entry Chronology code:
+			______________________________
+			"""
 			journal_entry_chronology = []
 
 			journal_entry_chronology_sql_script = '''SELECT * FROM journal_entry_chronology;'''
@@ -100,9 +102,11 @@ class NEW_JE_WINDOW(tk.Toplevel):
 				connection.commit()
 
 				cursor.close()
-
-			#Journal Entry Chronology code:
-
+			"""
+			_________________________________________
+			Retrieve General Ledger data from SQL.db:
+			_________________________________________
+			"""
 			GL_data = []
 
 			GL_sql_script = '''SELECT GENERAL_LEDGER_NAME FROM general_ledgers;'''
@@ -122,7 +126,11 @@ class NEW_JE_WINDOW(tk.Toplevel):
 				connection.commit()
 
 				cursor.close()
-
+			"""
+			_______________________
+			Define Tkinter widgets:
+			_______________________
+			"""
 			super().__init__(*args,**kwargs)
 			self.config(width=400,height=340)
 			self.title("New Journal Entry")

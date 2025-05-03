@@ -17,6 +17,7 @@ from tkinter import ttk
 from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 import stripe
+import os
 
 #PebbleSuite custom modules.
 from MenuBar import *
@@ -127,7 +128,29 @@ class APP(tk.Tk):
 		"""
 
 		self.tasks_button = ttk.Button(self,text="Tasks",command=self.tasks_window)
-		self.tasks_button.place(x=20,y=20)
+		self.tasks_button.place(x=20,y=12)
+
+		self.files_button = ttk.Button(self,text="Files",command=self.na)
+		self.files_button.place(x=130,y=12)
+
+		self.database_button = ttk.Button(self,text="Database",command=self.na)
+		self.database_button.place(x=275,y=12)
+
+		self.directory_label = ttk.Label(self,text="Directory:")
+		self.directory_label.place(x=430,y=12)
+		self.directory_text = tk.StringVar()
+		self.current_directory = os.getcwd()
+		self.check_directory = os.path.dirname(self.current_directory)
+		self.directory_text.set(f"{self.check_directory}")
+
+		self.directory_entry = ttk.Entry(self,textvariable=self.directory_text)
+		self.directory_entry.place(x=500,y=12,width=300)
+
+		self.set_directory_button = ttk.Button(self,text="Set Directory",command=self.change_directory)
+		self.set_directory_button.place(x=825,y=12)
+
+		self.separator = ttk.Separator(self,orient='horizontal')
+		self.separator.place(relx=0,rely=0.10,relwidth=1,relheight=1)
 
 		"""
 
@@ -171,6 +194,16 @@ class APP(tk.Tk):
 
 		pass
 
+	def change_directory(self):
+
+		try:
+
+			pass
+
+		except Exception as error:
+
+			tk.change_directory_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
 	def tasks_window(self):
 
 		"""
@@ -182,9 +215,9 @@ class APP(tk.Tk):
 		"""
 
 		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.place(x=377,y=155,width=20,height=335)
+		self.scrollbar.place(x=377,y=175,width=20,height=315)
 		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=155,width=357,height=335)
+		self.listbox.place(x=20,y=175,width=357,height=315)
 		self.scrollbar.config(command=self.listbox.yview)
 
 		with sqlite3.connect("SQL.db") as connection:
@@ -202,27 +235,27 @@ class APP(tk.Tk):
 			cursor.close()
 
 		self.text_scrollbar = ttk.Scrollbar(self)
-		self.text_scrollbar.place(x=920,y=155,width=20,height=335)
+		self.text_scrollbar.place(x=920,y=175,width=20,height=315)
 		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
-		self.textbox.place(x=430,y=155,width=490,height=335)
+		self.textbox.place(x=430,y=175,width=490,height=315)
 
 		self.new_task_button = ttk.Button(self,text="Create New Task",command=self.new_task)
-		self.new_task_button.place(x=275,y=120)
+		self.new_task_button.place(x=275,y=140)
 
 		self.clear_note_data_button = ttk.Button(self,text="Clear Task Entries",command=self.clear_note_entries)
 		self.clear_note_data_button.place(x=110,y=500)
 
 		self.new_task_name_label = ttk.Label(self,text="New Task Name:")
-		self.new_task_name_label.place(x=20,y=60)
+		self.new_task_name_label.place(x=20,y=80)
 		self.new_task_name_entry = ttk.Entry(self)
-		self.new_task_name_entry.place(x=20,y=80,width=375)
+		self.new_task_name_entry.place(x=20,y=100,width=375)
 
 		self.new_note_date_label = ttk.Label(self,text="New Task Date:")
-		self.new_note_date_label.place(x=20,y=120)
+		self.new_note_date_label.place(x=20,y=140)
 		self.new_task_date_entry_text = tk.StringVar()
 		self.new_task_date_entry_text.set("MM/DD/YYYY")
 		self.new_task_date_entry = ttk.Entry(self,textvariable=self.new_task_date_entry_text)
-		self.new_task_date_entry.place(x=130,y=120,width=100)
+		self.new_task_date_entry.place(x=130,y=140,width=100)
 
 		self.open_task_note_button = ttk.Button(self,text="Open Task",command=self.display_note)
 		self.open_task_note_button.place(x=20,y=500)
@@ -237,19 +270,19 @@ class APP(tk.Tk):
 		self.delete_task_note_button.place(x=240,y=500)
 
 		self.editing_task_name_label = ttk.Label(self,text="Current Task:")
-		self.editing_task_name_label.place(x=430,y=60)
+		self.editing_task_name_label.place(x=430,y=80)
 		self.editing_task_name_entry_text = tk.StringVar()
 		self.editing_task_name_entry = ttk.Entry(self,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
-		self.editing_task_name_entry.place(x=430,y=80,width=375)
+		self.editing_task_name_entry.place(x=430,y=100,width=375)
 
 		self.editing_task_date_label = ttk.Label(self,text="Date Created:")
-		self.editing_task_date_label.place(x=825,y=60)
+		self.editing_task_date_label.place(x=825,y=80)
 		self.editing_task_date_entry_text = tk.StringVar()
 		self.editing_task_date_entry = ttk.Entry(self,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
-		self.editing_task_date_entry.place(x=825,y=80,width=100)
+		self.editing_task_date_entry.place(x=825,y=100,width=100)
 
 		self.editing_task_notes_label = ttk.Label(self,text="Current Task Notes:")
-		self.editing_task_notes_label.place(x=430,y=120)
+		self.editing_task_notes_label.place(x=430,y=140)
 
 
 	def new_task(self):
