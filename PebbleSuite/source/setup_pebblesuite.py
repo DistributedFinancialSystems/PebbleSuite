@@ -1,5 +1,4 @@
-#setup_pebblesuite.py
-
+import os
 import sqlite3
 
 
@@ -15,6 +14,12 @@ class database:
 
 
 	def create_pebblesuite_tables(self):
+
+		permanent_directory = ('''CREATE TABLE IF NOT EXISTS permanent_directory(
+					PERMANENT_DIRECTORY TEXT);''')
+
+		working_directory = ('''CREATE TABLE IF NOT EXISTS working_directory(
+					WORKING_DIRECTORY TEXT);''')
 
 		stripe_api_script = ('''CREATE TABLE IF NOT EXISTS stripe_api_key(
 					STRIPE_API_KEY TEXT);''')
@@ -169,6 +174,8 @@ class database:
 
 			cursor = connection.cursor()
 
+			cursor.execute(permanent_directory)
+			cursor.execute(working_directory)
 			cursor.execute(stripe_api_script)
 			cursor.execute(journal_entry_chronology)
 			cursor.execute(tasks_sql_script)
@@ -197,6 +204,16 @@ if __name__ == "__main__":
 	connect_database = database(database_name)
 	connect_database.create_pebblesuite_tables()
 
+	permanent_directory_key_default = '''INSERT INTO permanent_directory(
+						PERMANENT_DIRECTORY)
+						VALUES(?)'''
+
+	directory = os.getcwd()
+
+	working_directory_key_default = '''INSERT INTO working_directory(
+					WORKING_DIRECTORY)
+					VALUES(0);'''
+
 	stripe_API_key_default = '''INSERT INTO stripe_api_key(
 				STRIPE_API_KEY)
 				VALUES(0);'''
@@ -208,6 +225,8 @@ if __name__ == "__main__":
 	with sqlite3.connect("SQL.db") as connection:
 
 		cursor = connection.cursor()
+		cursor.execute(permanent_directory_key_default,[directory])
+		cursor.execute(working_directory_key_default)
 		cursor.execute(stripe_API_key_default)
 		cursor.execute(journal_entry_script)
 		connection.commit()

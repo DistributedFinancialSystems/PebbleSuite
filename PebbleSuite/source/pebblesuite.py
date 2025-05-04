@@ -198,7 +198,10 @@ class APP(tk.Tk):
 
 		try:
 
-			pass
+			new_dir = self.directory_text.get()
+			os.chdir(new_dir)
+
+			change_directory_confirmation_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"New working directory:  {new_dir}")
 
 		except Exception as error:
 
