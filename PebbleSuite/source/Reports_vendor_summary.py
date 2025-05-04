@@ -5,6 +5,7 @@ from tkinter.ttk import *
 from tkinter.messagebox import showinfo
 import pandas as pd
 import time
+import os
 
 
 
@@ -56,22 +57,61 @@ class VENDOR_SUMMARY_WINDOW(tk.Toplevel):
 
 		retrieve_vendors_sql_script = '''SELECT * FROM vendors;'''
 
+		retrieve_working_directory = '''SELECT WORKING_DIRECTORY FROM working_directory;'''
+
+		retrieve_permanent_directory = '''SELECT PERMANENT_DIRECTORY FROM permanent_directory;'''
+
+		directory = []
+
 		try:
+
 			with sqlite3.connect("SQL.db") as connection:
 
-				cursor = connection.cursor()
+				cursor_1 = connection.cursor()
 
-				cursor.execute(retrieve_vendors_sql_script)
+				cursor_1.execute(retrieve_vendors_sql_script)
 
-				rows = cursor.fetchall()
+				rows = cursor_1.fetchall()
 
-				df = pd.DataFrame(rows,columns=[column[0] for column in cursor.description])
-
-				df.to_csv(f'{time.time()}_export_vendors.csv',index=False)
+				df = pd.DataFrame(rows,columns=[column[0] for column in cursor_1.description])
 
 				connection.commit()
 
-				cursor.close()
+				cursor_1.close()
+
+				cursor_2 = connection.cursor()
+
+				cursor_2.execute(retrieve_working_directory)
+
+				for item in cursor_2:
+
+					directory.append(*item)
+
+				connection.commit()
+
+				cursor_2.close()
+
+				os.chdir(f"{directory[0]}")
+
+				df.to_csv(f'{time.time()}_export_vendors.csv',index=False)
+
+				directory.clear()
+
+				cursor_3 = connection.cursor()
+
+				cursor_3.execute(retrieve_permanent_directory)
+
+				for item in cursor_3:
+
+					directory.append(*item)
+
+				os.chdir(f"{directory[0]}")
+
+				directory.clear()
+
+				connection.commit()
+
+				cursor_3.close()
 
 			export_vendors_confirmation_message_1 = tk.messagebox.showinfo(title="Vendor Summary",message="Vendor data successfully exported.")
 

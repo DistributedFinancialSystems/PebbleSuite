@@ -136,11 +136,35 @@ class APP(tk.Tk):
 		self.database_button = ttk.Button(self,text="Database",command=self.na)
 		self.database_button.place(x=275,y=12)
 
+		self.separator = ttk.Separator(self,orient='horizontal')
+		self.separator.place(relx=0,rely=0.10,relwidth=1,relheight=1)
+
+		"""
+		____________________________________
+		Functionality for directory widgets:
+		____________________________________
+		"""
 		self.directory_label = ttk.Label(self,text="Directory:")
 		self.directory_label.place(x=430,y=12)
 		self.directory_text = tk.StringVar()
-		self.current_directory = os.getcwd()
-		self.check_directory = os.path.dirname(self.current_directory)
+
+		self.current_directory = []
+
+		with sqlite3.connect("SQL.db") as connection:
+
+			cursor = connection.cursor()
+
+			cursor.execute('''SELECT * FROM permanent_directory;''')
+
+			for item in cursor:
+
+				self.current_directory.append(*item)
+
+			connection.commit()
+
+			cursor.close()
+
+		self.check_directory = os.path.dirname(self.current_directory[0])
 		self.directory_text.set(f"{self.check_directory}")
 
 		self.directory_entry = ttk.Entry(self,textvariable=self.directory_text)
@@ -148,9 +172,6 @@ class APP(tk.Tk):
 
 		self.set_directory_button = ttk.Button(self,text="Set Directory",command=self.change_directory)
 		self.set_directory_button.place(x=825,y=12)
-
-		self.separator = ttk.Separator(self,orient='horizontal')
-		self.separator.place(relx=0,rely=0.10,relwidth=1,relheight=1)
 
 		"""
 
@@ -198,8 +219,19 @@ class APP(tk.Tk):
 
 		try:
 
+			update_working_directory_sql_script = '''UPDATE working_directory SET WORKING_DIRECTORY=?;'''
+
 			new_dir = self.directory_text.get()
-			os.chdir(new_dir)
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(update_working_directory_sql_script,[new_dir])
+
+				connection.commit()
+
+				cursor.close()
 
 			change_directory_confirmation_message = tk.messagebox.showinfo(title="PebbleSuite",message=f"New working directory:  {new_dir}")
 
