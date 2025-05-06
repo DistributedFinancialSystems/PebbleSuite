@@ -92,22 +92,9 @@ from Reports_client_summary import *
 from Settings_stripe_account import *
 
 
-"""
-class TestFrame(tk.Frame):
-
-	def __init__(self):
-
-		super().__init__()
-
-		tk.Label(self,text="Test Label")
-"""
-
-
 
 
 class APP(tk.Tk):
-
-	retrieve_note_names = '''SELECT TASK_NAME FROM tasks;'''
 
 	def __init__(self):
 
@@ -120,9 +107,17 @@ class APP(tk.Tk):
 		self.config(menu=root_menu)
 
 		container = tk.Frame(self)
+		#container.place(x=10,y=10,relx=0.5,rely=0.5)
 		container.pack(side="top",fill="both")
 		container.grid_rowconfigure(0,weight=1)
-		container.grid_columnconfigure(0,weight=3)
+		container.grid_rowconfigure(1,weight=1)
+		container.grid_rowconfigure(2,weight=1)
+		container.grid_rowconfigure(3,weight=1)
+		container.grid_columnconfigure(0,weight=1)
+		container.grid_columnconfigure(1,weight=3)
+		#container.grid_columnconfigure(2,weight=1)
+		#container.grid_columnconfigure(3,weight=1)
+		#container.grid_columnconfigure(4,weight=1)
 
 		self.frames = {}
 
@@ -134,7 +129,10 @@ class APP(tk.Tk):
 
 			frame.grid(row=0,column=0,sticky="nsew")
 
+			#frame.place(x=10,y=10,relx=0.5,rely=0.5)
+
 		self.show_frame(StartPage)
+
 
 	def show_frame(self,cont):
 
@@ -143,33 +141,13 @@ class APP(tk.Tk):
 		frame.tkraise()
 
 		"""
-
-		self.tasks_frame = tk.Frame(self,height=540,width=960)
-		self.tasks_frame.pack()
-
-		self.files_frame = tk.Frame(self,height=540,width=960)
-		self.files_frame.pack()
-
-		"""
-		"""
-		self.files_button = ttk.Button(self,text="Files",command=self.na)
-		self.files_button.place(x=130,y=12)
-
-		self.tasks_button = ttk.Button(self,text="Tasks",command=self.na)
-		self.tasks_button.place(x=20,y=12)
-
-		self.database_button = ttk.Button(self,text="Database",command=self.na)
-		self.database_button.place(x=275,y=12)
-		"""
-
-		#self.separator = ttk.Separator(self,orient='horizontal')
-		#self.separator.place(relx=0,rely=0.10,relwidth=1,relheight=1)
-
-		"""
 		____________________________________
 		Functionality for directory widgets:
 		____________________________________
 		"""
+
+		"""
+
 		self.directory_label = ttk.Label(self,text="Directory:")
 		self.directory_label.place(x=430,y=12)
 		self.directory_text = tk.StringVar()
@@ -199,40 +177,6 @@ class APP(tk.Tk):
 		self.set_directory_button = ttk.Button(self,text="Set Directory",command=self.change_directory)
 		self.set_directory_button.place(x=825,y=12)
 
-		"""
-		self.files_button = ttk.Button(files_frame,text="Files",command=self.files_window)
-		self.files_button.place(x=120,y=20)
-		"""
-
-		"""
-		self.testframe1 = TestFrame()
-		self.testframe1.grid(row=2,column=3)
-		"""
-	"""
-	def files_window(self):
-
-		for widget in self.winfo_children():
-
-			widget.destroy()
-
-		self.files_label = ttk.Label(self.files_frame,text="Files Frame")
-		self.files_label.place(x=100,y=100)
-
-		self.files_button = ttk.Button(self.files_frame,text="Button",command=self.na)
-		self.files_button.place(x=200,y=100)
-
-		self.scrollbar = ttk.Scrollbar(self.files_frame)
-		self.scrollbar.place(x=120,y=100,width=20,height=100)
-		self.listbox = tk.Listbox(self.files_frame,yscrollcommand=self.scrollbar.set)
-		self.listbox.place(x=20,y=100,width=100,height=100)
-		self.scrollbar.config(command=self.listbox.yview)
-	"""
-
-
-	def na(self):
-
-		pass
-
 
 	def change_directory(self):
 
@@ -257,18 +201,82 @@ class APP(tk.Tk):
 		except Exception as error:
 
 			tk.change_directory_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
-
 	"""
 
-	def tasks_window(self):
 
-		for widget in self.files_frame.winfo_children():
 
-			widget.destroy()
+class StartPage(tk.Frame):
+
+	def __init__(self,parent,controller):
+
+		tk.Frame.__init__(self,parent)
+
+		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
+		button1.grid(row=0,column=0,padx=10,pady=10)
+		#button1.place(x=20,y=15)
+
+		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		button2.grid(row=1,column=0,padx=10,pady=10)
+		#button2.place(x=120,y=15)
+
+		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
+		button3.grid(row=2,column=0,padx=10,pady=10)
+		#button3.place(x=220,y=15)
+
+		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		button4.grid(row=3,column=0,padx=10,pady=10)
+		#button4.place(x=320,y=15)
+
+		"""
+		label = ttk.Label(self,text="Row 1,Column 0")
+
+		label.grid(row=1,column=0,padx=10,pady=10)
+
+		label2 = ttk.Label(self,text="Row 2, column 0")
+
+		label2.grid(row=2,column=0,padx=10,pady=10)
+
+		label3 = ttk.Label(self,text="Row 1, Column 1")
+
+		label3.grid(row=1,column=1,padx=10,pady=10)
+
+		label4 = ttk.Label(self,text="Row 2, Column 2")
+
+		label4.grid(row=2,column=2,padx=10,pady=10)
+		"""
+
+
+class Tasks(tk.Frame):
+
+	retrieve_note_names = '''SELECT TASK_NAME FROM tasks;'''
+
+	def __init__(self,parent,controller):
+
+		tk.Frame.__init__(self,parent)
+
+		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
+		button1.grid(row=0,column=0,padx=10,pady=10)
+		#button1.place(x=20,y=15)
+
+		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		button2.grid(row=1,column=0,padx=10,pady=10)
+		#button2.place(x=120,y=15)
+
+		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
+		button3.grid(row=2,column=0,padx=10,pady=10)
+		#button3.place(x=220,y=15)
+
+		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		button4.grid(row=3,column=0,padx=10,pady=10)
+		#button4.place(x=320,y=15)
+
+		"""
 
 		self.scrollbar = ttk.Scrollbar(self)
+		self.scrollbar.grid(row=0,column=1,padx=10,pady=10)
 		self.scrollbar.place(x=377,y=175,width=20,height=315)
 		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
+		self.listbox.grid(row=0,column=1,padx=10,pady=10)
 		self.listbox.place(x=20,y=175,width=357,height=315)
 		self.scrollbar.config(command=self.listbox.yview)
 
@@ -286,10 +294,16 @@ class APP(tk.Tk):
 
 			cursor.close()
 
-		self.text_scrollbar = ttk.Scrollbar(self)
-		self.text_scrollbar.place(x=920,y=175,width=20,height=315)
-		self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
-		self.textbox.place(x=430,y=175,width=490,height=315)
+		"""
+
+		#self.text_scrollbar = ttk.Scrollbar(self)
+		#self.text_scrollbar.grid(row=2,column=1,padx=10,pady=10)
+		#self.text_scrollbar.place(x=920,y=175,width=20,height=315)
+		#self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
+		#self.textbox.grid(row=3,column=1,padx=10,pady=10)
+		#self.textbox.place(x=430,y=175,width=490,height=315)
+
+		"""
 
 		self.new_task_button = ttk.Button(self,text="Create New Task",command=self.new_task)
 		self.new_task_button.place(x=275,y=140)
@@ -336,7 +350,12 @@ class APP(tk.Tk):
 		self.editing_task_notes_label = ttk.Label(self,text="Current Task Notes:")
 		self.editing_task_notes_label.place(x=430,y=140)
 
-	"""
+		"""
+
+
+	def na(self):
+
+		a = tk.messagebox.showinfo(title="PebbleSuite",message="na")
 
 
 	def new_task(self):
@@ -576,49 +595,6 @@ class APP(tk.Tk):
 
 					delete_note_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
-class StartPage(tk.Frame):
-
-	def __init__(self,parent,controller):
-
-		tk.Frame.__init__(self,parent)
-
-		label = ttk.Label(self,text="StartPage")
-
-		label.grid(row=0,column=0,padx=10,pady=10)
-
-		button1 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-
-		button1.grid(row=0,column=1,padx=10,pady=10)
-
-		button2 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-
-		button2.grid(row=0,column=2,padx=10,pady=10)
-
-		button3 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-
-		button3.grid(row=0,column=3,padx=10,pady=10)
-
-class Tasks(tk.Frame):
-
-	def __init__(self,parent,controller):
-
-		tk.Frame.__init__(self,parent)
-
-		label = ttk.Label(self,text="Tasks")
-
-		label.grid(row=0,column=0,padx=10,pady=10)
-
-		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-
-		button1.grid(row=0,column=1,padx=10,pady=10)
-
-		button2 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-
-		button2.grid(row=0,column=2,padx=10,pady=10)
-
-		button3 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-
-		button3.grid(row=0,column=3,padx=10,pady=10)
 
 class Files(tk.Frame):
 
@@ -626,29 +602,43 @@ class Files(tk.Frame):
 
 		tk.Frame.__init__(self,parent)
 
+		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
+		button1.grid(row=0,column=0,padx=10,pady=10)
+		#button1.place(x=20,y=15)
+
+		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		button2.grid(row=1,column=0,padx=10,pady=10)
+		#button2.place(x=120,y=15)
+
+		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
+		button3.grid(row=2,column=0,padx=10,pady=10)
+		#button3.place(x=220,y=15)
+
+		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		button4.grid(row=3,column=0,padx=10,pady=10)
+		#button4.place(x=320,y=15)
+
 		label = ttk.Label(self,text="Files")
-
 		label.grid(row=0,column=0,padx=10,pady=10)
+		#label.place(x=20,y=500)
 
-		button1 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		files_button = ttk.Button(self,text="Button",command=self.na)
+		files_button.grid(row=0,column=1,padx=10,pady=10)
+		#files_button.place(x=120,y=500)
 
-		button1.grid(row=0,column=1,padx=10,pady=10)
+		#self.separator = ttk.Separator(self,orient='horizontal')
+		#self.separator.place(relx=0,rely=0.50,relwidth=1,relheight=1)
 
-		button2 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
+		#scrollbar = ttk.Scrollbar(self)
+		#scrollbar.place(x=120,y=100,width=20,height=100)
+		#listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
+		#listbox.place(x=20,y=100,width=100,height=100)
+		#scrollbar.config(command=self.listbox.yview)
 
-		button2.grid(row=0,column=2,padx=10,pady=10)
+	def na(self):
 
-		button3 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		tk.messagebox.showinfo(title="PebbleSuite",message="Message1")
 
-		button3.grid(row=0,column=3,padx=10,pady=10)
-
-		label2 = ttk.Label(self,text="YOOP")
-
-		label2.grid(row=4,column=4,padx=10,pady=10)
-
-		label3 = ttk.Label(self,text="FSDFSDF")
-
-		label3.grid(row=10,column=0,padx=10,pady=10)
 
 class Database(tk.Frame):
 
@@ -656,21 +646,25 @@ class Database(tk.Frame):
 
 		tk.Frame.__init__(self,parent)
 
-		label = ttk.Label(self,text="Database")
+		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
+		button1.grid(row=0,column=0,padx=10,pady=10)
+		#button1.place(x=20,y=15)
 
-		label.grid(row=0,column=0,padx=10,pady=10)
+		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		button2.grid(row=1,column=0,padx=10,pady=10)
+		#button2.place(x=120,y=15)
 
-		button1 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
+		button3.grid(row=2,column=0,padx=10,pady=10)
+		#button3.place(x=220,y=15)
 
-		button1.grid(row=0,column=1,padx=10,pady=10)
+		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		button4.grid(row=3,column=0,padx=10,pady=10)
+		#button4.place(x=320,y=15)
 
-		button2 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-
-		button2.grid(row=0,column=2,padx=10,pady=10)
-
-		button3 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-
-		button3.grid(row=0,column=3,padx=10,pady=10)
+		label1 = ttk.Label(self,text="Database")
+		label1.grid(row=0,column=0,padx=10,pady=10)
+		label1.place(x=20,y=500)
 
 
 """
