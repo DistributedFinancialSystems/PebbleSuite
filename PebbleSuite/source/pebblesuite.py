@@ -106,46 +106,38 @@ class APP(tk.Tk):
 		root_menu = MENU_BAR(self)
 		self.config(menu=root_menu)
 
-		container = tk.Frame(self)
-		#container.place(x=10,y=10,relx=0.5,rely=0.5)
-		container.pack(side="top",fill="both")
+		container = tk.Frame(self,width=960,height=50,bg="hotpink")
+		container.place(x=0,y=0)
+		container.grid(row=0,column=0,sticky="nsew",padx=5,pady=5)
+		#container.pack(side="top",fill="both")
 		container.grid_rowconfigure(0,weight=1)
-		container.grid_rowconfigure(1,weight=1)
-		container.grid_rowconfigure(2,weight=1)
-		container.grid_rowconfigure(3,weight=1)
 		container.grid_columnconfigure(0,weight=1)
-		container.grid_columnconfigure(1,weight=3)
-		#container.grid_columnconfigure(2,weight=1)
-		#container.grid_columnconfigure(3,weight=1)
-		#container.grid_columnconfigure(4,weight=1)
-
-		self.frames = {}
-
-		for F in (StartPage,Tasks,Files,Database):
-
-			frame = F(container,self)
-
-			self.frames[F] = frame
-
-			frame.grid(row=0,column=0,sticky="nsew")
-
-			#frame.place(x=10,y=10,relx=0.5,rely=0.5)
-
-		self.show_frame(StartPage)
 
 
-	def show_frame(self,cont):
+		container2 = tk.Frame(self,width=960,height=490,bg="skyblue")
+		container2.place(x=0,y=50)
+		container2.grid(row=1,column=0,sticky="nsew",padx=5,pady=5)
+		#container2.pack(side="top",fill="both")
+		container2.grid_rowconfigure(1,weight=1)
+		container2.grid_columnconfigure(0,weight=1)
 
-		frame = self.frames[cont]
 
-		frame.tkraise()
+		b1 = ttk.Button(self,text="StartPage")
+		b1.place(x=20,y=12)
+
+		b2 = ttk.Button(self,text="Tasks")
+		b2.place(x=120,y=12)
+
+		b3 = ttk.Button(self,text="Files")
+		b3.place(x=220,y=12)
+
+		b4 = ttk.Button(self,text="Database")
+		b4.place(x=320,y=12)
 
 		"""
 		____________________________________
 		Functionality for directory widgets:
 		____________________________________
-		"""
-
 		"""
 
 		self.directory_label = ttk.Label(self,text="Directory:")
@@ -201,8 +193,31 @@ class APP(tk.Tk):
 		except Exception as error:
 
 			tk.change_directory_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
-	"""
 
+
+
+		"""
+		self.frames = {}
+
+		for F in (StartPage,Tasks,Files,Database):
+
+			frame = F(container,self)
+
+			self.frames[F] = frame
+
+			frame.grid(row=0,column=0,sticky="nsew")
+
+			#frame.place(x=10,y=10,relx=0.5,rely=0.5)
+
+		self.show_frame(StartPage)
+
+
+	def show_frame(self,cont):
+
+		frame = self.frames[cont]
+
+		frame.tkraise()
+		"""
 
 
 class StartPage(tk.Frame):
@@ -211,20 +226,20 @@ class StartPage(tk.Frame):
 
 		tk.Frame.__init__(self,parent)
 
-		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-		button1.grid(row=0,column=0,padx=10,pady=10)
+		#button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
+		#button1.grid(row=0,column=0,sticky=tk.EW,padx=10,pady=10)
 		#button1.place(x=20,y=15)
 
 		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=1,column=0,padx=10,pady=10)
+		button2.grid(row=0,column=0,padx=10,pady=10)
 		#button2.place(x=120,y=15)
 
-		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		button3.grid(row=2,column=0,padx=10,pady=10)
+		#button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
+		#button3.grid(row=0,column=0,sticky=tk.EW,padx=10,pady=10)
 		#button3.place(x=220,y=15)
 
-		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		button4.grid(row=3,column=0,padx=10,pady=10)
+		#button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		#button4.grid(row=1,column=0,sticky=tk.EW,padx=10,pady=10)
 		#button4.place(x=320,y=15)
 
 		"""
@@ -258,27 +273,43 @@ class Tasks(tk.Frame):
 		button1.grid(row=0,column=0,padx=10,pady=10)
 		#button1.place(x=20,y=15)
 
-		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=1,column=0,padx=10,pady=10)
+		#button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
+		#button2.grid(row=0,column=0,padx=10,pady=10)
 		#button2.place(x=120,y=15)
 
-		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		button3.grid(row=2,column=0,padx=10,pady=10)
+		#button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
+		#button3.grid(row=0,column=0,padx=10,pady=10)
 		#button3.place(x=220,y=15)
 
-		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		button4.grid(row=3,column=0,padx=10,pady=10)
+		#button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
+		#button4.grid(row=0,column=0,padx=10,pady=10)
 		#button4.place(x=320,y=15)
 
-		"""
+		#self.scrollbar = ttk.Scrollbar(self)
+		#self.scrollbar.grid(row=1,column=0,padx=10,pady=10)
+		#self.scrollbar.place(x=377,y=175,width=20,height=315)
 
-		self.scrollbar = ttk.Scrollbar(self)
-		self.scrollbar.grid(row=0,column=1,padx=10,pady=10)
-		self.scrollbar.place(x=377,y=175,width=20,height=315)
-		self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
-		self.listbox.grid(row=0,column=1,padx=10,pady=10)
-		self.listbox.place(x=20,y=175,width=357,height=315)
-		self.scrollbar.config(command=self.listbox.yview)
+		f1 = tk.Frame(self)
+
+		f1.grid(row=5,column=1,sticky="nsew")
+
+		b1 = tk.Button(f1,text="TEST ME")
+		b1.pack(side="top")
+		#b1.place(x=30,y=30)
+
+		b2 = tk.Button(f1,text="MASDASD")
+		b2.pack(side="bottom")
+
+		b3 = tk.Button(f1,text="wef")
+		b3.pack(side="right")
+
+		#self.listbox = tk.Listbox(f1)
+		#self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
+		#self.listbox.grid(row=1,column=1,padx=10,pady=10)
+		#self.listbox.place(x=20,y=175,width=357,height=315)
+		#self.scrollbar.config(command=self.listbox.yview)
+
+		"""
 
 		with sqlite3.connect("SQL.db") as connection:
 
@@ -293,8 +324,8 @@ class Tasks(tk.Frame):
 				self.listbox.insert(0," ".join(item))
 
 			cursor.close()
-
 		"""
+
 
 		#self.text_scrollbar = ttk.Scrollbar(self)
 		#self.text_scrollbar.grid(row=2,column=1,padx=10,pady=10)
@@ -604,26 +635,26 @@ class Files(tk.Frame):
 
 		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
 		button1.grid(row=0,column=0,padx=10,pady=10)
-		#button1.place(x=20,y=15)
+		button1.place(x=20,y=15)
 
 		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=1,column=0,padx=10,pady=10)
-		#button2.place(x=120,y=15)
+		button2.grid(row=0,column=0,padx=10,pady=10)
+		button2.place(x=120,y=15)
 
 		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		button3.grid(row=2,column=0,padx=10,pady=10)
-		#button3.place(x=220,y=15)
+		button3.grid(row=0,column=0,padx=10,pady=10)
+		button3.place(x=220,y=15)
 
 		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		button4.grid(row=3,column=0,padx=10,pady=10)
-		#button4.place(x=320,y=15)
+		button4.grid(row=0,column=0,padx=10,pady=10)
+		button4.place(x=320,y=15)
 
-		label = ttk.Label(self,text="Files")
-		label.grid(row=0,column=0,padx=10,pady=10)
+		#label = ttk.Label(self,text="Files")
+		#label.grid(row=0,column=0,padx=10,pady=10)
 		#label.place(x=20,y=500)
 
-		files_button = ttk.Button(self,text="Button",command=self.na)
-		files_button.grid(row=0,column=1,padx=10,pady=10)
+		#files_button = ttk.Button(self,text="Button",command=self.na)
+		#files_button.grid(row=1,column=1,padx=10,pady=10)
 		#files_button.place(x=120,y=500)
 
 		#self.separator = ttk.Separator(self,orient='horizontal')
@@ -648,22 +679,22 @@ class Database(tk.Frame):
 
 		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
 		button1.grid(row=0,column=0,padx=10,pady=10)
-		#button1.place(x=20,y=15)
+		button1.place(x=20,y=15)
 
 		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=1,column=0,padx=10,pady=10)
-		#button2.place(x=120,y=15)
+		button2.grid(row=0,column=0,padx=10,pady=10)
+		button2.place(x=120,y=15)
 
 		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		button3.grid(row=2,column=0,padx=10,pady=10)
-		#button3.place(x=220,y=15)
+		button3.grid(row=0,column=0,padx=10,pady=10)
+		button3.place(x=220,y=15)
 
 		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		button4.grid(row=3,column=0,padx=10,pady=10)
-		#button4.place(x=320,y=15)
+		button4.grid(row=0,column=0,padx=10,pady=10)
+		button4.place(x=320,y=15)
 
 		label1 = ttk.Label(self,text="Database")
-		label1.grid(row=0,column=0,padx=10,pady=10)
+		label1.grid(row=0,column=1,padx=10,pady=10)
 		label1.place(x=20,y=500)
 
 
