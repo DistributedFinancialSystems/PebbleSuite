@@ -106,32 +106,28 @@ class APP(tk.Tk):
 		root_menu = MENU_BAR(self)
 		self.config(menu=root_menu)
 
-		container = tk.Frame(self,width=960,height=50,bg="hotpink")
-		container.place(x=0,y=0)
-		container.grid(row=0,column=0,sticky="nsew",padx=5,pady=5)
-		#container.pack(side="top",fill="both")
-		container.grid_rowconfigure(0,weight=1)
-		container.grid_columnconfigure(0,weight=1)
+		self.container = tk.Frame(self,width=960,height=50,bg="hotpink")
+		self.container.place(x=0,y=0)
+		self.container.grid(row=0,column=0,sticky="nsew",padx=5,pady=5)
+		self.container.grid_rowconfigure(0,weight=1)
+		self.container.grid_columnconfigure(0,weight=1)
 
+		self.container2 = tk.Frame(self,width=960,height=490,bg="skyblue")
+		self.container2.place(x=0,y=50)
+		self.container2.grid(row=1,column=0,sticky="nsew",padx=5,pady=5)
+		self.container2.grid_rowconfigure(1,weight=1)
+		self.container2.grid_columnconfigure(0,weight=1)
 
-		container2 = tk.Frame(self,width=960,height=490,bg="skyblue")
-		container2.place(x=0,y=50)
-		container2.grid(row=1,column=0,sticky="nsew",padx=5,pady=5)
-		#container2.pack(side="top",fill="both")
-		container2.grid_rowconfigure(1,weight=1)
-		container2.grid_columnconfigure(0,weight=1)
-
-
-		b1 = ttk.Button(self,text="StartPage")
+		b1 = ttk.Button(self,text="StartPage",command=self.startpage_menu)
 		b1.place(x=20,y=12)
 
-		b2 = ttk.Button(self,text="Tasks")
+		b2 = ttk.Button(self,text="Tasks",command=self.tasks_menu)
 		b2.place(x=120,y=12)
 
-		b3 = ttk.Button(self,text="Files")
+		b3 = ttk.Button(self,text="Files",command=self.files_menu)
 		b3.place(x=220,y=12)
 
-		b4 = ttk.Button(self,text="Database")
+		b4 = ttk.Button(self,text="Database",command=self.database_menu)
 		b4.place(x=320,y=12)
 
 		"""
@@ -140,7 +136,7 @@ class APP(tk.Tk):
 		____________________________________
 		"""
 
-		self.directory_label = ttk.Label(self,text="Directory:")
+		self.directory_label = tk.Label(self,text="Directory:",bg="hotpink")
 		self.directory_label.place(x=430,y=12)
 		self.directory_text = tk.StringVar()
 
@@ -194,194 +190,125 @@ class APP(tk.Tk):
 
 			tk.change_directory_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
+	"""
+	_________________________
+	STARTPAGE MENU FUNCTIONS:
+	_________________________
+	"""
 
+	def startpage_menu(self):
 
-		"""
-		self.frames = {}
+		try:
 
-		for F in (StartPage,Tasks,Files,Database):
+			for widget in self.container2.winfo_children():
 
-			frame = F(container,self)
+				widget.destroy()
 
-			self.frames[F] = frame
+			self.label = tk.Label(self.container2,text="Label",bg='skyblue')
+			self.label.grid(row=1,column=0,padx=10,pady=10)
+			self.label.place(x=600,y=200)
 
-			frame.grid(row=0,column=0,sticky="nsew")
+		except Exception as error:
 
-			#frame.place(x=10,y=10,relx=0.5,rely=0.5)
+			startpage_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
-		self.show_frame(StartPage)
+	"""
+	_____________________
+	TASKS MENU FUNCTIONS:
+	_____________________
+	"""
 
+	def tasks_menu(self):
 
-	def show_frame(self,cont):
+		try:
 
-		frame = self.frames[cont]
 
-		frame.tkraise()
-		"""
+			for widget in self.container2.winfo_children():
 
+				widget.destroy()
 
-class StartPage(tk.Frame):
 
-	def __init__(self,parent,controller):
+			self.retrieve_note_names = '''SELECT TASK_NAME FROM tasks;'''
 
-		tk.Frame.__init__(self,parent)
+			self.scrollbar = ttk.Scrollbar(self.container2)
+			self.scrollbar.place(x=377,y=175,width=20,height=315)
+			self.listbox = tk.Listbox(self.container2)
+			self.listbox = tk.Listbox(self.container2, yscrollcommand=self.scrollbar.set)
+			self.listbox.grid(row=1,column=0,padx=10,pady=10)
+			self.listbox.place(x=20,y=175,width=357,height=315)
+			self.scrollbar.config(command=self.listbox.yview)
 
-		#button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-		#button1.grid(row=0,column=0,sticky=tk.EW,padx=10,pady=10)
-		#button1.place(x=20,y=15)
 
-		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=0,column=0,padx=10,pady=10)
-		#button2.place(x=120,y=15)
+			with sqlite3.connect("SQL.db") as connection:
 
-		#button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		#button3.grid(row=0,column=0,sticky=tk.EW,padx=10,pady=10)
-		#button3.place(x=220,y=15)
+				cursor = connection.cursor()
 
-		#button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		#button4.grid(row=1,column=0,sticky=tk.EW,padx=10,pady=10)
-		#button4.place(x=320,y=15)
+				cursor.execute(self.retrieve_note_names)
 
-		"""
-		label = ttk.Label(self,text="Row 1,Column 0")
+				connection.commit()
 
-		label.grid(row=1,column=0,padx=10,pady=10)
+				for item in cursor:
 
-		label2 = ttk.Label(self,text="Row 2, column 0")
+					self.listbox.insert(0," ".join(item))
 
-		label2.grid(row=2,column=0,padx=10,pady=10)
+				cursor.close()
 
-		label3 = ttk.Label(self,text="Row 1, Column 1")
 
-		label3.grid(row=1,column=1,padx=10,pady=10)
+			self.text_scrollbar = ttk.Scrollbar(self.container2)
+			self.text_scrollbar.grid(row=2,column=1,padx=10,pady=10)
+			self.text_scrollbar.place(x=920,y=175,width=20,height=315)
+			self.textbox = tk.Text(self.container2,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
+			self.textbox.grid(row=3,column=1,padx=10,pady=10)
+			self.textbox.place(x=430,y=175,width=490,height=315)
 
-		label4 = ttk.Label(self,text="Row 2, Column 2")
+			self.new_task_button = ttk.Button(self.container2,text="Create New Task",command=self.new_task)
+			self.new_task_button.place(x=275,y=140)
 
-		label4.grid(row=2,column=2,padx=10,pady=10)
-		"""
+			self.clear_note_data_button = ttk.Button(self.container2,text="Clear Task Entries",command=self.clear_note_entries)
+			self.clear_note_data_button.place(x=110,y=500)
 
+			self.new_task_name_label = tk.Label(self.container2,text="New Task Name:",bg="skyblue")
+			self.new_task_name_label.place(x=20,y=80)
+			self.new_task_name_entry = ttk.Entry(self.container2)
+			self.new_task_name_entry.place(x=20,y=100,width=375)
 
-class Tasks(tk.Frame):
+			self.new_note_date_label = tk.Label(self.container2,text="New Task Date:",bg="skyblue")
+			self.new_note_date_label.place(x=20,y=140)
+			self.new_task_date_entry_text = tk.StringVar()
+			self.new_task_date_entry_text.set("MM/DD/YYYY")
+			self.new_task_date_entry = ttk.Entry(self.container2,textvariable=self.new_task_date_entry_text)
+			self.new_task_date_entry.place(x=130,y=140,width=100)
 
-	retrieve_note_names = '''SELECT TASK_NAME FROM tasks;'''
+			self.open_task_note_button = ttk.Button(self.container2,text="Open Task",command=self.display_note)
+			self.open_task_note_button.place(x=20,y=500)
 
-	def __init__(self,parent,controller):
+			self.update_task_note_button = ttk.Button(self.container2,text="Save Changes",command=self.save_note_changes)
+			self.update_task_note_button.place(x=430,y=500)
 
-		tk.Frame.__init__(self,parent)
+			self.clear_task_note_button = ttk.Button(self.container2,text="Close Task",command=self.close_note)
+			self.clear_task_note_button.place(x=535,y=500)
 
-		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-		button1.grid(row=0,column=0,padx=10,pady=10)
-		#button1.place(x=20,y=15)
+			self.delete_task_note_button = ttk.Button(self.container2,text="Delete Task",command=self.delete_task_note)
+			self.delete_task_note_button.place(x=240,y=500)
 
-		#button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		#button2.grid(row=0,column=0,padx=10,pady=10)
-		#button2.place(x=120,y=15)
+			self.editing_task_name_label = tk.Label(self.container2,text="Current Task:",bg="skyblue")
+			self.editing_task_name_label.place(x=430,y=80)
+			self.editing_task_name_entry_text = tk.StringVar()
+			self.editing_task_name_entry = ttk.Entry(self.container2,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
+			self.editing_task_name_entry.place(x=430,y=100,width=375)
 
-		#button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		#button3.grid(row=0,column=0,padx=10,pady=10)
-		#button3.place(x=220,y=15)
+			self.editing_task_date_label = tk.Label(self.container2,text="Date Created:",bg="skyblue")
+			self.editing_task_date_label.place(x=825,y=80)
+			self.editing_task_date_entry_text = tk.StringVar()
+			self.editing_task_date_entry = ttk.Entry(self.container2,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
+			self.editing_task_date_entry.place(x=825,y=100,width=100)
 
-		#button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		#button4.grid(row=0,column=0,padx=10,pady=10)
-		#button4.place(x=320,y=15)
+			self.editing_task_notes_label = tk.Label(self.container2,text="Current Task Notes:",bg="skyblue")
+			self.editing_task_notes_label.place(x=430,y=140)
 
-		#self.scrollbar = ttk.Scrollbar(self)
-		#self.scrollbar.grid(row=1,column=0,padx=10,pady=10)
-		#self.scrollbar.place(x=377,y=175,width=20,height=315)
+		except Exception as error:
 
-		f1 = tk.Frame(self)
-
-		f1.grid(row=5,column=1,sticky="nsew")
-
-		b1 = tk.Button(f1,text="TEST ME")
-		b1.pack(side="top")
-		#b1.place(x=30,y=30)
-
-		b2 = tk.Button(f1,text="MASDASD")
-		b2.pack(side="bottom")
-
-		b3 = tk.Button(f1,text="wef")
-		b3.pack(side="right")
-
-		#self.listbox = tk.Listbox(f1)
-		#self.listbox = tk.Listbox(self, yscrollcommand=self.scrollbar.set)
-		#self.listbox.grid(row=1,column=1,padx=10,pady=10)
-		#self.listbox.place(x=20,y=175,width=357,height=315)
-		#self.scrollbar.config(command=self.listbox.yview)
-
-		"""
-
-		with sqlite3.connect("SQL.db") as connection:
-
-			cursor = connection.cursor()
-
-			cursor.execute(self.retrieve_note_names)
-
-			connection.commit()
-
-			for item in cursor:
-
-				self.listbox.insert(0," ".join(item))
-
-			cursor.close()
-		"""
-
-
-		#self.text_scrollbar = ttk.Scrollbar(self)
-		#self.text_scrollbar.grid(row=2,column=1,padx=10,pady=10)
-		#self.text_scrollbar.place(x=920,y=175,width=20,height=315)
-		#self.textbox = tk.Text(self,yscrollcommand=self.text_scrollbar,wrap=tk.WORD)
-		#self.textbox.grid(row=3,column=1,padx=10,pady=10)
-		#self.textbox.place(x=430,y=175,width=490,height=315)
-
-		"""
-
-		self.new_task_button = ttk.Button(self,text="Create New Task",command=self.new_task)
-		self.new_task_button.place(x=275,y=140)
-
-		self.clear_note_data_button = ttk.Button(self,text="Clear Task Entries",command=self.clear_note_entries)
-		self.clear_note_data_button.place(x=110,y=500)
-
-		self.new_task_name_label = ttk.Label(self,text="New Task Name:")
-		self.new_task_name_label.place(x=20,y=80)
-		self.new_task_name_entry = ttk.Entry(self)
-		self.new_task_name_entry.place(x=20,y=100,width=375)
-
-		self.new_note_date_label = ttk.Label(self,text="New Task Date:")
-		self.new_note_date_label.place(x=20,y=140)
-		self.new_task_date_entry_text = tk.StringVar()
-		self.new_task_date_entry_text.set("MM/DD/YYYY")
-		self.new_task_date_entry = ttk.Entry(self,textvariable=self.new_task_date_entry_text)
-		self.new_task_date_entry.place(x=130,y=140,width=100)
-
-		self.open_task_note_button = ttk.Button(self,text="Open Task",command=self.display_note)
-		self.open_task_note_button.place(x=20,y=500)
-
-		self.update_task_note_button = ttk.Button(self,text="Save Changes",command=self.save_note_changes)
-		self.update_task_note_button.place(x=430,y=500)
-
-		self.clear_task_note_button = ttk.Button(self,text="Close Task",command=self.close_note)
-		self.clear_task_note_button.place(x=535,y=500)
-
-		self.delete_task_note_button = ttk.Button(self,text="Delete Task",command=self.delete_task_note)
-		self.delete_task_note_button.place(x=240,y=500)
-
-		self.editing_task_name_label = ttk.Label(self,text="Current Task:")
-		self.editing_task_name_label.place(x=430,y=80)
-		self.editing_task_name_entry_text = tk.StringVar()
-		self.editing_task_name_entry = ttk.Entry(self,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
-		self.editing_task_name_entry.place(x=430,y=100,width=375)
-
-		self.editing_task_date_label = ttk.Label(self,text="Date Created:")
-		self.editing_task_date_label.place(x=825,y=80)
-		self.editing_task_date_entry_text = tk.StringVar()
-		self.editing_task_date_entry = ttk.Entry(self,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
-		self.editing_task_date_entry.place(x=825,y=100,width=100)
-
-		self.editing_task_notes_label = ttk.Label(self,text="Current Task Notes:")
-		self.editing_task_notes_label.place(x=430,y=140)
-
-		"""
+			tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 	def na(self):
@@ -626,6 +553,52 @@ class Tasks(tk.Frame):
 
 					delete_note_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
+	"""
+	_____________________
+	FILES MENU FUNCTIONS:
+	_____________________
+	"""
+
+	def files_menu(self):
+
+		try:
+
+
+			for widget in self.container2.winfo_children():
+
+				widget.destroy()
+
+
+			files_menu_label_1 = tk.Label(self.container2,text="Files Menu")
+			files_menu_label_1.place(x=300,y=300)
+
+
+		except Exception as error:
+
+			files_menu_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+	"""
+	________________________
+	DATABASE MENU FUNCTIONS:
+	________________________
+	"""
+
+	def database_menu(self):
+
+		try:
+
+			for widget in self.container2.winfo_children():
+
+				widget.destroy()
+
+			database_menu_label_1 = tk.Label(self.container2,text="Database Menu")
+			database_menu_label_1.place(x=300,y=300)
+
+		except Exception as error:
+
+			database_menu_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
 
 class Files(tk.Frame):
 
@@ -648,27 +621,6 @@ class Files(tk.Frame):
 		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
 		button4.grid(row=0,column=0,padx=10,pady=10)
 		button4.place(x=320,y=15)
-
-		#label = ttk.Label(self,text="Files")
-		#label.grid(row=0,column=0,padx=10,pady=10)
-		#label.place(x=20,y=500)
-
-		#files_button = ttk.Button(self,text="Button",command=self.na)
-		#files_button.grid(row=1,column=1,padx=10,pady=10)
-		#files_button.place(x=120,y=500)
-
-		#self.separator = ttk.Separator(self,orient='horizontal')
-		#self.separator.place(relx=0,rely=0.50,relwidth=1,relheight=1)
-
-		#scrollbar = ttk.Scrollbar(self)
-		#scrollbar.place(x=120,y=100,width=20,height=100)
-		#listbox = tk.Listbox(self,yscrollcommand=self.scrollbar.set)
-		#listbox.place(x=20,y=100,width=100,height=100)
-		#scrollbar.config(command=self.listbox.yview)
-
-	def na(self):
-
-		tk.messagebox.showinfo(title="PebbleSuite",message="Message1")
 
 
 class Database(tk.Frame):
