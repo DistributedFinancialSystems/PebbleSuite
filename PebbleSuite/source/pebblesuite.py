@@ -118,7 +118,7 @@ class APP(tk.Tk):
 		self.container2.grid_rowconfigure(1,weight=1)
 		self.container2.grid_columnconfigure(0,weight=1)
 
-		b1 = ttk.Button(self,text="StartPage",command=self.startpage_menu)
+		b1 = ttk.Button(self,text="Sales",command=self.sales_menu)
 		b1.place(x=20,y=12)
 
 		b2 = ttk.Button(self,text="Tasks",command=self.tasks_menu)
@@ -196,7 +196,7 @@ class APP(tk.Tk):
 	_________________________
 	"""
 
-	def startpage_menu(self):
+	def sales_menu(self):
 
 		try:
 
@@ -204,13 +204,13 @@ class APP(tk.Tk):
 
 				widget.destroy()
 
-			self.label = tk.Label(self.container2,text="StartPage Menu",bg='skyblue')
+			self.label = tk.Label(self.container2,text="Sales Menu",bg='skyblue')
 			self.label.grid(row=1,column=0,padx=10,pady=10)
 			self.label.place(x=300,y=300)
 
 		except Exception as error:
 
-			startpage_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+			sales_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 	"""
 	_____________________
@@ -587,62 +587,18 @@ class APP(tk.Tk):
 				widget.destroy()
 
 			database_menu_label_1 = tk.Label(self.container2,text="Database Menu",bg="skyblue")
-			database_menu_label_1.place(x=300,y=300)
+			database_menu_label_1.place(x=10,y=10)
+
+			querybox = tk.Text(self.container2)
+			querybox.place(x=10,y=30,height=100,width=740)
+
+			databox = tk.Text(self.container2)
+			databox.place(x=10,y=150,height=315,width=740)
 
 		except Exception as error:
 
 			database_menu_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
-
-
-class Files(tk.Frame):
-
-	def __init__(self,parent,controller):
-
-		tk.Frame.__init__(self,parent)
-
-		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-		button1.grid(row=0,column=0,padx=10,pady=10)
-		button1.place(x=20,y=15)
-
-		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=0,column=0,padx=10,pady=10)
-		button2.place(x=120,y=15)
-
-		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		button3.grid(row=0,column=0,padx=10,pady=10)
-		button3.place(x=220,y=15)
-
-		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		button4.grid(row=0,column=0,padx=10,pady=10)
-		button4.place(x=320,y=15)
-
-
-class Database(tk.Frame):
-
-	def __init__(self,parent,controller):
-
-		tk.Frame.__init__(self,parent)
-
-		button1 = ttk.Button(self,text="StartPage",command = lambda : controller.show_frame(StartPage))
-		button1.grid(row=0,column=0,padx=10,pady=10)
-		button1.place(x=20,y=15)
-
-		button2 = ttk.Button(self,text="Tasks",command = lambda : controller.show_frame(Tasks))
-		button2.grid(row=0,column=0,padx=10,pady=10)
-		button2.place(x=120,y=15)
-
-		button3 = ttk.Button(self,text="Files",command = lambda : controller.show_frame(Files))
-		button3.grid(row=0,column=0,padx=10,pady=10)
-		button3.place(x=220,y=15)
-
-		button4 = ttk.Button(self,text="Database",command = lambda : controller.show_frame(Database))
-		button4.grid(row=0,column=0,padx=10,pady=10)
-		button4.place(x=320,y=15)
-
-		label1 = ttk.Label(self,text="Database")
-		label1.grid(row=0,column=1,padx=10,pady=10)
-		label1.place(x=20,y=500)
 
 
 """
