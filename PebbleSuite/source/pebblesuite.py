@@ -381,6 +381,8 @@ class APP(tk.Tk):
 
 						self.listbox.insert(0," ".join(item))
 
+						print(*item)
+
 					cursor.close()
 
 				except Exception as error:
@@ -586,18 +588,63 @@ class APP(tk.Tk):
 
 				widget.destroy()
 
-			database_menu_label_1 = tk.Label(self.container2,text="Database Menu",bg="skyblue")
-			database_menu_label_1.place(x=10,y=10)
+			self.database_menu_label_1 = tk.Label(self.container2,text="Database Menu",bg="skyblue")
+			self.database_menu_label_1.place(x=10,y=10)
 
-			querybox = tk.Text(self.container2)
-			querybox.place(x=10,y=30,height=100,width=740)
+			self.querybox = tk.Text(self.container2,wrap=tk.WORD)
+			self.querybox.place(x=10,y=30,height=100,width=740)
 
-			databox = tk.Text(self.container2)
-			databox.place(x=10,y=150,height=315,width=740)
+			self.querybox_submit_query_button = ttk.Button(self.container2,text="Submit Query",command=self.submit_query)
+			self.querybox_submit_query_button.place(x=770,y=30)
+
+			self.querybox_clear_query_button = ttk.Button(self.container2,text="Clear Query",command=self.clear_query)
+			self.querybox_clear_query_button.place(x=770,y=70)
+
+			self.databox = tk.Text(self.container2,wrap=tk.WORD)
+			self.databox.place(x=10,y=150,height=315,width=740)
 
 		except Exception as error:
 
 			database_menu_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
+	def submit_query(self):
+
+		try:
+
+			query = self.querybox.get(1.0,"end-1c")
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute(query)
+
+				for item in cursor:
+
+					self.databox.insert(1.0," ".join(item))
+
+					print(item)
+
+				connection.commit()
+
+				cursor.close()
+
+		except Exception as error:
+
+			submit_query_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
+	def clear_query(self):
+
+		try:
+
+			self.querybox.delete(1.0,tk.END)
+			self.databox.delete(1.0,tk.END)
+
+		except Exception as error:
+
+			clear_query_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 
