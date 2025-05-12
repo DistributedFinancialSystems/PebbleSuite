@@ -255,15 +255,17 @@ class AR_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 
 	def search_credit_memos(self):
 
-		search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS=?;'''
-
-		for item in self.select_client_listbox.curselection():
-
-			select_client = self.select_client_listbox.get(item)
-
-		credit_memo_status = "Open"
-
 		try:
+
+			search_client_sql_script = '''SELECT CREDIT_MEMO_NUMBER FROM client_credit_memos WHERE CREDIT_MEMO_NAME=? AND CREDIT_MEMO_STATUS=?;'''
+
+			for item in self.select_client_listbox.curselection():
+
+				select_client = self.select_client_listbox.get(item)
+
+			self.listbox.delete(0,tk.END)
+
+			credit_memo_status = "Open"
 
 			with sqlite3.connect("SQL.db") as connection:
 

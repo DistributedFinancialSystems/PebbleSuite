@@ -381,8 +381,6 @@ class APP(tk.Tk):
 
 						self.listbox.insert(0," ".join(item))
 
-						print(*item)
-
 					cursor.close()
 
 				except Exception as error:

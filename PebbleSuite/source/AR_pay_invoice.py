@@ -272,6 +272,8 @@ class AR_PAY_INVOICE_WINDOW(tk.Toplevel):
 
 				select_client = self.select_client_listbox.get(item)
 
+			self.listbox.delete(0,tk.END)
+
 			with sqlite3.connect("SQL.db") as connection:
 
 				cursor = connection.cursor()

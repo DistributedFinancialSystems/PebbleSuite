@@ -1,13 +1,3 @@
-"""
-[ ]
-[ ]
-[ ]
-[ ]	AP_apply_credit_memo.py
-[ ]
-[ ]
-[ ]
-"""
-
 import datetime
 from datetime import date
 import sqlite3
@@ -275,6 +265,8 @@ class AP_PAY_CREDIT_MEMO_WINDOW(tk.Toplevel):
 			for item in self.select_vendor_listbox.curselection():
 
 				select_vendor = self.select_vendor_listbox.get(item)
+
+			self.listbox.delete(0,tk.END)
 
 			with sqlite3.connect("SQL.db") as connection:
 
