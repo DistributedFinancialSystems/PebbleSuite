@@ -51,6 +51,7 @@ from GL_new_GL import *
 from GL_edit_GL import *
 from GL_delete_GL import *
 from GL_GL_summary import *
+from GL_reconcile_GL import *
 
 #Help Menu modules:
 from Help_commands import *
@@ -141,7 +142,7 @@ class MENU_BAR(tk.Menu):
 		self.GL_menu.add_command(label="Delete General Ledger",command=self.delete_GL)
 		self.GL_menu.add_separator()
 		self.GL_menu.add_command(label="General Ledger Summary",command=self.GL_summary)
-		self.GL_menu.add_command(label="Reconcile General Ledger",command=self.new_GL)
+		self.GL_menu.add_command(label="Reconcile General Ledger",command=self.reconcile_GL)
 		self.add_cascade(label="General Ledgers",menu=self.GL_menu)
 
 		#Help Menu Tkinter widgets
@@ -449,6 +450,12 @@ class MENU_BAR(tk.Menu):
 		if not GL_SUMMARY_WINDOW.alive:
 
 			self.secondary_window = GL_SUMMARY_WINDOW()
+
+	def reconcile_GL(self):
+
+		if not RECONCILE_GL_WINDOW.alive:
+
+			self.secondary_window = RECONCILE_GL_WINDOW()
 
 
 	"""
