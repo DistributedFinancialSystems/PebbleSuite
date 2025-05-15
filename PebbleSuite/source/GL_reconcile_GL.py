@@ -78,7 +78,7 @@ class RECONCILE_GL_WINDOW(tk.Toplevel):
 		self.general_ledger_name_label = ttk.Label(self,text="General Ledger Name:")
 		self.general_ledger_name_label.place(x=400,y=15)
 		self.general_ledger_name_entry_text = tk.StringVar()
-		self.general_ledger_name_entry = ttk.Entry(self,textvariable=self.general_ledger_name_entry_text,width=21)
+		self.general_ledger_name_entry = ttk.Entry(self,textvariable=self.general_ledger_name_entry_text,width=21,state=tk.DISABLED)
 		self.general_ledger_name_entry.place(x=400,y=45)
 
 		self.general_ledger_number_label = ttk.Label(self,text="General Ledger Number:")
@@ -100,21 +100,25 @@ class RECONCILE_GL_WINDOW(tk.Toplevel):
 		self.submit_general_ledger_changes_button.place(x=400,y=230)
 
 		self.debits_scrollbar = ttk.Scrollbar(self)
-		self.debits_scrollbar.place(x=353,y=500,width=20,height=170)
+		self.debits_scrollbar.place(x=353,y=350,width=20,height=170)
 		self.debits_listbox = tk.Listbox(self,yscrollcommand=self.debits_scrollbar)
-		self.debits_listbox.place(x=20,y=500,width=333,height=170)
+		self.debits_listbox.place(x=20,y=350,width=333,height=170)
 		self.debits_scrollbar.config(command=self.debits_listbox.yview)
 
 		self.credits_scrollbar = ttk.Scrollbar(self)
-		self.credits_scrollbar.place(x=353,y=500,width=20,height=170)
+		self.credits_scrollbar.place(x=733,y=350,width=20,height=170)
 		self.credits_listbox = tk.Listbox(self,yscrollcommand=self.credits_scrollbar)
-		self.credits_listbox.place(x=500,y=500,width=333,height=170)
+		self.credits_listbox.place(x=400,y=350,width=333,height=170)
 		self.credits_scrollbar.config(command=self.credits_listbox.yview)
 
 
 	def select_general_ledger(self):
 
 		try:
+
+			self.debits_listbox.delete(0,tk.END)
+
+			self.credits_listbox.delete(0,tk.END)
 
 			general_ledger = None
 
