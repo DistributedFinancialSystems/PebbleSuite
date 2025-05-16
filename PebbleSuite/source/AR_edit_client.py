@@ -249,6 +249,10 @@ class EDIT_CLIENT_WINDOW(tk.Toplevel):
 
 				change_client_data_error_message_1 = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
 
+			elif search_client_name == "":
+
+				change_client_data_error_message_2 = tk.messagebox.showinfo(title="Edit Client",message="Select a client to edit.")
+
 			else:
 
 				with sqlite3.connect("SQL.db") as connection:
