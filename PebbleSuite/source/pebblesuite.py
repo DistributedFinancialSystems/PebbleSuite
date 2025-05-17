@@ -107,13 +107,13 @@ class APP(tk.Tk):
 		root_menu = MENU_BAR(self)
 		self.config(menu=root_menu)
 
-		self.container = tk.Frame(self,width=960,height=50,bg="hotpink")
+		self.container = tk.Frame(self,width=960,height=50,bg="lightgray")
 		self.container.place(x=0,y=0)
 		self.container.grid(row=0,column=0,sticky="nsew")
 		self.container.grid_rowconfigure(0,weight=1)
 		self.container.grid_columnconfigure(0,weight=1)
 
-		self.container2 = tk.Frame(self,width=960,height=490,bg="skyblue")
+		self.container2 = tk.Frame(self,width=960,height=490,bg="lightgray")
 		self.container2.place(x=0,y=50)
 		self.container2.grid(row=1,column=0,sticky="nsew")
 		self.container2.grid_rowconfigure(1,weight=1)
@@ -137,7 +137,7 @@ class APP(tk.Tk):
 		____________________________________
 		"""
 
-		self.directory_label = tk.Label(self,text="Directory:",bg="hotpink")
+		self.directory_label = tk.Label(self,text="Directory:",bg="lightgray")
 		self.directory_label.place(x=430,y=12)
 		self.directory_text = tk.StringVar()
 
@@ -205,7 +205,7 @@ class APP(tk.Tk):
 
 				widget.destroy()
 
-			self.label = tk.Label(self.container2,text="Sales Menu",bg='skyblue')
+			self.label = tk.Label(self.container2,text="Sales Menu",bg='lightgray')
 			self.label.grid(row=1,column=0,padx=10,pady=10)
 			self.label.place(x=300,y=300)
 
@@ -268,12 +268,12 @@ class APP(tk.Tk):
 			self.clear_note_data_button = ttk.Button(self.container2,text="Clear Task Entries",command=self.clear_note_entries)
 			self.clear_note_data_button.place(x=110,y=450)
 
-			self.new_task_name_label = tk.Label(self.container2,text="New Task Name:",bg="skyblue")
+			self.new_task_name_label = tk.Label(self.container2,text="New Task Name:",bg="lightgray")
 			self.new_task_name_label.place(x=20,y=15)
 			self.new_task_name_entry = ttk.Entry(self.container2)
 			self.new_task_name_entry.place(x=20,y=45,width=375)
 
-			self.new_note_date_label = tk.Label(self.container2,text="New Task Date:",bg="skyblue")
+			self.new_note_date_label = tk.Label(self.container2,text="New Task Date:",bg="lightgray")
 			self.new_note_date_label.place(x=20,y=80)
 			self.new_task_date_entry_text = tk.StringVar()
 			self.new_task_date_entry_text.set("MM/DD/YYYY")
@@ -292,19 +292,19 @@ class APP(tk.Tk):
 			self.delete_task_note_button = ttk.Button(self.container2,text="Delete Task",command=self.delete_task_note)
 			self.delete_task_note_button.place(x=240,y=450)
 
-			self.editing_task_name_label = tk.Label(self.container2,text="Current Task:",bg="skyblue")
+			self.editing_task_name_label = tk.Label(self.container2,text="Current Task:",bg="lightgray")
 			self.editing_task_name_label.place(x=430,y=15)
 			self.editing_task_name_entry_text = tk.StringVar()
 			self.editing_task_name_entry = ttk.Entry(self.container2,textvariable=self.editing_task_name_entry_text,state=tk.DISABLED)
 			self.editing_task_name_entry.place(x=430,y=45,width=375)
 
-			self.editing_task_date_label = tk.Label(self.container2,text="Date Created:",bg="skyblue")
+			self.editing_task_date_label = tk.Label(self.container2,text="Date Created:",bg="lightgray")
 			self.editing_task_date_label.place(x=825,y=15)
 			self.editing_task_date_entry_text = tk.StringVar()
 			self.editing_task_date_entry = ttk.Entry(self.container2,textvariable=self.editing_task_date_entry_text,state=tk.DISABLED)
 			self.editing_task_date_entry.place(x=825,y=45,width=100)
 
-			self.editing_task_notes_label = tk.Label(self.container2,text="Current Task Notes:",bg="skyblue")
+			self.editing_task_notes_label = tk.Label(self.container2,text="Current Task Notes:",bg="lightgray")
 			self.editing_task_notes_label.place(x=430,y=80)
 
 		except Exception as error:
@@ -565,7 +565,7 @@ class APP(tk.Tk):
 				widget.destroy()
 
 
-			files_menu_label_1 = tk.Label(self.container2,text="Files Menu",bg="skyblue")
+			files_menu_label_1 = tk.Label(self.container2,text="Files Menu",bg="lightgray")
 			files_menu_label_1.place(x=300,y=300)
 
 
@@ -587,7 +587,7 @@ class APP(tk.Tk):
 
 				widget.destroy()
 
-			self.database_menu_label_1 = tk.Label(self.container2,text="Database Menu",bg="skyblue")
+			self.database_menu_label_1 = tk.Label(self.container2,text="Database Menu",bg="lightgray")
 			self.database_menu_label_1.place(x=10,y=10)
 
 			self.querybox = tk.Text(self.container2,wrap=tk.WORD)

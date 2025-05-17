@@ -93,6 +93,9 @@ class RECONCILE_GL_WINDOW(tk.Toplevel):
 		self.general_ledger_type_entry = ttk.Entry(self,textvariable=self.general_ledger_type_entry_text,state=tk.DISABLED,width=21)
 		self.general_ledger_type_entry.place(x=400,y=185)
 
+		self.general_ledger_reconcile_date_label = ttk.Label(self,text="Previous Reconciliation Date")
+		self.general_ledger_reconcile_date_label.place(x=800,y=15)
+
 		self.cancel_general_ledger_changes_button = ttk.Button(self,text="Cancel",command=self.cancel_changes)
 		self.cancel_general_ledger_changes_button.place(x=490,y=230)
 
