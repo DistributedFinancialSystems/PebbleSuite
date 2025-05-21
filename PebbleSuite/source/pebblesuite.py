@@ -209,6 +209,13 @@ class APP(tk.Tk):
 			self.label.grid(row=1,column=0,padx=10,pady=10)
 			self.label.place(x=300,y=300)
 
+			self.sale_date_label = ttk.Label(self.container2,text="Sale Date:")
+			self.sale_date_label.place(x=15,y=15)
+			self.sale_date_entry_text = tk.StringVar()
+			self.sale_date_entry = ttk.Entry(self.container2,textvariable=self.sale_date_entry_text)
+			self.sale_date_entry.place(x=15,y=45)
+			self.sale_date_entry_text.set("MM/DD/YYYY")
+
 		except Exception as error:
 
 			sales_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
