@@ -205,20 +205,36 @@ class APP(tk.Tk):
 
 				widget.destroy()
 
-			self.label = tk.Label(self.container2,text="Sales Menu",bg='lightgray')
-			self.label.grid(row=1,column=0,padx=10,pady=10)
-			self.label.place(x=300,y=300)
-
 			self.sale_date_label = ttk.Label(self.container2,text="Sale Date:")
 			self.sale_date_label.place(x=15,y=15)
 			self.sale_date_entry_text = tk.StringVar()
 			self.sale_date_entry = ttk.Entry(self.container2,textvariable=self.sale_date_entry_text)
-			self.sale_date_entry.place(x=15,y=45)
+			self.sale_date_entry.place(x=85,y=15,width=95)
 			self.sale_date_entry_text.set("MM/DD/YYYY")
+
+			self.sale_customer_label = ttk.Label(self.container2,text="Customers:")
+			self.sale_customer_label.place(x=15,y=75)
+
+			self.sale_customer_menu = tk.Listbox(self.container2)
+			self.sale_customer_menu.place(x=15,y=100)
+
+			self.select_customer_button = ttk.Button(self.container2,text="Select Customer",command=self.select_customer)
+			self.select_customer_button.place(x=15,y=310)
 
 		except Exception as error:
 
 			sales_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
+	def select_customer(self):
+
+		try:
+
+			select_customer_confirmation_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message="Customer selected!")
+
+		except Exception as error:
+
+			select_customer_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 	"""
 	_____________________
