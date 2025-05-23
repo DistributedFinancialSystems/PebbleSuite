@@ -193,7 +193,7 @@ class APP(tk.Tk):
 
 	"""
 	_________________________
-	STARTPAGE MENU FUNCTIONS:
+	SALES MENU FUNCTIONS:
 	_________________________
 	"""
 
@@ -221,6 +221,15 @@ class APP(tk.Tk):
 			self.select_customer_button = ttk.Button(self.container2,text="Select Customer",command=self.select_customer)
 			self.select_customer_button.place(x=15,y=310)
 
+			self.sale_products_label = ttk.Label(self.container2,text="Products:")
+			self.sale_products_label.place(x=200,y=75)
+
+			self.sale_products_menu = tk.Listbox(self.container2)
+			self.sale_products_menu.place(x=200,y=100)
+
+			self.select_product_button = ttk.Button(self.container2,text="Select Product",command=self.select_product)
+			self.select_product_button.place(x=200,y=310)
+
 		except Exception as error:
 
 			sales_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
@@ -235,6 +244,17 @@ class APP(tk.Tk):
 		except Exception as error:
 
 			select_customer_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
+	def select_product(self):
+
+		try:
+
+			select_product_confirmation_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message="Product selected!")
+
+		except Exception as error:
+
+			select_product_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 	"""
 	_____________________
