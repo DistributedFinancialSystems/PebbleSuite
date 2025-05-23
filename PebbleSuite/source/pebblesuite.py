@@ -206,29 +206,29 @@ class APP(tk.Tk):
 				widget.destroy()
 
 			self.sale_date_label = ttk.Label(self.container2,text="Sale Date:")
-			self.sale_date_label.place(x=15,y=15)
+			self.sale_date_label.place(x=20,y=15)
 			self.sale_date_entry_text = tk.StringVar()
 			self.sale_date_entry = ttk.Entry(self.container2,textvariable=self.sale_date_entry_text)
-			self.sale_date_entry.place(x=85,y=15,width=95)
+			self.sale_date_entry.place(x=90,y=15,width=92)
 			self.sale_date_entry_text.set("MM/DD/YYYY")
 
 			self.sale_customer_label = ttk.Label(self.container2,text="Customers:")
-			self.sale_customer_label.place(x=15,y=75)
+			self.sale_customer_label.place(x=20,y=80)
 
 			self.sale_customer_menu = tk.Listbox(self.container2)
-			self.sale_customer_menu.place(x=15,y=100)
+			self.sale_customer_menu.place(x=20,y=105)
 
 			self.select_customer_button = ttk.Button(self.container2,text="Select Customer",command=self.select_customer)
-			self.select_customer_button.place(x=15,y=310)
+			self.select_customer_button.place(x=20,y=315)
 
 			self.sale_products_label = ttk.Label(self.container2,text="Products:")
-			self.sale_products_label.place(x=200,y=75)
+			self.sale_products_label.place(x=205,y=80)
 
 			self.sale_products_menu = tk.Listbox(self.container2)
-			self.sale_products_menu.place(x=200,y=100)
+			self.sale_products_menu.place(x=205,y=105)
 
 			self.select_product_button = ttk.Button(self.container2,text="Select Product",command=self.select_product)
-			self.select_product_button.place(x=200,y=310)
+			self.select_product_button.place(x=205,y=315)
 
 		except Exception as error:
 
@@ -631,19 +631,19 @@ class APP(tk.Tk):
 				widget.destroy()
 
 			self.database_menu_label_1 = tk.Label(self.container2,text="Database Menu",bg="lightgray")
-			self.database_menu_label_1.place(x=10,y=10)
+			self.database_menu_label_1.place(x=20,y=15)
 
 			self.querybox = tk.Text(self.container2,wrap=tk.WORD)
-			self.querybox.place(x=10,y=30,height=100,width=740)
+			self.querybox.place(x=20,y=35,height=100,width=740)
 
 			self.querybox_submit_query_button = ttk.Button(self.container2,text="Submit Query",command=self.submit_query)
-			self.querybox_submit_query_button.place(x=770,y=30)
+			self.querybox_submit_query_button.place(x=770,y=35)
 
 			self.querybox_clear_query_button = ttk.Button(self.container2,text="Clear Query",command=self.clear_query)
-			self.querybox_clear_query_button.place(x=770,y=70)
+			self.querybox_clear_query_button.place(x=770,y=75)
 
 			self.databox = tk.Text(self.container2,wrap=tk.WORD)
-			self.databox.place(x=10,y=150,height=315,width=740)
+			self.databox.place(x=20,y=155,height=315,width=740)
 
 		except Exception as error:
 
