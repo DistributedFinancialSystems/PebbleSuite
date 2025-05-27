@@ -36,7 +36,7 @@ class RECONCILE_GL_WINDOW(tk.Toplevel):
 			cursor.close()
 
 		super().__init__(*args,**kwargs)
-		self.config(width=900,height=900)
+		self.config(width=800,height=775)
 		self.title("Reconcile General Ledger")
 		self.focus()
 		self.resizable(0,0)
@@ -123,17 +123,32 @@ class RECONCILE_GL_WINDOW(tk.Toplevel):
 		self.submit_general_ledger_changes_button = ttk.Button(self,text="Delete",command=self.submit_changes)
 		self.submit_general_ledger_changes_button.place(x=400,y=230)
 
+		self.debits_label = ttk.Label(self,text="Debits:")
+		self.debits_label.place(x=20,y=320)
+
 		self.debits_scrollbar = ttk.Scrollbar(self)
 		self.debits_scrollbar.place(x=353,y=350,width=20,height=170)
 		self.debits_listbox = tk.Listbox(self,yscrollcommand=self.debits_scrollbar)
 		self.debits_listbox.place(x=20,y=350,width=333,height=170)
 		self.debits_scrollbar.config(command=self.debits_listbox.yview)
 
+		self.credits_label = ttk.Label(self,text="Credits:")
+		self.credits_label.place(x=20,y=550)
+
 		self.credits_scrollbar = ttk.Scrollbar(self)
-		self.credits_scrollbar.place(x=733,y=350,width=20,height=170)
+		self.credits_scrollbar.place(x=353,y=570,width=20,height=170)
 		self.credits_listbox = tk.Listbox(self,yscrollcommand=self.credits_scrollbar)
-		self.credits_listbox.place(x=400,y=350,width=333,height=170)
+		self.credits_listbox.place(x=20,y=570,width=333,height=170)
 		self.credits_scrollbar.config(command=self.credits_listbox.yview)
+
+		self.selected_values_label = ttk.Label(self,text="Selected Values:")
+		self.selected_values_label.place(x=400,y=320)
+
+		self.selected_values_scrollbar = ttk.Scrollbar(self)
+		self.selected_values_scrollbar.place(x=753,y=350,width=20,height=390)
+		self.selected_values_listbox = tk.Listbox(self,yscrollcommand=self.selected_values_scrollbar)
+		self.selected_values_listbox.place(x=400,y=350,width=353,height=390)
+		self.selected_values_scrollbar.config(command=self.selected_values_listbox.yview)
 
 
 	def select_general_ledger(self):
