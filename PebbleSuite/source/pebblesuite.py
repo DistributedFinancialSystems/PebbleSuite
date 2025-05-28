@@ -609,7 +609,7 @@ class APP(tk.Tk):
 
 
 			files_menu_label_1 = tk.Label(self.container2,text="Files Menu",bg="lightgray")
-			files_menu_label_1.place(x=300,y=300)
+			files_menu_label_1.place(x=20,y=15)
 
 
 		except Exception as error:
@@ -646,7 +646,7 @@ class APP(tk.Tk):
 			self.databox.place(x=20,y=155,height=315,width=740)
 
 			self.databox_clear_query_data_button = ttk.Button(self.container2,text="Clear Data",command=self.clear_query_data)
-			self.databox_clear_query_data_button.place(x=770,y=315)
+			self.databox_clear_query_data_button.place(x=770,y=155)
 
 		except Exception as error:
 
