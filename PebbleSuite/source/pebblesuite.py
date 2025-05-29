@@ -648,6 +648,9 @@ class APP(tk.Tk):
 			self.databox_clear_query_data_button = ttk.Button(self.container2,text="Clear Data",command=self.clear_query_data)
 			self.databox_clear_query_data_button.place(x=770,y=155)
 
+			self.databox_print_query_data_button = ttk.Button(self.container2,text="Print Data",command=self.print_query_data)
+			self.databox_print_query_data_button.place(x=770,y=195)
+
 		except Exception as error:
 
 			database_menu_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
@@ -690,6 +693,7 @@ class APP(tk.Tk):
 
 			clear_query_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
+
 	def clear_query_data(self):
 
 		try:
@@ -699,6 +703,17 @@ class APP(tk.Tk):
 		except Exception as error:
 
 			clear_query_data_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
+	def print_query_data(self):
+
+		try:
+
+			print_query_data_confirmation_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message="Data printed!")
+
+		except Exception as error:
+
+			print_query_data_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
 
 
 
