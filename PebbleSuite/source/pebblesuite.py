@@ -230,6 +230,8 @@ class APP(tk.Tk):
 			self.select_product_button = ttk.Button(self.container2,text="Select Product",command=self.select_product)
 			self.select_product_button.place(x=205,y=315)
 
+			#self.sale_list_label = ttk.Label(self.
+
 		except Exception as error:
 
 			sales_menu_error_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
