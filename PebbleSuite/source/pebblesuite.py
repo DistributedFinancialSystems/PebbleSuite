@@ -214,23 +214,29 @@ class APP(tk.Tk):
 
 			self.sale_customer_label = ttk.Label(self.container2,text="Customers:")
 			self.sale_customer_label.place(x=20,y=80)
-
 			self.sale_customer_menu = tk.Listbox(self.container2)
 			self.sale_customer_menu.place(x=20,y=105)
-
 			self.select_customer_button = ttk.Button(self.container2,text="Select Customer",command=self.select_customer)
 			self.select_customer_button.place(x=20,y=315)
 
 			self.sale_products_label = ttk.Label(self.container2,text="Products:")
 			self.sale_products_label.place(x=205,y=80)
-
 			self.sale_products_menu = tk.Listbox(self.container2)
 			self.sale_products_menu.place(x=205,y=105)
-
 			self.select_product_button = ttk.Button(self.container2,text="Select Product",command=self.select_product)
 			self.select_product_button.place(x=205,y=315)
 
-			#self.sale_list_label = ttk.Label(self.
+			self.product_inventory_label = ttk.Label(self.container2,text="Product Inventory")
+			self.product_inventory_label.place(x=390,y=80)
+			self.product_inventory_menu = tk.Listbox(self.container2)
+			self.product_inventory_menu.place(x=390,y=105)
+			self.product_inventory_button = ttk.Button(self.container2,text="Add to Sale",command=self.add_product)
+			self.product_inventory_button.place(x=390,y=315)
+
+			self.checkout_list_label = ttk.Label(self.container2,text="Current Sale")
+			self.checkout_list_label.place(x=580,y=80)
+			self.checkout_list_menu = tk.Listbox(self.container2)
+			self.checkout_list_menu.place(x=580,y=105)
 
 		except Exception as error:
 
@@ -257,6 +263,19 @@ class APP(tk.Tk):
 		except Exception as error:
 
 			select_product_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
+	def add_product(self):
+
+		try:
+
+			add_product_confirmation_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message="Product Added!")
+
+		except Exception as error:
+
+			add_product_error_message_1 = tk.messagebox.showinfo(title="PebbleSuite",message=f"{error}")
+
+
 
 	"""
 	_____________________
@@ -612,6 +631,12 @@ class APP(tk.Tk):
 
 			files_menu_label_1 = tk.Label(self.container2,text="Files Menu",bg="lightgray")
 			files_menu_label_1.place(x=20,y=15)
+
+			self.files_scrollbar = ttk.Scrollbar(self.container2)
+			self.files_scrollbar.place(x=320,y=40,height=400,width=20)
+			self.files_listbox = tk.Listbox(self.container2,yscrollcommand=self.files_scrollbar.set)
+			self.files_listbox.place(x=20,y=40,height=400,width=300)
+			self.files_scrollbar.config(command=self.files_listbox.yview)
 
 
 		except Exception as error:
