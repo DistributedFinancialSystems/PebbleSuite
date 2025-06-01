@@ -633,9 +633,9 @@ class APP(tk.Tk):
 			files_menu_label_1.place(x=20,y=15)
 
 			self.files_scrollbar = ttk.Scrollbar(self.container2)
-			self.files_scrollbar.place(x=320,y=40,height=400,width=20)
+			self.files_scrollbar.place(x=520,y=40,height=400,width=20)
 			self.files_listbox = tk.Listbox(self.container2,yscrollcommand=self.files_scrollbar.set)
-			self.files_listbox.place(x=20,y=40,height=400,width=300)
+			self.files_listbox.place(x=20,y=40,height=400,width=500)
 			self.files_scrollbar.config(command=self.files_listbox.yview)
 
 
