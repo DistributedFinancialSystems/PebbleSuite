@@ -131,41 +131,6 @@ class APP(tk.Tk):
 		b4 = ttk.Button(self,text="Database",command=self.database_menu)
 		b4.place(x=320,y=12)
 
-		"""
-		____________________________________
-		Functionality for directory widgets:
-		____________________________________
-		"""
-
-		self.directory_label = tk.Label(self,text="Directory:",bg="lightgray")
-		self.directory_label.place(x=430,y=12)
-		self.directory_text = tk.StringVar()
-
-		self.current_directory = []
-
-		with sqlite3.connect("SQL.db") as connection:
-
-			cursor = connection.cursor()
-
-			cursor.execute('''SELECT * FROM permanent_directory;''')
-
-			for item in cursor:
-
-				self.current_directory.append(*item)
-
-			connection.commit()
-
-			cursor.close()
-
-		self.check_directory = os.path.dirname(self.current_directory[0])
-		self.directory_text.set(f"{self.check_directory}")
-
-		self.directory_entry = ttk.Entry(self,textvariable=self.directory_text)
-		self.directory_entry.place(x=500,y=12,width=300)
-
-		self.set_directory_button = ttk.Button(self,text="Set Directory",command=self.change_directory)
-		self.set_directory_button.place(x=825,y=12)
-
 
 	def change_directory(self):
 
@@ -633,10 +598,45 @@ class APP(tk.Tk):
 			files_menu_label_1.place(x=20,y=15)
 
 			self.files_scrollbar = ttk.Scrollbar(self.container2)
-			self.files_scrollbar.place(x=520,y=40,height=400,width=20)
+			self.files_scrollbar.place(x=420,y=40,height=400,width=20)
 			self.files_listbox = tk.Listbox(self.container2,yscrollcommand=self.files_scrollbar.set)
-			self.files_listbox.place(x=20,y=40,height=400,width=500)
+			self.files_listbox.place(x=20,y=40,height=400,width=400)
 			self.files_scrollbar.config(command=self.files_listbox.yview)
+
+			"""
+			____________________________________
+			Functionality for directory widgets:
+			____________________________________
+			"""
+
+			self.directory_label = tk.Label(self.container2,text="Directory:",bg="lightgray")
+			self.directory_label.place(x=430,y=15)
+			self.directory_text = tk.StringVar()
+
+			self.current_directory = []
+
+			with sqlite3.connect("SQL.db") as connection:
+
+				cursor = connection.cursor()
+
+				cursor.execute('''SELECT * FROM permanent_directory;''')
+
+				for item in cursor:
+
+					self.current_directory.append(*item)
+
+				connection.commit()
+
+				cursor.close()
+
+			self.check_directory = os.path.dirname(self.current_directory[0])
+			self.directory_text.set(f"{self.check_directory}")
+
+			self.directory_entry = ttk.Entry(self.container2,textvariable=self.directory_text)
+			self.directory_entry.place(x=500,y=15,width=300)
+
+			self.set_directory_button = ttk.Button(self.container2,text="Set Directory",command=self.change_directory)
+			self.set_directory_button.place(x=825,y=15)
 
 
 		except Exception as error:

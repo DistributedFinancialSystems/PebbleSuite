@@ -192,8 +192,9 @@ class MENU_BAR(tk.Menu):
 		self.financial_reports_menu.add_command(label="Profit & Loss",command=self.new_reports)
 		self.financial_reports_menu.add_separator()
 		self.financial_reports_menu.add_command(label="1099 Forms",command=self.new_reports)
-		self.add_cascade(label="Reporting",menu=self.financial_reports_menu)
+		self.add_cascade(label="Reports",menu=self.financial_reports_menu)
 
+		"""
 		#Sales Menu Tkinter widgets:
 		self.sales_menu = tk.Menu(self)
 		self.sales_menu.add_command(label="New Transaction",command=self.new_sales)
@@ -201,6 +202,7 @@ class MENU_BAR(tk.Menu):
 		self.sales_menu.add_command(label="Print Receipt",command=self.new_sales)
 		self.sales_menu.add_command(label="Void Transaction",command=self.new_sales)
 		self.add_cascade(label="Sales",menu=self.sales_menu)
+		"""
 
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
@@ -209,7 +211,7 @@ class MENU_BAR(tk.Menu):
 		self.settings_menu.add_command(label="Passwords",command=self.new_settings)
 		self.settings_menu.add_command(label="Working Directory",command=self.new_settings)
 		self.settings_menu.add_command(label="Stripe Account",command=self.update_stripe_API_key)
-		self.add_cascade(label="Settings",menu=self.settings_menu)
+		self.add_cascade(label="System Settings",menu=self.settings_menu)
 
 
 	"""
