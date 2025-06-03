@@ -92,13 +92,13 @@ class AP_EDIT_INVOICE_WINDOW(tk.Toplevel):
 		self.invoice_issue_date_label = ttk.Label(self,text="Invoice Issue Date:")
 		self.invoice_issue_date_label.place(x=400,y=85)
 		self.invoice_issue_date_entry_text = tk.StringVar()
-		self.invoice_issue_date_entry = ttk.Entry(self,textvariable=self.invoice_issue_date_entry_text)
+		self.invoice_issue_date_entry = ttk.Entry(self,textvariable=self.invoice_issue_date_entry_text,state=tk.DISABLED)
 		self.invoice_issue_date_entry.place(x=400,y=115)
 
 		self.invoice_due_date_label = ttk.Label(self,text="Invoice Due Date:")
 		self.invoice_due_date_label.place(x=400,y=155)
 		self.invoice_due_date_entry_text = tk.StringVar()
-		self.invoice_due_date_entry = ttk.Entry(self,textvariable=self.invoice_due_date_entry_text)
+		self.invoice_due_date_entry = ttk.Entry(self,textvariable=self.invoice_due_date_entry_text,state=tk.DISABLED)
 		self.invoice_due_date_entry.place(x=400,y=185)
 
 		self.invoice_number_label = ttk.Label(self,text="Invoice Number:")
