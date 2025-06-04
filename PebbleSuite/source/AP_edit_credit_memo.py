@@ -96,13 +96,13 @@ class AP_EDIT_CREDIT_MEMO_WINDOW(tk.Toplevel):
 		self.credit_memo_issue_date_label = ttk.Label(self,text="Credit Memo Issue Date: *")
 		self.credit_memo_issue_date_label.place(x=400,y=15)
 		self.credit_memo_issue_date_entry_text = tk.StringVar()
-		self.credit_memo_issue_date_entry = ttk.Entry(self,textvariable=self.credit_memo_issue_date_entry_text)
+		self.credit_memo_issue_date_entry = ttk.Entry(self,textvariable=self.credit_memo_issue_date_entry_text,state=tk.DISABLED)
 		self.credit_memo_issue_date_entry.place(x=400,y=45)
 
 		self.credit_memo_due_date_label = ttk.Label(self,text="Credit Memo Due Date: *")
 		self.credit_memo_due_date_label.place(x=400,y=85)
 		self.credit_memo_due_date_entry_text = tk.StringVar()
-		self.credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.credit_memo_due_date_entry_text)
+		self.credit_memo_due_date_entry = ttk.Entry(self,textvariable=self.credit_memo_due_date_entry_text,state=tk.DISABLED)
 		self.credit_memo_due_date_entry.place(x=400,y=115)
 
 		self.credit_memo_number_label = ttk.Label(self,text="Credit Memo Number: *")
