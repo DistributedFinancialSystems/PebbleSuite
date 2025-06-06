@@ -1,4 +1,4 @@
-#Python Standard Library modules.
+#Python Standard Library modules:
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
@@ -194,16 +194,6 @@ class MENU_BAR(tk.Menu):
 		self.financial_reports_menu.add_command(label="1099 Forms",command=self.new_reports)
 		self.add_cascade(label="Reports",menu=self.financial_reports_menu)
 
-		"""
-		#Sales Menu Tkinter widgets:
-		self.sales_menu = tk.Menu(self)
-		self.sales_menu.add_command(label="New Transaction",command=self.new_sales)
-		self.sales_menu.add_command(label="Delete Transaction",command=self.new_sales)
-		self.sales_menu.add_command(label="Print Receipt",command=self.new_sales)
-		self.sales_menu.add_command(label="Void Transaction",command=self.new_sales)
-		self.add_cascade(label="Sales",menu=self.sales_menu)
-		"""
-
 		#Settings Menu Tkinter widgets:
 		self.settings_menu = tk.Menu(self)
 		self.settings_menu.add_command(label="Company",command=self.new_settings)
@@ -385,6 +375,7 @@ class MENU_BAR(tk.Menu):
 	[ ]
 	"""
 
+
 	def new_sale(self):
 
 		showinfo(title="Customer Sales",message="This is the Customer Sales menu.")
@@ -486,6 +477,7 @@ class MENU_BAR(tk.Menu):
 	[ ]
 	"""
 
+
 	def new_inventory(self):
 
 		showinfo(title="Inventory Menu",message="This is the Inventory menu!")
@@ -572,19 +564,6 @@ class MENU_BAR(tk.Menu):
 		if not CLIENT_SUMMARY_WINDOW.alive:
 			self.secondary_window = CLIENT_SUMMARY_WINDOW()
 
-	"""
-	[ ]
-	[ ]
-	[ ]
-	[ ]	SALES MENU FUNCTIONS:
-	[ ]
-	[ ]
-	[ ]
-	"""
-
-	def new_sales(self):
-
-		showinfo(title="Sales Menu",message="This is the sales menu.")
 
 	"""
 	[ ]
@@ -596,6 +575,7 @@ class MENU_BAR(tk.Menu):
 	[ ]
 	"""
 
+
 	def new_settings(self):
 
 		showinfo(title="Settings Menu",message="This is the Settings menu!")
@@ -604,6 +584,3 @@ class MENU_BAR(tk.Menu):
 
 		if not STRIPE_ACCOUNT_WINDOW.alive:
 			self.secondary_window = STRIPE_ACCOUNT_WINDOW()
-
-
-#End of MenuBar.py file.
