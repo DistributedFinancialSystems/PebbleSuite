@@ -532,6 +532,16 @@ class MENU_BAR(tk.Menu):
 		if not JE_SUMMARY_WINDOW.alive:
 			self.secondary_window = JE_SUMMARY_WINDOW()
 
+	"""
+	[ ]
+	[ ]
+	[ ]
+	[ ]	MONTHLY CLOSE FUNCTIONS:
+	[ ]
+	[ ]
+	[ ]
+	"""
+
 	def new_ME(self):
 
 		showinfo(title="Month-End Menu",message="This is the Month-End menu!")
