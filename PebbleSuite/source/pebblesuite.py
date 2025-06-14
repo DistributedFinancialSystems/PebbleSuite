@@ -80,6 +80,7 @@ from Inventory_new_inventory import *
 
 #Journal Entries modules:
 from JE_new_journal_entry import *
+from JE_edit_JE import *
 from JE_JE_summary import *
 
 #Reports Menu modules:

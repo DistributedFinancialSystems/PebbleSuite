@@ -9,7 +9,7 @@ from tkinter.messagebox import showinfo
 
 
 
-class EDIT_GL_WINDOW(tk.Toplevel):
+class EDIT_JE_WINDOW(tk.Toplevel):
 
 	alive = False
 

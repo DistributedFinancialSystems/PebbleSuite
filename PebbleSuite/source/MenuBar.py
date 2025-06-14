@@ -64,6 +64,7 @@ from Inventory_new_inventory import *
 
 #Journal Entries Menu modules:
 from JE_new_journal_entry import *
+from JE_edit_JE import *
 from JE_JE_summary import *
 
 #Reports Menu modules:
@@ -167,7 +168,7 @@ class MENU_BAR(tk.Menu):
 		#Journal Entries Menu Tkinter widgets
 		self.JE_menu = tk.Menu(self)
 		self.JE_menu.add_command(label="New Journal Entry",command=self.new_JE_entry)
-		self.JE_menu.add_command(label="Edit Journal Entry",command=self.new_JE)
+		self.JE_menu.add_command(label="Edit Journal Entry",command=self.edit_JE)
 		self.JE_menu.add_command(label="Delete Journal Entry",command=self.new_JE)
 		self.JE_menu.add_separator()
 		self.JE_menu.add_command(label="Journal Entry Summary",command=self.JE_summary)
@@ -526,6 +527,11 @@ class MENU_BAR(tk.Menu):
 
 		if not NEW_JE_WINDOW.alive:
 			self.secondary_window = NEW_JE_WINDOW()
+
+	def edit_JE(self):
+
+		if not EDIT_JE_WINDOW.alive:
+			self.secondary_window = EDIT_JE_WINDOW()
 
 	def JE_summary(self):
 
